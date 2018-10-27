@@ -7,6 +7,7 @@ use App\mst_data;
 use App\sesion;
 use App\trDataCategory;
 use App\trDataJobDesc;
+use App\district;
 use App\trDataPosisition;
 use App\trRequestChangeJob;
 use App\User;
@@ -21,6 +22,7 @@ class AdminController extends Controller
     public function index()
     {
         $change = count(trRequestChangeJob::all());
+
         $surat = count(mst_data::all());
         $user = count(User::all());
         $user2 = User::orderBy('id', 'desc')->get();
@@ -230,6 +232,14 @@ $datauser=User::orderBy('id', 'desc')->take(8)->get();
 
         return response()->json($data);
     }
+
+//    public function setuju($approve)
+//    {
+//        {
+//            mst_data::where(['approve_id'=>$approve])->update(['approve_id'=>'1']);
+//            return redirect()->route('admin');
+//        }
+//    }
 
     public function accept(Request $request)
     {

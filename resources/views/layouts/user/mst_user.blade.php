@@ -79,7 +79,7 @@
                 <div class="row">
                     <div class="col-xs-1">
                         <div id="fh5co-logo">
-                            <a href="{{route('dashboard')}}">S<span>.</span>S<span>.</span>W<span>.</span>S<span>.</span></a>
+                            <a href="{{route('dashboard')}}">A<span>.</span>P<span>.</span>E<span>.</span>D<span>.</span>A<span>.</span></a>
                         </div>
                     </div>
                     <div class="col-xs-11 text-right menu-2">

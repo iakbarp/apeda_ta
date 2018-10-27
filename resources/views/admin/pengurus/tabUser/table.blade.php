@@ -75,7 +75,7 @@
                                 '                                                                               data-id="' + value.id + '"\n' +
                                 '                                                                               style="width: 30px">\n' +
                                 '                                                                    </td>\n' +
-                                '                                                                    <td>' + value.nip + '</td>\n' +
+                                '                                                                    <td>' + value.nik + '</td>\n' +
                                 '                                                                    <td>' + value.name + '</td>\n' +
                                 '                                                                    <td>' + value.posisition_id + ' di ' + value.job_id + '</td>\n' +
                                 '                                                                    <td>' + value.role_id + '</td>\n' +
@@ -218,7 +218,7 @@
                                 '                                                                               data-id="' + value.id + '"\n' +
                                 '                                                                               style="width: 30px">\n' +
                                 '                                                                    </td>\n' +
-                                '                                                                    <td>' + value.nip + '</td>\n' +
+                                '                                                                    <td>' + value.nik + '</td>\n' +
                                 '                                                                    <td>' + value.name + '</td>\n' +
                                 '                                                                    <td>' + value.ps + '</td>\n' +
                                 '                                                                    <td>' + value.role + '</td>\n' +
@@ -413,7 +413,7 @@
                                 '                                                                               data-id="' + value.id + '"\n' +
                                 '                                                                               style="width: 30px">\n' +
                                 '                                                                    </td>\n' +
-                                '                                                                    <td>' + value.nip + '</td>\n' +
+                                '                                                                    <td>' + value.nik + '</td>\n' +
                                 '                                                                    <td>' + value.name + '</td>\n' +
                                 '                                                                    <td>' + value.posisition_id + ' di ' + value.job_id + '</td>\n' +
                                 '                                                                    <td>' + value.role_id + '</td>\n' +
@@ -440,7 +440,7 @@
                                 '                                                                               data-id="' + value.id + '"\n' +
                                 '                                                                               style="width: 30px">\n' +
                                 '                                                                    </td>\n' +
-                                '                                                                    <td>' + value.nip + '</td>\n' +
+                                '                                                                    <td>' + value.nik + '</td>\n' +
                                 '                                                                    <td>' + value.name + '</td>\n' +
                                 '                                                                    <td>' + value.ps + '</td>\n' +
                                 '                                                                    <td>' + value.role + '</td>\n' +
@@ -606,8 +606,8 @@
         $('#modal-form #name').css('background-color', '#fcfdff');
         $('#modal-form #bio').prop('disabled', true);
         $('#modal-form #bio').css('background-color', '#fcfdff');
-        $('#modal-form #nip').prop('disabled', true);
-        $('#modal-form #nip').css('background-color', '#fcfdff');
+        $('#modal-form #nik').prop('disabled', true);
+        $('#modal-form #nik').css('background-color', '#fcfdff');
         $('#modal-form #email').prop('disabled', true);
         $('#modal-form #email').css('background-color', '#fcfdff');
         $('#modal-form #phone').prop('disabled', true);
@@ -716,7 +716,7 @@ lockfilllihat();
 
                 $('#modal-form #id').val(data.id);
                 $('#modal-form #name').val(data.name);
-                $('#modal-form #nip').val(data.nip);
+                $('#modal-form #nik').val(data.nik);
                 $('#modal-form #alamat').val(data.alamat);
                 $('#modal-form #phone').val(data.phone);
                 $('#modal-form #email').val(data.email);
@@ -731,11 +731,6 @@ lockfilllihat();
                     $('#modal-form').modal('show');
                 }
             },
-            error: function () {
-                $('#load').hide();
-                $('.content .row').css("opacity", 1);
-                errorNotif();
-            }
         });
     }
 </script>
@@ -754,16 +749,6 @@ lockfilllihat();
 </script>
 {{--focus--}}
 {{--error notif--}}
-<script>
-    function errorNotif() {
-        swal({
-            title: 'Oops...',
-            text: 'Something went wrong or data is empty!',
-            type: 'error',
-            timer: '1500'
-        })
-    }
-</script>
 {{--error notif--}}
 
 {{--changeoption--}}
@@ -787,9 +772,7 @@ lockfilllihat();
                 }
 
             },
-            error: function () {
-                errorNotif();
-            }
+
         });
 
     });
@@ -819,9 +802,7 @@ lockfilllihat();
 
 
             },
-            error: function () {
-                errorNotif();
-            }
+
         });
 
     });
@@ -876,11 +857,7 @@ lockfilllihat();
                                 });
                                 $('#load2').hide();
                             },
-                            error: function () {
 
-                                // $(':button[type="submit"]').prop('disabled', false);
-                                errorNotif();
-                            }
                         });
 
                     }
@@ -888,12 +865,9 @@ lockfilllihat();
                     return false;
                 });
                 $('#load2').hide();
-            },
-            error: function () {
-                $('#load2').hide(1000);
-                $('.content .row').css("opacity", 1);
-                errorNotif();
             }
+
+
         });
         $('#load').fadeOut(3000);
         $('.content .row').css("opacity", 1).fadeIn(3000);
@@ -996,14 +970,7 @@ lockfilllihat();
                 });
 
             },
-            error: function () {
-                $('#modal-form #job_id').prop('readonly', false);
-                $('#modal-form #job_id').css('background-color', '#ffffff');
-                $('#modal-form #posisition_id').prop('readonly', false);
-                $('#modal-form #posisition_id').css('background-color', '#ffffff');
-                errorNotif();
 
-            }
         });
 
         return false;
@@ -1099,11 +1066,7 @@ lockfilllihat();
                     $('#modal-form4').modal('show');
                     $('#modal-form4 .modal-title').text('Multi Edit Data Pegawai');
                 },
-                error: function () {
-                    $('#load2').hide();
-                    $('.content .row').css("opacity", 1);
-                    errorNotif();
-                }
+
             });
         }
         else {
@@ -1157,14 +1120,7 @@ lockfilllihat();
                 });
 
             },
-            error: function () {
-                $('#modal-form #job_id').prop('readonly', false);
-                $('#modal-form #job_id').css('background-color', '#ffffff');
-                $('#modal-form #posisition_id').prop('readonly', false);
-                $('#modal-form #posisition_id').css('background-color', '#ffffff');
-                errorNotif();
 
-            }
         });
 
 
@@ -1272,34 +1228,34 @@ lockfilllihat();
 
 {{--cek email nip--}}
 <script>
-    $('#data2').on('input', '.nip', function (asd) {
-        var NIP = [];
-        $statusnip = 0;
-        $call = $('#data2 .nip');
+    $('#data2').on('input', '.nik', function (asd) {
+        var NIK = [];
+        $statusnik = 0;
+        $call = $('#data2 .nik');
         label = $(this).val();
         $target = $(this);
         $call.each(function () {
-            NIP.push(this.value);
+            NIK.push(this.value);
         });
         cut = $(this).data('no');
-        NIP.splice(cut, 1);
-        console.log(NIP);
+        NIK.splice(cut, 1);
+        console.log(NIK);
         console.log('anu ' + cut);
-        $.each(NIP, function (index, value) {
+        $.each(NIK, function (index, value) {
             if (label == value && label !== '') {
-                $statusnip = 1;
+                $statusnik = 1;
             }
             console.log(label + ' ddd ' + value + ' (das');
         });
 
         $(this).addClass('loadinglah');
         $.ajax({
-            url: "{{route('admin.table.pengguna.ceknip')}}",
+            url: "{{route('admin.table.pengguna.ceknik')}}",
             type: "get",
             data: {'cek': label, 'mode': 1},
             success: function (data) {
                 console.log(data);
-                if (data == 0 || $statusnip == 1) {
+                if (data == 0 || $statusnik == 1) {
                     $('#data2 form :input').prop('readonly', true);
                     $('#data2 form .email').prop('readonly', true);
                     $('#data2 .seksi').addClass('disabled');
@@ -1309,11 +1265,11 @@ lockfilllihat();
                     $('#data2 :input[type="submit"]').prop('disabled', true);
                     swal({
                         title: 'notice',
-                        text: 'NIP telah dipakai!',
+                        text: 'NIK telah dipakai!',
                         type: 'info',
                         timer: '1500'
                     })
-                    $('#data2 form #berubah').empty().append('NIP telah dipakai!');
+                    $('#data2 form #berubah').empty().append('NIK telah dipakai!');
                     // $( '#jadi-data form input:not(.'+urutancek+')' ).prop('readonly', true);
                     // $( '#jadi-data form .text1' ).prop('readonly', true);
                     // $('#bantu').empty().append(isicek1 + isicek2);
@@ -1328,16 +1284,7 @@ lockfilllihat();
                 }
                 $target.removeClass('loadinglah');
             },
-            error: function () {
-                noticecek();
-                $target.removeClass('loadinglah');
-                swal({
-                    title: 'Oops...',
-                    text: 'Something went wrong!',
-                    type: 'error',
-                    timer: '1500'
-                })
-            }
+
         });
 
     });
@@ -1369,7 +1316,7 @@ lockfilllihat();
 
         $target.addClass('loadinglah');
         $.ajax({
-            url: "{{route('admin.table.pengguna.ceknip')}}",
+            url: "{{route('admin.table.pengguna.ceknik')}}",
             type: "get",
             data: {'cek': label, 'mode': 0},
             success: function (data) {
@@ -1402,11 +1349,6 @@ lockfilllihat();
 
                 }
                 $target.removeClass('loadinglah');
-            },
-            error: function () {
-                noticecek();
-                $target.removeClass('loadinglah');
-                errorNotif();
             }
         });
 

@@ -1,7 +1,5 @@
 <?php
-
 namespace App\Http\Controllers;
-
 use App\mst_data;
 use App\trDataCategory;
 use App\trDataHistori;
@@ -13,7 +11,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
-
 class UsulanduaController extends Controller
 {
     public function index()
@@ -21,18 +18,17 @@ class UsulanduaController extends Controller
         $category = $this->getCatagories();
         return view('user.usulan.indexdua', compact('category'));
     }
-
     private function getCatagories()
     {
         $job = trDataCategory::where('job_id', Auth::user()->job_id)->orderBy('name', 'asc')->get(['id', 'name', 'singkatan']);
         $job2 = $job;
         return $job2;
     }
-
     public function store(Request $request)
     {
         for ($i = 0; $i < count($request->name); $i++) {
-            mst_data::create(['name' => $request->name[$i], 'desc' => $request->desc[$i], 'kode' => $request->kode[$i], 'category_id' => $request->category_id[$i],
+            mst_data::create(['name' => $request->name[$i], 'desc' => $request->desc[$i], 'lokasi' => $request->lokasi[$i], 'volume' => $request->volume[$i], 'anggaran' => $request->anggaran[$i], 'kode' => $request->kode[$i],
+                'city_id' => $request->city_id[$i], 'district_id' => $request->district_id[$i], 'category_id' => $request->category_id[$i],
                 'user_id' => Auth::user()->id, 'job_id' => Auth::user()->job_id, 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()]);
             $z = 1;
             foreach ($request->file[$i] as $row) {
@@ -45,10 +41,8 @@ class UsulanduaController extends Controller
                 trFile::create(['name' => 'storage/' . $filename, 'data_id' => mst_data::where('user_id', Auth::user()->id)->orderBy('id', 'desc')->first()->id]);
             }
         }
-
         return response()->json($request);
     }
-
     public function api(Request $r)
     {
         $index = $r->index;
@@ -66,7 +60,6 @@ class UsulanduaController extends Controller
         }
         return response()->json($result);
     }
-
     private function findData($id, $index, $skip, $next, $search,$pagi)
     {
         $this->getLocation();
@@ -74,18 +67,21 @@ class UsulanduaController extends Controller
         if (is_null($id)) {
             if ($index == 2) {
                 $data = $label->orderBy('id', 'desc')->get();
-
             } else {
                 $data = $label->onlyTrashed()->orderBy('deleted_at', 'desc')->get();
             }
         } else {
             $data = mst_data::where('category_id', $id)->orderBy('id', 'desc')->get();
-
         }
         $result['entity'] = $result['status'] = 0;
         if (count($data) > 0) {
             foreach ($data as $r) {
                 $kode = $r->kode;
+                $lokasi = $r->lokasi;
+                $volume = $r->volume;
+                $anggaran = $r->anggaran;
+                $city_id = $r->city_id;
+                $district_id = $r->district_id;
                 $name = $r->name;
                 $user_id = $r->user_id;
                 $id = $r->id;
@@ -95,7 +91,6 @@ class UsulanduaController extends Controller
                 if (!is_null($userdel_id)) {
                     $userdel = $r->Userdel->name;
                 }
-
                 $category = $r->trDataCategory->name;
                 $date = Carbon::createFromFormat('Y-m-d H:i:s', $r->created_at)->formatLocalized('%A, %d %B %Y');
                 $date2 = null;
@@ -109,7 +104,6 @@ class UsulanduaController extends Controller
                 $comparcategory = strpos(strtolower($category), strtolower($search));
                 $compardate = strpos(strtolower($date), strtolower($search));
                 $compardate2 = strpos(strtolower($date2), strtolower($search));
-
                 if (strlen($user) > 11) {
                     $user = substr($user, 0, 11) . '...';
                 }
@@ -124,9 +118,9 @@ class UsulanduaController extends Controller
                         foreach (trFile::where('data_id', $r->id)->get() as $tr) {
                             $url = $tr->name;
                             $rela[] = array('url' => $url, 'name' => substr($tr->name, 21));
-
                         }
-                        $result['data'][] = array('kode' => $kode, 'name' => $name, 'user_id' => $user_id, 'user' => $user, 'date' => $date
+                        $result['data'][] = array('kode' => $kode, 'lokasi' => $lokasi, 'volume' => $volume, 'anggaran' => $anggaran,
+                            '$city_id' => $city_id, '$district_id' => $district_id, 'name' => $name, 'user_id' => $user_id, 'user' => $user, 'date' => $date
                         , 'id' => $id, 'relation' => $rela);
                     }
                 } elseif ($index == 1) {
@@ -137,12 +131,10 @@ class UsulanduaController extends Controller
                         foreach (trFile::where('data_id', $r->id)->get() as $tr) {
                             $url = $tr->name;
                             $rela[] = array('url' => $url, 'name' => substr($tr->name, 21));
-
                         }
                         $result['data'][] = array('kode' => $kode, 'name' => $name, 'category' => $category, 'date2' => $date2
                         , 'userdel' => $userdel
                         , 'userdel_id' => $userdel_id, 'id' => $id, 'relation' => $rela);
-
                     }
                 } elseif ($index == 2) {
                     if ($comparkode !== false || $comparname !== false || $comparuser !== false || $compardate !== false || $comparcategory !== false) {
@@ -152,42 +144,38 @@ class UsulanduaController extends Controller
                         foreach (trFile::where('data_id', $r->id)->get() as $tr) {
                             $url = $tr->name;
                             $rela[] = array('url' => $url, 'name' => substr($tr->name, 21));
-
                         }
-                        $result['data'][] = array('kode' => $kode, 'name' => $name, 'user_id' => $user_id, 'user' => $user, 'category' => $category, 'date' => $date
+                        $result['data'][] = array('kode' => $kode, 'lokasi' => $lokasi, 'volume' => $volume, 'anggaran' => $anggaran,
+                            '$city_id' => $city_id, '$district_id' => $district_id,
+                            'name' => $name, 'user_id' => $user_id, 'user' => $user, 'category' => $category, 'date' => $date
                         , 'id' => $id, 'relation' => $rela);
                     }
                 }
-
             }
             if (isset($result['data'])){
-            $anu= array_slice($result['data'], $skip, $next);
-            if (count($anu)==0){
-                $result['data']=array_slice($result['data'], ($skip-10), $next);
-                $pagi=$pagi-1;
-            }
-            else{
-                $result['data']=$anu;
-            }
+                $anu= array_slice($result['data'], $skip, $next);
+                if (count($anu)==0){
+                    $result['data']=array_slice($result['data'], ($skip-10), $next);
+                    $pagi=$pagi-1;
+                }
+                else{
+                    $result['data']=$anu;
+                }
                 $result['maxpage'] = ceil($result['entity'] / $next);
-            $result['pagi']=$pagi;
-
+                $result['pagi']=$pagi;
             }
-
         }
         return $result;
     }
-
-    private function inputArray($kode, $name, $user_id, $id, $user, $userdel_id, $userdel, $category, $date, $date2)
+    private function inputArray($kode, $lokasi, $volume, $anggaran, $city_id, $district_id, $name, $user_id, $id, $user, $userdel_id, $userdel, $category, $date, $date2)
     {
         $result['status'] = 1;
         $result['entity'] = $result['entity'] + 1;
-        $result['data'][] = array('kode' => $kode, 'name' => $name, 'user_id' => $user_id, 'user' => $user, 'category' => $category, 'date' => $date, 'date2' => $date2
+        $result['data'][] = array('kode' => $kode, 'lokasi' => $lokasi, 'volume' => $volume, 'anggaran' => $anggaran,
+            '$city_id' => $city_id, '$district_id' => $district_id, 'name' => $name, 'user_id' => $user_id, 'user' => $user, 'category' => $category, 'date' => $date, 'date2' => $date2
         , 'userdel' => $userdel, 'userdel_id' => $userdel_id, 'id' => $id);
         return $result;
     }
-
-
     private function notsearch($id, $index, $skip, $next,$pagi)
     {
         $label = mst_data::where('job_id', Auth::user()->job_id);
@@ -199,7 +187,6 @@ class UsulanduaController extends Controller
                     $pagi=$pagi-1;
                 }
                 $data2 = mst_data::where('job_id', Auth::user()->job_id)->get();
-
             } else {
                 $data = $label->onlyTrashed()->orderBy('deleted_at', 'desc')->skip($skip)->take($next)->get();
                 if (count($data)==0){
@@ -218,7 +205,6 @@ class UsulanduaController extends Controller
         }
         return $this->setarray($data, $next, $id, $data2,$pagi);
     }
-
     private function setarray($data, $delimiter, $id, $data2,$pagi)
     {
         $this->getLocation();
@@ -236,7 +222,6 @@ class UsulanduaController extends Controller
                 if (!is_null($row->userdel)) {
                     $userdel = $row->Userdel->name;
                 }
-
                 if (strlen($user) > 11) {
                     $user = substr($user, 0, 11) . '...';
                 }
@@ -247,14 +232,14 @@ class UsulanduaController extends Controller
                 foreach (trFile::where('data_id', $row->id)->get() as $tr) {
                     $url = $tr->name;
                     $rela[] = array('url' => $url, 'name' => substr($tr->name, 21));
-
                 }
                 $deldate = "data tidak tersedia";
                 if (!is_null($row->deleted_at)) {
                     $deldate = Carbon::createFromFormat('Y-m-d H:i:s',
                         $row->deleted_at)->formatLocalized('%A, %d %B %Y');
                 }
-                $result['data'][] = array('name' => $row->name, 'kode' => $row->kode, 'user' => $user, 'user_id' => $row->user_id, 'category' => $row->trDataCategory->name,
+                $result['data'][] = array('name' => $row->name, 'kode' => $row->kode, 'lokasi' => $row->lokasi, 'volume' => $row->volume, 'anggaran' => $row->anggaran,
+                    'city_id' => $row->city_id, 'district_id' => $row->district_id, 'user' => $user, 'user_id' => $row->user_id, 'category' => $row->trDataCategory->name,
                     'date' => Carbon::createFromFormat('Y-m-d H:i:s', $row->created_at)->formatLocalized('%A, %d %B %Y'),
                     'date2' => $deldate, 'id' => $row->id, 'userdel' => $userdel
                 , 'userdel_id' => $row->userdel, 'relation' => $rela);
@@ -262,13 +247,11 @@ class UsulanduaController extends Controller
         }
         return $result;
     }
-
     public function getLocation()
     {
         Carbon::setLocale('id');
         setlocale(LC_TIME, 'Indonesian');
     }
-
     public function destroy(Request $r)
     {
         $id = $r->id;
@@ -278,7 +261,6 @@ class UsulanduaController extends Controller
                 $datafs = trFileHistori::whereIn('data_id', $id)->get();
                 $datads = trDataHistori::whereIn('data_id', $id)->get();
                 $dataf = trFile::whereIn('data_id', $id)->get();
-
                 if (!is_null($datafs)) {
                     trFileHistori::whereIn('data_id', $id)->delete();
                 }
@@ -286,7 +268,6 @@ class UsulanduaController extends Controller
                     trDataHistori::onlyTrashed()->whereIn('data_id', $id)->restore();
                     trDataHistori::whereIn('data_id', $id)->forceDelete();
                 }
-
                 if (!is_null($dataf)) {
                     $hapus = trFile::withTrashed()->whereIn('id', $id)->pluck('name')->all();
                     foreach ($hapus as $row) {
@@ -296,7 +277,6 @@ class UsulanduaController extends Controller
                     trFile::onlyTrashed()->whereIn('data_id', $id)->restore();
                     trFile::whereIn('data_id', $id)->forceDelete();
                 }
-
                 mst_data::onlyTrashed()->whereIn('id', $id)->restore();
                 mst_data::whereIn('id', $id)->forceDelete();
             } else {
@@ -310,7 +290,6 @@ class UsulanduaController extends Controller
                     trDataHistori::onlyTrashed()->where('data_id', $id)->restore();
                     trDataHistori::where('data_id', $id)->forceDelete();
                 }
-
                 if (!is_null($dataf)) {
                     $hapus = trFile::withTrashed()->where('id', $id)->pluck('name')->all();
                     foreach ($hapus as $row) {
@@ -320,13 +299,9 @@ class UsulanduaController extends Controller
                     trFile::onlyTrashed()->where('data_id', $id)->restore();
                     trFile::where('data_id', $id)->forceDelete();
                 }
-
                 mst_data::onlyTrashed()->findOrFail($id)->restore();
                 mst_data::where('id', $id)->forceDelete();
-
-
             }
-
         }
         else {
             if (is_array($id)) {
@@ -334,7 +309,8 @@ class UsulanduaController extends Controller
                 $trans = array();
                 foreach ($data as $row) {
                     $trans[] = array('name' => $row->name,
-                        'kode' => $row->kode, 'desc' => $row->desc, 'user_id' => Auth::user()->id,
+                        'kode' => $row->kode, 'desc' => $row->desc, 'lokasi' => $row->lokasi, 'volume' => $row->volume, 'anggaran' => $row->anggaran,
+                        'city_id' => $row->city_id, 'district_id' => $row->district_id, 'user_id' => Auth::user()->id,
                         'category_id' => $row->category_id, 'job_id' => $row->job_id, 'data_id' => $row->id
                     , 'deletes' => 0
                     , 'edit' => 0
@@ -346,7 +322,8 @@ class UsulanduaController extends Controller
             } else {
                 $data = mst_data::findOrFail($id);
                 trDataHistori::create(['name' => $data->name,
-                    'kode' => $data->kode, 'desc' => $data->desc, 'user_id' => Auth::user()->id,
+                    'kode' => $data->kode, 'desc' => $data->desc, 'lokasi' => $data->lokasi, 'volume' => $data->volume, 'anggaran' => $data->anggaran,
+                    'city_id' => $data->city_id, 'district_id' => $data->district_id, 'user_id' => Auth::user()->id,
                     'category_id' => $data->category_id, 'job_id' => $data->job_id, 'data_id' => $id
                     , 'deletes' => 0
                     , 'edit' => 0
@@ -360,7 +337,6 @@ class UsulanduaController extends Controller
         }
         return response()->json(['status' => 'sukses'/*, 'category' => $data->singkatan*/]);
     }
-
     public function edit(Request $r)
     {
         $this->getLocation();
@@ -372,7 +348,6 @@ class UsulanduaController extends Controller
         foreach ($dataCategory as $row) {
             $dataCategory2[] = array('name' => $row->singkatan . ' (' . $row->name . ')', 'id' => $row->id);
         }
-
         if (is_array($id)) {
             $i = mst_data::whereIn('id', $id)->orderBy('id', 'desc')->get();
             $data['category_list'] = $dataCategory2;
@@ -381,6 +356,11 @@ class UsulanduaController extends Controller
                     'kode' => $x->kode,
                     'category_id' => $x->category_id,
                     'desc' => $x->desc,
+                    'lokasi' => $x->lokasi,
+                    'volume' => $x->volume,
+                    'anggaran' => $x->anggaran,
+                    'city_id' => $x->city_id,
+                    'district_id' => $x->district_id,
                     'id' => $x->id);
             }
         } else {
@@ -395,10 +375,14 @@ class UsulanduaController extends Controller
             foreach ($dataFile as $row) {
                 $dataFile2[] = array('name' => substr($row->name, 21), 'url' => $row->name, 'id' => $row->id);
             }
-
             $data = array('kode' => $i->kode,
                 'name' => $i->name,
                 'desc' => $i->desc,
+                'lokasi' => $i->lokasi,
+                'volume' => $i->volume,
+                'anggaran' => $i->anggaran,
+                'city_id' => $i->city_id,
+                'district_id' => $i->district_id,
                 'user_id' => $i->User->name,
                 'userdel' => $userdel,
                 'file' => $dataFile2,
@@ -408,7 +392,6 @@ class UsulanduaController extends Controller
         }
         return response()->json($data);
     }
-
     public function update(Request $r)
     {
         $id = $r->id;
@@ -416,7 +399,6 @@ class UsulanduaController extends Controller
         $idDel = array();
         $idEdit = array();
         if (is_array($id)) {
-
         } else {
             $data = mst_data::findOrFail($id);
             $statusFile = 0;
@@ -453,11 +435,15 @@ class UsulanduaController extends Controller
                     trFile::findOrFail('id', $r->hapus)->destroy();
                     $idDel[] = trFileHistori::create(['metode' => 1, 'file_id' => $r->hapus])->id;
                 }
-
             }
             if ($r->name != $data->name ||
                 $r->kode != $data->kode ||
                 $r->desc != $data->desc ||
+                $r->lokasi != $data->lokasi ||
+                $r->volume != $data->volume ||
+                $r->anggaran != $data->anggaran ||
+                $r->city_id != $data->city_id ||
+                $r->district_id != $data->district_id ||
                 $r->category_id != $data->category_id) {
                 $statusEdit = 1;
             }
@@ -466,7 +452,8 @@ class UsulanduaController extends Controller
                 $status = 1;
                 $row = $r;
                 $idHistori = trDataHistori::create(['name' => $data->name,
-                    'kode' => $data->kode, 'desc' => $data->desc, 'user_id' => Auth::user()->id,
+                    'kode' => $data->kode, 'desc' => $data->desc, 'lokasi' => $data->lokasi, 'volume' => $data->volume, 'anggaran' => $data->anggaran,
+                    'city_id' => $data->city_id, 'district_id' => $data->district_id, 'user_id' => Auth::user()->id,
                     'category_id' => $data->category_id, 'job_id' => Auth::user()->job_id, 'data_id' => $id
                     , 'deletes' => $statusDel
                     , 'edit' => $statusEdit
@@ -478,14 +465,12 @@ class UsulanduaController extends Controller
                     $data = trFileHistori::whereIn('id', $idDel)->update(['histori_id' => $idHistori]);
                 }
                 if ($statusEdit == 1) {
-                    $data->update(['name' => $r->name, 'kode' => $r->kode, 'desc' => $r->desc, 'category_id' => $r->category_id]);
+                    $data->update(['name' => $r->name, 'kode' => $r->kode, 'desc' => $r->desc, 'lokasi' => $r->lokasi, 'volume' => $r->volume, 'anggaran' => $r->anggaran, 'city_id' => $r->city_id, 'district_id' => $r->district_id, 'category_id' => $r->category_id]);
                 }
             }
-
         }
         return $status;
     }
-
     public function multiupdate(Request $r)
     {
         $status = 0;
@@ -494,11 +479,14 @@ class UsulanduaController extends Controller
             if ($r->name[$i] != $data->name ||
                 $r->kode[$i] != $data->kode ||
                 $r->desc[$i] != $data->desc ||
+                $r->lokasi[$i] != $data->lokasi ||
+                $r->volume[$i] != $data->volume ||
+                $r->volume[$i] != $data->volume ||
                 $r->category_id[$i] != $data->category_id) {
                 $status = 1;
-
                 trDataHistori::create(['name' => $data->name,
-                    'kode' => $data->kode, 'desc' => $data->desc,
+                    'kode' => $data->kode, 'desc' => $data->desc, 'lokasi' => $data->lokasi, 'volume' => $data->volume, 'anggaran' => $data->anggaran,
+                    'city_id' => $r->city_id, 'district_id' => $r->district_id,
                     'user_id' => Auth::user()->id, 'category_id' => $data->category_id
                     , 'job_id' => Auth::user()->job_id, 'data_id' => $r->id[$i]
                     , 'deletes' => 0
@@ -507,21 +495,26 @@ class UsulanduaController extends Controller
                 $data->update(['name' => $r->name[$i],
                     'kode' => $r->kode[$i],
                     'category_id' => $r->category_id[$i],
-                    'desc' => $r->desc[$i]]);
+                    'desc' => $r->desc[$i],
+                    'lokasi' => $r->lokasi[$i],
+                    'volume' => $r->volume[$i],
+                    'anggaran' => $r->anggaran[$i],
+                    'city_id' => $r->city_id[$i],
+                    'district_id' => $r->district_id[$i]
+                    ]);
             }
         }
         return $status;
     }
-
     public function restore(Request $r)
     {
-
         if (is_array($r->id)) {
             mst_data::onlyTrashed()->whereIn('id', $r->id)->update(['userdel' => null]);
             $sample = mst_data::onlyTrashed()->whereIn('id', $r->id)->get();
             foreach ($sample as $data) {
                 trDataHistori::create(['name' => $data->name,
-                    'kode' => $data->kode, 'desc' => $data->desc,
+                    'kode' => $data->kode, 'desc' => $data->desc, 'lokasi' => $data->lokasi, 'volume' => $data->volume, 'anggaran' => $data->anggaran,
+                    'city_id' => $data->city_id, 'district_id' => $data->district_id,
                     'user_id' => Auth::user()->id, 'category_id' => $data->category_id
                     , 'job_id' => Auth::user()->job_id, 'data_id' => $data->id
                     , 'deletes' => 0
@@ -529,12 +522,12 @@ class UsulanduaController extends Controller
                     , 'tambah' => 0, 'deldata' => 0, 'resdata' => 1]);
             }
             mst_data::onlyTrashed()->whereIn('id', $r->id)->restore();
-
         } else {
             mst_data::onlyTrashed()->findOrFail($r->id)->update(['userdel' => null]);
             $data = mst_data::onlyTrashed()->findOrFail($r->id);
             trDataHistori::create(['name' => $data->name,
-                'kode' => $data->kode, 'desc' => $data->desc,
+                'kode' => $data->kode, 'desc' => $data->desc, 'lokasi' => $data->lokasi, 'volume' => $data->volume, 'anggaran' => $data->anggaran,
+                'city_id' => $data->city_id, 'district_id' => $data->district_id,
                 'user_id' => Auth::user()->id, 'category_id' => $data->category_id
                 , 'job_id' => Auth::user()->job_id, 'data_id' => $r->id
                 , 'deletes' => 0
@@ -544,7 +537,6 @@ class UsulanduaController extends Controller
         }
         return response()->json('a');
     }
-
     public function history(Request $r)
     {
         $id = $r->id;
@@ -571,30 +563,32 @@ class UsulanduaController extends Controller
                         $url = $z->files->name;
                         $addData[] = array('url' => url($url), 'name' => substr($url, 21));
                     }
-
                 }
                 if ($x->edit == 1) {
                     $c = mst_data::withTrashed()->findOrFail($id);
                     $nameCek = $c->name;
                     $kodeCek = $c->kode;
                     $ndescCek = $c->desc;
+                    $lokasiCek = $c->lokasi;
+                    $volumeCek = $c->volume;
+                    $anggaranCek= $c->anggaran;
+                    $city_idCek = $c->city_id;
+                    $district_idCek= $c->district_id;
                     $categoryCek = $c->trDataCategory->name;
                     $v = trDataHistori::withTrashed()->where('data_id', $id)->where('edit', 1)->get();
                     if (count($v) > 0) {
                         $cek1 = array();
                         foreach ($v as $d) {
                             $cek1[] = array('id' => $d->id, 'name' => $d->name, 'kode' => $d->kode
-                            , 'category_id' => $d->category_id, 'cate' => $d->cate->name, 'desc' => $d->desc);
+                            , 'category_id' => $d->category_id, 'cate' => $d->cate->name, 'desc' => $d->desc, 'lokasi' => $d->lokasi, 'volume' => $d->volume, 'anggaran' => $d->anggaran, 'city_id' => $d->city_id, 'district_id' => $d->district_id);
                         }
                         $cek2 = null;
-
                         for ($i = 0; $i < count($cek1); $i++) {
                             if ($cek1[$i]['id'] == $x->id) {
                                 $cek2 = $i;
                                 break;
                             }
                         }
-
                         if ((count($cek1) - 1) == $cek2) {
                             $dataNextEdit = $cek1[(count($cek1) - 1)];
                             if ($dataNextEdit['name'] != $nameCek) {
@@ -605,6 +599,21 @@ class UsulanduaController extends Controller
                             }
                             if ($dataNextEdit['desc'] != $ndescCek) {
                                 $ndescCek = $dataNextEdit['desc'] . ' -> ' . $ndescCek;
+                            }
+                            if ($dataNextEdit['lokasi'] != $lokasiCek) {
+                                $lokasiCek = $dataNextEdit['lokasi'] . ' -> ' . $lokasiCek;
+                            }
+                            if ($dataNextEdit['volume'] != $volumeCek) {
+                                $volumeCek = $dataNextEdit['volume'] . ' -> ' . $volumeCek;
+                            }
+                            if ($dataNextEdit['anggaran'] != $anggaranCek) {
+                                $anggaranCek = $dataNextEdit['anggaran'] . ' -> ' . $anggaranCek;
+                            }
+                            if ($dataNextEdit['city_id'] != $city_idCek) {
+                                $city_idCek = $dataNextEdit['city_id'] . ' -> ' . $city_idCek;
+                            }
+                            if ($dataNextEdit['district_id'] != $district_idCek) {
+                                $district_idCek = $dataNextEdit['district_id'] . ' -> ' . $district_idCek;
                             }
                             if ($dataNextEdit['category_id'] != $c->category_id) {
                                 $categoryCek = $dataNextEdit['cate'] . ' -> ' . $categoryCek;
@@ -619,6 +628,21 @@ class UsulanduaController extends Controller
                             }
                             if ($dataNextEdit['desc'] != $x->desc) {
                                 $ndescCek = $x->desc . ' -> ' . $dataNextEdit['desc'];
+                            }
+                            if ($dataNextEdit['lokasi'] != $x->lokasi) {
+                                $lokasiCek = $x->lokasi . ' -> ' . $dataNextEdit['lokasi'];
+                            }
+                            if ($dataNextEdit['volume'] != $x->volume) {
+                                $volumeCek = $x->volume . ' -> ' . $dataNextEdit['volume'];
+                            }
+                            if ($dataNextEdit['anggaran'] != $x->anggaran) {
+                                $anggaranCek = $x->anggaran . ' -> ' . $dataNextEdit['anggaran'];
+                            }
+                            if ($dataNextEdit['city_id'] != $x->city_id) {
+                                $city_idCek = $x->city_id . ' -> ' . $dataNextEdit['city_id'];
+                            }
+                            if ($dataNextEdit['district_id'] != $x->district_id) {
+                                $district_idCek = $x->district_id . ' -> ' . $dataNextEdit['district_id'];
                             }
                             if ($dataNextEdit['category_id'] != $x->category_id) {
                                 $categoryCek = $x->cate->name . ' -> ' . $dataNextEdit['cate'];
@@ -640,16 +664,15 @@ class UsulanduaController extends Controller
 //                            $categoryCek = $x->cate->name . ' -> ' . $dataNextEdit['cate'];
 //                        }
 //                    }
-
                     $editData = array('name' => $nameCek,
-                        'kode' => $kodeCek, 'desc' => $ndescCek,
+                        'kode' => $kodeCek, 'desc' => $ndescCek, 'lokasi' => $lokasiCek, 'volume' => $volumeCek, 'anggaran' => $anggaranCek, 'city_id' => $city_idCek, 'district_id' => $district_idCek,
                         'category' => $categoryCek);
                 }
                 if (is_null($x->updated_at)){
                     $date='Undefined';
                 }
                 else {
-                $date = Carbon::createFromFormat('Y-m-d H:i:s', $x->updated_at)->format('d/m/Y H:i:s') . ' WIB.';
+                    $date = Carbon::createFromFormat('Y-m-d H:i:s', $x->updated_at)->format('d/m/Y H:i:s') . ' WIB.';
                 }
                 $data['lists'][] = array('user_id' => $x->User->name, 'date' => $date, 'fileDel' => $x->deletes, 'edit' => $x->edit,
                     'addfiles' => $x->tambah, 'del' => $x->deldata, 'res' => $x->resdata,
@@ -659,7 +682,6 @@ class UsulanduaController extends Controller
         else{
             $data['status']=0;
         }
-
         return response()->json($data);
     }
 }

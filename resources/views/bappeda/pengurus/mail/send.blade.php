@@ -45,7 +45,7 @@
 
 <body style="background-color: #f6f8f8; height: 100%; margin: 0; padding: 0;">
 <div style="display:none;font-size:1px;color:#f6f8f8;line-height:1px;max-height:0px;max-width:0px;opacity:0;overflow:hidden;">
-    Pesan spesial terkait akun re:eBerkas.
+    Pesan spesial terkait akun APEDA.
 </div>
 <table class="body" align="center" border="0" cellpadding="0" cellspacing="0" width="100%"
        style="background-color: #f6f8f8; height: 100%; padding-bottom: 25px; padding-left: 0; padding-right: 0; padding-top: 25px;">
@@ -90,10 +90,10 @@
                                                     Hi {{substr($name,0,$kurva)}},</h2>
 
                                                 <p style='margin-bottom: 15px; font-family: "Avenir Next", "Avenir", "Helvetica", sans-serif !important; font-weight: 400; font-size: 16px; line-height: 1.5;'>
-                                                    Anda telah terdaftar pada akun re:eBerkas. Berikut detail Akun:</p>
+                                                    Anda telah terdaftar pada akun APEDA. Berikut detail Akun:</p>
                                                 <table>
                                                     <tr>
-                                                        <td>NIP</td><td> :</td><td>{{$nip}}</td>
+                                                        <td>NIK</td><td> :</td><td>{{$nik}}</td>
                                                     </tr>
                                                     <tr>
                                                         <td>Nama</td><td> :</td><td>{{$name}}</td>
@@ -128,7 +128,7 @@
                                                     Terima Kasih!</p>
                                                 <p class="signout light-type"
                                                    style='margin-bottom: 15px; font-family: "Avenir Next", "Avenir", "Helvetica", sans-serif !important; font-weight: 400; font-size: 16px; line-height: 1.5; color: #788991;'>
-                                                    — re:eBerkas Team</p>
+                                                    — APEDA Team</p>
                                                 <div class="padding-break"
                                                      style='font-family: "Avenir Next", "Avenir", "Helvetica", sans-serif !important; margin-top: 50px;'></div>
                                             </td>

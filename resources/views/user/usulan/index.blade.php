@@ -4,7 +4,8 @@
     <li><a href="{{url('home')}}">Home</a></li>
     <li><a href="{{url('profile')}}">Profil</a></li>
     <li><a href="{{url('employes')}}">Daftar Pegawai</a></li>
-    <li class="active"><a href="{{url('usulan#fh5co-usulan')}}">Form Usulan</a></li>
+
+    <li class="active" ><a href="{{url('usulan#fh5co-usulan')}}">Form Usulan</a></li>
 @endsection
 @section('style')
     <style>
@@ -12,22 +13,18 @@
             text-align: center;
             vertical-align: center;
         }
-
         p {
             margin: 40px 0 10px;
         }
-
         .btn-flex {
             display: flex;
             align-items: stretch;
             align-content: stretch;
         }
-
         .btn-flex .btn:first-child {
             flex-grow: 1;
             text-align: left;
         }
-
     </style>
 @endsection
 @section('content')
@@ -115,11 +112,11 @@
                                                         <td><input placeholder="input data" class="form-control"
                                                                    type="file"
                                                                    id="file[]" name="file[]" multiple required></td>
-                                                        <td><input placeholder="Kode Surat" class="form-control"
+                                                        <td><input placeholder="Nama Kegiatan" class="form-control"
                                                                    id="name"
                                                                    name="name" required></td>
                                                         <td>
-                                                        <td><input placeholder="Kode Berkas" class="form-control"
+                                                        <td><input placeholder="Tahun RKP" class="form-control"
                                                                    id="kode"
                                                                    name="kode" required></td>
                                                         <td>
@@ -138,6 +135,26 @@
                                                         <td>
                                                     <textarea class="form-control" placeholder="Keterangan" id="desc"
                                                               name="desc" style="height: 54px"></textarea>
+                                                        </td>
+                                                        <td>
+                                                    <textarea class="form-control" placeholder="Lokasi" id="lokasi"
+                                                              name="lokasi" style="height: 54px"></textarea>
+                                                        </td>
+                                                        <td>
+                                                    <textarea class="form-control" placeholder="Volume" id="volume"
+                                                              name="volume" style="height: 54px"></textarea>
+                                                        </td>
+                                                        <td>
+                                                    <textarea class="form-control" placeholder="Anggaran" id="anggaran"
+                                                              name="anggaran" style="height: 54px"></textarea>
+                                                        </td>
+                                                        <td>
+                                                    <textarea class="form-control" placeholder="Kota"
+                                                              name="city_id" style="height: 54px"></textarea>
+                                                        </td>
+                                                        <td>
+                                                    <textarea class="form-control" placeholder="Kecamatan" id="district_id"
+                                                              name="district_id" style="height: 54px"></textarea>
                                                         </td>
 
                                                     </tr>
@@ -192,10 +209,27 @@
 
                                                 </th>
                                                 <th>
-                                                    <center>Kode Berkas</center>
+                                                    <center>Tahun RKP</center>
                                                 </th>
                                                 <th>
-                                                    <center>Kode Surat</center>
+                                                    <center>Nama Kegiatan</center>
+                                                </th>
+                                                <th>
+                                                    <center>Lokasi</center>
+                                                </th>
+                                                <th>
+                                                    <center>Volume</center>
+                                                </th>
+                                                <th>
+                                                    <center>Anggaran</center>
+                                                </th>
+                                                <th>
+                                                <th>
+                                                    <center>Kota</center>
+                                                </th>
+                                                <th>
+                                                <th>
+                                                    <center>Kecamatan</center>
                                                 </th>
                                                 <th>
                                                     <center>Jenis Surat</center>
@@ -250,19 +284,35 @@
 
                                                 </th>
                                                 <th>
-                                                    <center>Kode Berkas</center>
+                                                    <center>Tahun RKP</center>
                                                 </th>
                                                 <th>
-                                                    <center>Kode Surat</center>
+                                                    <center>Nama Kegiatan</center>
+                                                </th>
+                                                <th>
+                                                    <center>Lokasi</center>
+                                                </th>
+                                                <th>
+                                                    <center>Volume</center>
+                                                </th>
+                                                <th>
+                                                    <center>Anggaran</center>
+                                                </th>
+                                                <th>
+                                                    <center>Kota</center>
+                                                </th>
+                                                <th>
+                                                <th>
+                                                    <center>Kecamatan</center>
                                                 </th>
                                                 <th>
                                                     <center>Jenis Surat</center>
                                                 </th>
                                                 <th>
-                                                    <center>Penghapus</center>
+                                                    <center>Pengirim</center>
                                                 </th>
                                                 <th>
-                                                    <center>Dihapus Tanggal</center>
+                                                    <center>Dibuat Tanggal</center>
                                                 </th>
                                                 <th></th>
                                             </tr>
@@ -309,10 +359,29 @@
                                                     <th width="20px">
                                                     </th>
                                                     <th>
-                                                        <center>Kode Berkas</center>
+                                                        <center>Tahun RKP</center>
                                                     </th>
                                                     <th>
-                                                        <center>Kode Surat</center>
+                                                        <center>Nama Kegiatan</center>
+                                                    </th>
+                                                    <th>
+                                                        <center>Lokasi</center>
+                                                    </th>
+                                                    <th>
+                                                        <center>Volume</center>
+                                                    </th>
+                                                    <th>
+                                                        <center>Anggaran</center>
+                                                    </th>
+                                                    <th>
+                                                        <center>Kota</center>
+                                                    </th>
+                                                    <th>
+                                                    <th>
+                                                        <center>Kecamatan</center>
+                                                    </th>
+                                                    <th>
+                                                        <center>Jenis Surat</center>
                                                     </th>
                                                     <th>
                                                         <center>Pengirim</center>
@@ -380,6 +449,11 @@
                     columns: [
                         {data: 'cek', name: 'cek', orderable: false, searchable: false},
                         {data: 'kode', name: 'kode'},
+                        {data: 'lokasi', name: 'lokasi'},
+                        {data: 'volume', name: 'volume'},
+                        {data: 'anggaran', name: 'anggaran'},
+                        {data: 'city_id', name: 'city_id'},
+                        {data: 'district_id', name: 'district_id'},
                         {data: 'name', name: 'name'},
                         {data: 'category', name: 'category'},
                         {data: 'user', name: 'user'},
@@ -387,7 +461,6 @@
                         {data: 'action', name: 'action', orderable: false, searchable: false}]
                 });
             }
-
             var b = -1;
             for (var i = 3; i < ({{count($job)}} +3); i++) {
                 var a = [];
@@ -419,28 +492,28 @@
                     columns: [
                         {data: 'cek', name: 'cek', orderable: false, searchable: false},
                         {data: 'kode', name: 'kode'},
+                        {data: 'lokasi', name: 'lokasi'},
+                        {data: 'volume', name: 'volume'},
+                        {data: 'anggaran', name: 'anggaran'},
+                        {data: 'city_id', name: 'city_id'},
+                        {data: 'district_id', name: 'district_id'},
                         {data: 'name', name: 'name'},
                         {data: 'user', name: 'user'},
                         {data: 'dibuat', name: 'dibuat'},
                         {data: 'action', name: 'action', orderable: false, searchable: false}]
                 });
-
             }
             $(document).on('change', '#jumlah', function () {
-
                 var trHTML2 = '';
                 var op = '';
                 var desa = $(this).val();
-
                 var div = $(this).parent();
                 var op = " ";
-
                 $.ajax({
                     type: 'get',
                     url: '{!!URL::to('usulan/jumlah')!!}',
                     data: {'id': '{{\Illuminate\Support\Facades\Auth::user()->job_id}}'},
                     success: function (data) {
-
                         $('#jadi-data form')[0].reset();
                         op += '<option value="" disabled selected>- Pilih Kategori\n' +
                             '                                                                    Surat -\n' +
@@ -453,16 +526,28 @@
                                 '                                                        <td><input placeholder="input data" class="form-control"\n' +
                                 '                                                                   type="file"\n' +
                                 '                                                                   id="file[' + i + '][]" name="file[' + i + '][]" multiple required></td>\n' +
-                                '                                                        <td><input placeholder="Kode Surat" class="form-control"\n' +
+                                '                                                        <td><input placeholder="Nama Kegiatan" class="form-control"\n' +
                                 '                                                                   id="name[]"\n' +
                                 '                                                                   name="name[]" multiple required></td>\n' +
                                 '                                                        <td>\n' +
-                                '                                                        <td><input placeholder="Kode Berkas" class="form-control"\n' +
+                                '                                                        <td><input placeholder="Tahun RKP" class="form-control"\n' +
                                 '                                                                   id="kode[]"\n' +
                                 '                                                                   name="kode[]" multiple required></td>\n' +
                                 '                                                        <td>\n' +
                                 '                                                            <select class="form-control category_id" name="category_id[]"\n' +
                                 '                                                                    id="category_id[]" required>' + op + '</select>\n' +
+                                '                                                        </td>\n' +
+                                '                                                        <td>\n' +
+                                '                                                    <textarea class="form-control" placeholder="Lokasi" id="lokasi[]"\n' +
+                                '                                                              name="lokasi[]" multiple style="height: 54px"></textarea>\n' +
+                                '                                                        </td>\n' +
+                                '                                                        <td>\n' +
+                                '                                                    <textarea class="form-control" placeholder="Volume" id="volume[]"\n' +
+                                '                                                              name="volume[]" multiple style="height: 54px"></textarea>\n' +
+                                '                                                        </td>\n' +
+                                '                                                        <td>\n' +
+                                '                                                    <textarea class="form-control" placeholder="Anggaran" id="anggaran[]"\n' +
+                                '                                                              name="anggaran[]" multiple style="height: 54px"></textarea>\n' +
                                 '                                                        </td>\n' +
                                 '                                                        <td>\n' +
                                 '                                                    <textarea class="form-control" placeholder="Keterangan" id="desc[]"\n' +
@@ -482,19 +567,14 @@
                         })
                     }
                 });
-
             })
-
         });
-
         $(function () {
             $('#jadi-data form').on('submit', function (e) {
                 if (!e.isDefaultPrevented()) {
                     $('#berubah1').hide();
                     $('#loading1').show();
                     $(':input[type="submit"]').prop('disabled', true);
-
-
                     $.ajax({
                         url: "{{route('usulan.store')}}",
                         type: "post",
@@ -525,12 +605,10 @@
                             })
                         }
                     });
-
                     return false;
                 }
             });
         });
-
         $(function () {
             $('#modal-form2 form').on('submit', function (e) {
                 if (!e.isDefaultPrevented()) {
@@ -543,10 +621,8 @@
                         contentType: false,
                         processData: false,
                         success: function (data) {
-
                             $('#modal-form2 form')[0].reset();
                             $(':button[type="submit"]').prop('disabled', false);
-
                             if (data.gagal == 0) {
                                 swal({
                                     title: 'Peringatan!',
@@ -579,12 +655,10 @@
                             })
                         }
                     });
-
                     return false;
                 }
             });
         });
-
         $(function () {
             $('#modal-form3 form').on('submit', function (e) {
                 if (!e.isDefaultPrevented()) {
@@ -599,7 +673,6 @@
                         success: function (data) {
                             $(':button[type="submit"]').prop('disabled', false);
                             $('#modal-form3 form')[0].reset();
-
                             $('#modal-form3').modal('hide');
                             if (data.gagal == 0) {
                                 swal({
@@ -642,20 +715,16 @@
                             })
                         }
                     });
-
                     return false;
                 }
-
             });
         });
-
         $('#table2-data form #delete').click(function () {
             $('#table2-data form #metode').val(0);
         });
         $('#table2-data form #update').click(function () {
             $('#table2-data form #metode').val(1);
         });
-
         $(function () {
             var op = '', trHTML2 = '';
             var jd = '', jd = [];
@@ -681,7 +750,6 @@
                         confirmButtonText: 'Ya!',
                         preConfirm: function () {
                             return new Promise(function (resolve) {
-
                                 resolve([
                                     $('#swal-input1').val()
                                 ])
@@ -689,7 +757,6 @@
                         },
                         allowOutsideClick: false
                     }).then(function (isConfirm) {
-
                         var password = $('#swal-input1').val();
                         if (isConfirm.value) {
                             $.ajax({
@@ -719,7 +786,6 @@
                                                 confirmButtonText: 'Ya!'
                                             }).then(function (isConfirm) {
                                                 if (!$.trim(isConfirm.dismiss)) {
-
                                                     $(':button[type="submit"]').prop('disabled', true);
                                                     $.ajax({
                                                         url: url,
@@ -728,7 +794,6 @@
                                                         contentType: false,
                                                         processData: false,
                                                         success: function (data) {
-
 //                                        console.log(data);
                                                             myobj['table2'].ajax.reload();
                                                             $(':button[type="submit"]').prop('disabled', false);
@@ -761,13 +826,10 @@
                                                     });
                                                 }
                                                 return false;
-
                                             })
-
                                         }
                                         else {
                                             $(':button[type="submit"]').prop('disabled', true);
-
                                             $.ajax({
                                                 url: url,
                                                 type: "post",
@@ -804,11 +866,9 @@
                                                                     op += '<option value="' + data.category[i].id + '">' + data.category[i].name + '</option>';
                                                                 }
 //                                            console.log(data.category[i].id);
-
                                                             }
                                                             jd.push(op);
 //                                        console.log(data.jadi[z].category_id);
-
                                                         }
 //                                    console.log(jd);
                                                         trHTML2 = '';
@@ -816,8 +876,11 @@
                                                         for (var i = 0; i < data.jadi.length; i++) {
                                                             trHTML2 += '<tr>\n' +
                                                                 '    <th width="150px">&nbsp;&nbsp;file</th>\n' +
-                                                                '    <th>&nbsp;&nbsp;Kode Surat</th>\n' +
-                                                                '    <th>&nbsp;&nbsp;Kode Berkas</th>\n' +
+                                                                '    <th>&nbsp;&nbsp;Nama Kegiatan</th>\n' +
+                                                                '    <th>&nbsp;&nbsp;Tahun RKP</th>\n' +
+                                                                '    <th>&nbsp;&nbsp;Lokasi</th>\n' +
+                                                                '    <th>&nbsp;&nbsp;Volume</th>\n' +
+                                                                '    <th>&nbsp;&nbsp;Anggaran</th>\n' +
                                                                 '    <th>&nbsp;&nbsp;Jenis Surat</th>\n' +
                                                                 '    <th>&nbsp;&nbsp;Detail</th>\n' +
                                                                 '</tr><tr>\n' +
@@ -825,10 +888,10 @@
                                                                 '                            <input placeholder="input data" class="form-control"\n' +
                                                                 '                                                                   type="file"\n' +
                                                                 '                                                                   id="file[' + i + '][]" name="file[' + i + '][]" multiple></td>\n' +
-                                                                '                                                        <td><input placeholder="Kode Surat" class="form-control"\n' +
+                                                                '                                                        <td><input placeholder="Nama Kegiatan" class="form-control"\n' +
                                                                 '                                                                   id="name[]"\n' +
                                                                 '                                                                   name="name[]" multiple value="' + data.jadi[i].name + '" required></td>\n' +
-                                                                '                                                        <td><input placeholder="Kode Berkas" class="form-control"\n' +
+                                                                '                                                        <td><input placeholder="Tahun RKP" class="form-control"\n' +
                                                                 '                                                                   id="kode[]"\n' +
                                                                 '                                                                   name="kode[]" value="' + data.jadi[i].kode + '" multiple required></td>\n' +
                                                                 '                                                        <td><select class="form-control category_id" name="category_id[]"\n' +
@@ -837,6 +900,15 @@
                                                                 '                                                        <td><textarea class="form-control" placeholder="Keterangan" id="desc[]"\n' +
                                                                 '                                                              name="desc[]"  style="height: 54px">' + data.jadi[i].desc + '</textarea>\n' +
                                                                 '                                                        </td>\n' +
+                                                                '                                                        <td><textarea class="form-control" placeholder="Lokasi" id="lokasi[]"\n' +
+                                                                '                                                              name="lokasi[]"  style="height: 54px">' + data.jadi[i].lokasi + '</textarea>\n' +
+                                                                '                                                        </td>\n' +
+                                                                '                                                        <td><textarea class="form-control" placeholder="Volume" id="volume[]"\n' +
+                                                                '                                                              name="volume[]"  style="height: 54px">' + data.jadi[i].volume + '</textarea>\n' +
+                                                                '                                                        </td>\n' +
+                                                                '                                                        <td><textarea class="form-control" placeholder="Anggaran" id="anggaran[]"\n' +
+                                                                '                                                              name="anggaran[]"  style="height: 54px">' + data.jadi[i].anggaran + '</textarea>\n' +
+                                                                '                                                        </td>\n' +
                                                                 '\n' +
                                                                 '                                                    </tr>';
                                                         }
@@ -844,7 +916,6 @@
                                                         $('#modal-form2 .modal-footer').empty().append(' <button type="submit" class="btn btn-primary btn-save">Submit</button>\n' +
                                                             '                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>');
 //                                    $('#jadi-data form #ulang').empty().append(trHTML2);
-
                                                     }
                                                     else {
                                                         swal({
@@ -865,7 +936,6 @@
                                                     })
                                                 }
                                             });
-
                                         }
                                     } else {
                                         swal({
@@ -892,19 +962,14 @@
                 }
             });
         });
-
         var singk = [];
-
         @for ($i=0;$i<count($job);$i++)
         singk.push("{{$job[$i]->singkatan}}");
                 @endfor
-
-
         for (var mb = 0; mb < ({{count($job)}}+0); mb++) {
             var ml = mb + 3, datas = data + (mb + 3);
             $('#' + singk[mb] + ' form #delete' + ml).on('click', {id: ml}, function () {
                 url = "{{route('usulan.cek')}}";
-
                 $('#data' + e.data.id + ' form #metode').val(0);
                 if ($('#data' + e.data.id + ' form #metode').val() == 0) {
                     swal({
@@ -920,7 +985,6 @@
                         confirmButtonText: 'Ya!',
                         preConfirm: function () {
                             return new Promise(function (resolve) {
-
                                 resolve([
                                     $('#swal-input1').val()
                                 ])
@@ -928,7 +992,6 @@
                         },
                         allowOutsideClick: false
                     }).then(function (isConfirm) {
-
                         var password = $('#swal-input1').val();
                         if (isConfirm.value) {
                             $.ajax({
@@ -956,7 +1019,6 @@
                                             confirmButtonText: 'Ya!'
                                         }).then(function (isConfirm) {
                                             if (!$.trim(isConfirm.dismiss)) {
-
                                                 $(':button[type="submit"]').prop('disabled', true);
                                                 $.ajax({
                                                     url: url,
@@ -1018,9 +1080,7 @@
                         }
                         return false;
                     });
-
                 }
-
                 else {
                     swal({
                         title: 'Oops...',
@@ -1028,12 +1088,9 @@
                         type: 'error',
                         timer: '1500'
                     })
-
                 }
                 return false;
-
             });
-
             $('#' + singk[mb] + ' form #update' + ml).on('click', {id: ml}, function (e) {
                 $('#data' + e.data.id + ' form #metode').val(1);
                 var kunci = '', op = '', trHTML2 = '';
@@ -1052,7 +1109,6 @@
                         confirmButtonText: 'Ya!',
                         preConfirm: function () {
                             return new Promise(function (resolve) {
-
                                 resolve([
                                     $('#swal-input1').val()
                                 ])
@@ -1060,7 +1116,6 @@
                         },
                         allowOutsideClick: false
                     }).then(function (isConfirm) {
-
                         var password = $('#swal-input1').val();
                         if (isConfirm.value) {
                             $.ajax({
@@ -1111,8 +1166,11 @@
                                                     for (var i = 0; i < data.jadi.length; i++) {
                                                         trHTML2 += '<tr><input type="hidden" value="' + data.jadi[i].id + '" name="id[]" id="id[]" multiple>\n' +
                                                             '    <th width="150px">&nbsp;&nbsp;file</th>\n' +
-                                                            '    <th>&nbsp;&nbsp;Kode Surat</th>\n' +
-                                                            '    <th>&nbsp;&nbsp;Kode Berkas</th>\n' +
+                                                            '    <th>&nbsp;&nbsp;Nama Kegiatan</th>\n' +
+                                                            '    <th>&nbsp;&nbsp;Tahun RKP</th>\n' +
+                                                            '    <th>&nbsp;&nbsp;Lokasi</th>\n' +
+                                                            '    <th>&nbsp;&nbsp;Volume</th>\n' +
+                                                            '    <th>&nbsp;&nbsp;Anggaran</th>\n' +
                                                             '    <th>&nbsp;&nbsp;Jenis Surat</th>\n' +
                                                             '    <th>&nbsp;&nbsp;Detail</th>\n' +
                                                             '</tr><tr>\n' +
@@ -1120,10 +1178,10 @@
                                                             '                            <input placeholder="input data" class="form-control"\n' +
                                                             '                                                                   type="file"\n' +
                                                             '                                                                   id="file[' + i + '][]" name="file[' + i + '][]" multiple></td>\n' +
-                                                            '                                                        <td><input placeholder="Kode Surat" class="form-control"\n' +
+                                                            '                                                        <td><input placeholder="Nama Kegiatan" class="form-control"\n' +
                                                             '                                                                   id="name[]"\n' +
                                                             '                                                                   name="name[]" multiple value="' + data.jadi[i].name + '" required></td>\n' +
-                                                            '                                                        <td><input placeholder="Kode Berkas" class="form-control"\n' +
+                                                            '                                                        <td><input placeholder="Tahun RKP" class="form-control"\n' +
                                                             '                                                                   id="kode[]"\n' +
                                                             '                                                                   name="kode[]" value="' + data.jadi[i].kode + '" multiple required></td>\n' +
                                                             '                                                        <td><select class="form-control category_id" name="category_id[]"\n' +
@@ -1132,14 +1190,21 @@
                                                             '                                                        <td><textarea class="form-control" placeholder="Keterangan" id="desc[]"\n' +
                                                             '                                                              name="desc[]"  style="height: 54px">' + data.jadi[i].desc + '</textarea>\n' +
                                                             '                                                        </td>\n' +
+                                                            '                                                        <td><textarea class="form-control" placeholder="Lokasi" id="lokasi[]"\n' +
+                                                            '                                                              name="lokasi[]"  style="height: 54px">' + data.jadi[i].lokasi + '</textarea>\n' +
+                                                            '                                                        </td>\n' +
+                                                            '                                                        <td><textarea class="form-control" placeholder="Volume" id="volume[]"\n' +
+                                                            '                                                              name="volume[]"  style="height: 54px">' + data.jadi[i].volume + '</textarea>\n' +
+                                                            '                                                        </td>\n' +
+                                                            '                                                        <td><textarea class="form-control" placeholder="Anggaran" id="anggaran[]"\n' +
+                                                            '                                                              name="anggaran[]"  style="height: 54px">' + data.jadi[i].anggaran + '</textarea>\n' +
+                                                            '                                                        </td>\n' +
                                                             '\n' +
                                                             '                                                    </tr>';
                                                     }
                                                     $('#location2').empty().append(trHTML2);
                                                     $('#modal-form2 .modal-footer').empty().append(' <button type="submit" class="btn btn-primary btn-save">Submit</button>\n' +
                                                         '                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>');
-
-
                                                 }
                                                 else {
                                                     swal({
@@ -1181,8 +1246,6 @@
                         }
                         return false;
                     });
-
-
                 }
                 else {
                     swal({
@@ -1191,33 +1254,26 @@
                         type: 'error',
                         timer: '1500'
                     })
-
                 }
                 return false;
             });
         }
-
         function ambilData(asd) {
 //            console.log('hmmm');
             if ($(asd).data("id") == 2 || $(asd).data("id") == 1) {
 //                alert($(asd).data("id"));
                 myobj['table' + $(asd).data("id")].ajax.reload();
-
-
             }
             else {
 //                alert($(asd).data("tabl"));
                 myobj['table' + $(asd).data("tabl")].ajax.reload();
             }
-
         }
-
         function showForm(id) {
             var opa = '';
             var opa2 = '';
             var base_url = '{!!URL::to('/')!!}' + '/';
             var foo = '';
-
             $.ajax({
                 url: "{{route('usulan.show')}}",
                 type: "GET",
@@ -1229,7 +1285,6 @@
                     $('.modal-title').text('Detail Berkas');
 //                    console.log(data);
                     opa = '';
-
                     for (var i = 0; i < data.berkas.length; i++) {
                         opa += '<a href="' + base_url + data.berkas[i].name + '" target="_blank">' + data.berkas[i].name.substr(21) + '</a><br> ';
                     }
@@ -1239,16 +1294,18 @@
                     else {
                         opa2 = 'Belum ada perubahan'
                     }
-
                     trHTML = '';
-                    trHTML += '<tr><td width="200px">Kode Berkas</td><td>:&nbsp;</td><td>' + data.kode + '</td></tr>';
-                    trHTML += '<tr><td width="200px">Kode Surat</td><td>:&nbsp;</td><td>' + data.name + '</td></tr>';
+                    trHTML += '<tr><td width="200px">Tahun RKP</td><td>:&nbsp;</td><td>' + data.kode + '</td></tr>';
+                    trHTML += '<tr><td width="200px">Nama Kegiatan</td><td>:&nbsp;</td><td>' + data.name + '</td></tr>';
                     trHTML += '<tr><td width="200px">Jenis Surat</td><td>:&nbsp;</td><td>' + data.category + ' (' + data.singkatan + ')' + '</td></tr>';
                     trHTML += '<tr><td width="200px">Pengirim</td><td>:&nbsp;</td><td>' + data.user + '</td></tr>';
                     trHTML += '<tr><td width="200px">Perubahan Data</td><td>:&nbsp;</td><td>' + opa2 + '</td></tr>';
                     trHTML += '<tr><td width="200px" valign="top">Berkas</td><td valign="top">:&nbsp;</td><td>' + opa.substr(0) + '</td></tr>';
                     trHTML += '<tr><td width="200px">Dibuat</td><td>:&nbsp;</td><td>' + data.dibuat + '</td></tr>';
                     trHTML += '<tr><td width="200px" valign="top">Keterangan</td><td valign="top">:&nbsp;</td><td align="justify" >' + data.desc + '</td></tr>';
+                    trHTML += '<tr><td width="200px" valign="top">Lokasi</td><td valign="top">:&nbsp;</td><td align="justify" >' + data.lokasi + '</td></tr>';
+                    trHTML += '<tr><td width="200px" valign="top">Volume</td><td valign="top">:&nbsp;</td><td align="justify" >' + data.volume + '</td></tr>';
+                    trHTML += '<tr><td width="200px" valign="top">Anggaran</td><td valign="top">:&nbsp;</td><td align="justify" >' + data.anggaran + '</td></tr>';
                     $('#location').empty().append(trHTML);
                     foo = '';
                     if (data.deleted_at == null) {
@@ -1261,15 +1318,12 @@
                     }
                     $('#modal-form .modal-footer').empty().append('' + foo +
                         '                    <button type="button" class="btn btn-default" data-dismiss="modal">Kembali</button>');
-
                 },
                 error: function () {
                     alert("Nothing Data");
                 }
             });
         }
-
-
         function deleteData(id) {
             if ($(id).data("method") == 1) {
                 $('#modal-form').modal('hide');
@@ -1287,7 +1341,6 @@
                 confirmButtonText: 'Ya!',
                 preConfirm: function () {
                     return new Promise(function (resolve) {
-
                         resolve([
                             $('#swal-input1').val()
                         ])
@@ -1295,7 +1348,6 @@
                 },
                 allowOutsideClick: false
             }).then(function (isConfirm) {
-
                 var password = $('#swal-input1').val();
                 if (isConfirm.value) {
                     $.ajax({
@@ -1366,10 +1418,8 @@
                 }
                 return false;
             });
-
             return false;
         }
-
         function restoreData(id) {
             if ($(id).data("method") == 1) {
                 $('#modal-form').modal('hide');
@@ -1387,7 +1437,6 @@
                 confirmButtonText: 'Ya!',
                 preConfirm: function () {
                     return new Promise(function (resolve) {
-
                         resolve([
                             $('#swal-input1').val()
                         ])
@@ -1395,7 +1444,6 @@
                 },
                 allowOutsideClick: false
             }).then(function (isConfirm) {
-
                 var password = $('#swal-input1').val();
                 if (isConfirm.value) {
                     $.ajax({
@@ -1423,7 +1471,6 @@
                                     confirmButtonText: 'Ya!'
                                 }).then(function (isConfirm) {
                                     if (!$.trim(isConfirm.dismiss)) {
-
                                         $.ajax({
                                             url: "{{route('usulan.restore')}}",
                                             type: "GET",
@@ -1467,11 +1514,8 @@
                 }
                 return false;
             });
-
             return false;
-
         }
-
         function deletePermData(id) {
             swal({
                 title: 'Hapus Permanen?',
@@ -1489,7 +1533,6 @@
                         data: {'id': $(id).data("id")},
                         success: function (data) {
 //                            console.log(data);
-
                             swal({
                                 title: 'Data Dipulihkan!',
                                 text: 'Data Berhasil Dipulihkan!',
@@ -1506,7 +1549,6 @@
             });
             return false;
         }
-
         function editForm(id) {
             var op = '';
             var opa = '';
@@ -1527,7 +1569,6 @@
                 confirmButtonText: 'Ya!',
                 preConfirm: function () {
                     return new Promise(function (resolve) {
-
                         resolve([
                             $('#swal-input1').val()
                         ])
@@ -1535,7 +1576,6 @@
                 },
                 allowOutsideClick: false
             }).then(function (isConfirm) {
-
                 var password = $('#swal-input1').val();
                 if (isConfirm.value) {
                     $.ajax({
@@ -1583,7 +1623,6 @@
                                         }
 //                    console.log(opa);
 //                            console.log(jd2);
-
                                         $('#modal-form3 form #isi').empty().append('<div class="row form-group has-feedback">\n' +
                                             '                                            <div class="col-md-12">\n' +
                                             '                                                <input type="hidden" id="id" name="id" value="' + data.id + '">' +
@@ -1596,14 +1635,14 @@
                                             '                                        <div class="row form-group has-feedback">' + opa + '\n' +
                                             '                                        </div>\n' +
                                             '                                        <div class="row form-group has-feedback">\n' +
-                                            '                                            <div class="col-md-6"><label class="control-label">&nbsp;Kode Surat</label>\n' +
-                                            '                                                <input placeholder="Kode Surat" id="name" type="text"\n' +
+                                            '                                            <div class="col-md-6"><label class="control-label">&nbsp;Nama Kegiatan</label>\n' +
+                                            '                                                <input placeholder="Nama Kegiatan" id="name" type="text"\n' +
                                             '                                                       class="form-control"\n' +
                                             '                                                       name="name" value="' + data.name + '" \n' +
                                             '                                                       required autofocus>\n' +
                                             '                                            </div>\n' +
-                                            '                                            <div class="col-md-6"><label class="control-label">&nbsp;Kode Berkas</label>\n' +
-                                            '                                                <input placeholder="Kode Berkas" id="kode" type="text"\n' +
+                                            '                                            <div class="col-md-6"><label class="control-label">&nbsp;Tahun RKP</label>\n' +
+                                            '                                                <input placeholder="Tahun RKP" id="kode" type="text"\n' +
                                             '                                                       class="form-control"\n' +
                                             '                                                       name="kode" value="' + data.kode + '" \n' +
                                             '                                                        required autofocus>\n' +
@@ -1625,13 +1664,30 @@
                                             '                                                  class="form-control"\n' +
                                             '                                                  name="desc" >' + data.desc + '</textarea>\n' +
                                             '                                            </div>\n' +
+                                            '                                        <div class="row form-group has-feedback">\n' +
+                                            '                                            <div class="col-md-12"><label class="control-label">&nbsp;Detail</label>\n' +
+                                            '                                        <textarea placeholder="Lokasi" id="lokasi" type="text"\n' +
+                                            '                                                  class="form-control"\n' +
+                                            '                                                  name="lokasi" >' + data.lokasi + '</textarea>\n' +
+                                            '                                            </div>\n' +
+                                            '                                        <div class="row form-group has-feedback">\n' +
+                                            '                                            <div class="col-md-12"><label class="control-label">&nbsp;Detail</label>\n' +
+                                            '                                        <textarea placeholder="Volume" id="volume" type="text"\n' +
+                                            '                                                  class="form-control"\n' +
+                                            '                                                  name="volume" >' + data.volume + '</textarea>\n' +
+                                            '                                            </div>\n' +
+                                            '                                        <div class="row form-group has-feedback">\n' +
+                                            '                                            <div class="col-md-12"><label class="control-label">&nbsp;Detail</label>\n' +
+                                            '                                        <textarea placeholder="Anggaran" id="anggaran" type="text"\n' +
+                                            '                                                  class="form-control"\n' +
+                                            '                                                  name="anggaran" >' + data.anggaran + '</textarea>\n' +
+                                            '                                            </div>\n' +
                                             '                                        </div>');
                                     },
                                     error: function () {
                                         alert("Nothing Data");
                                     }
                                 });
-
                             } else {
                                 swal({
                                     title: 'Password Salah!',
@@ -1653,11 +1709,8 @@
                 }
                 return false;
             });
-
-
             return false;
         }
-
         function historyData(id) {
             var tanggal = '';
             var tr = '';
@@ -1667,7 +1720,6 @@
                 lakuk = '', isi = '', kontenedit = '';
             prefix = 'row';
             var kontendelet = '', kontentambah = '';
-
             $.ajax({
                 type: 'get',
                 url: '{{route('usulan.history')}}',
@@ -1690,7 +1742,6 @@
                                 urutan.push(i + 1);
                             }
                         }
-
                     }
 //                    console.log(urutan);
                     lakuk = '';
@@ -1768,7 +1819,6 @@
                                 '  </div>\n' +
                                 '</div>  ';
                         }
-
                     }
 //                    console.log(lakuk);
                     for (var i = 0; i < urutan.length; i++) {
@@ -1797,7 +1847,6 @@
                             }
                         }
                     }
-
 //                    console.log(tgl);
                     tanggal2 = '';
                     for (var i = 0; i < tanggal.length; i++) {
@@ -1811,7 +1860,6 @@
                     $('#modal-form4').modal('show');
                     $('#modal-form4 .modal-title4').text('Histori Perubahan Berkas');
                 },
-
                 error: function () {
                     swal({
                         title: 'Oops...',
@@ -1821,7 +1869,6 @@
                     })
                 }
             });
-
         }
     </script>
 @endsection

@@ -1,19 +1,13 @@
-@extends('layouts.admin.admin_mst_dashboard')
+@extends('layouts.bappeda.bappeda_mst_dashboard')
 @section('title', 'Aplikasi Pembangunan Daerah | Table Pengguna')
 @section('sidenav')
     <ul class="sidebar-menu" data-widget="tree">
-        <li class="header">Navigasi Admin</li>
+        <li class="header">Navigasi Bappeda</li>
 
 
         <li>
-            <a href="{{route('admin.dashboard')}}">
+            <a href="{{route('bappeda.dashboard')}}">
                 <i class="fa fa-dashboard"></i> <span>Dashboard</span>
-                </span>
-            </a>
-        </li>
-        <li>
-            <a href="{{route('admin.request.index')}}">
-                <i class="fa fa-file-text"></i> <span>Permintaan</span>
                 </span>
             </a>
         </li>
@@ -27,13 +21,9 @@
             </a>
             <ul class="treeview-menu">
                 <li
-                        class="tab tab-pinggir @if ($users=='user') active @endif "
+                        class="tab tab-pinggir @if ($users=='superuser') active @endif "
                         data-id="0"
                 ><a href="#user"><i class="fa fa-group"></i> Pengguna</a></li>
-                <li
-                        class="tab tab-pinggir @if ($users=='letter') active @endif "
-                        data-id="1"
-                ><a href="#surat"><i class="fa fa-envelope"></i>Jenis Surat</a></li>
             </ul>
         </li>
     </ul>
@@ -281,16 +271,16 @@
     </style>
     {{--sweetalert modify icon--}}
     <style>
-{{--        {{asset('images/loadingstyle/loadingimg.gif')}}--}}
+        {{--        {{asset('images/loadingstyle/loadingimg.gif')}}--}}
         .swal-wide{
-    width:850px !important;
-    height:400px !important;
-}
+            width:850px !important;
+            height:400px !important;
+        }
     </style>
     <script src="{{asset('bower_components/jquery/dist/jquery.min.js')}}"></script>
 @endsection
 @section('content')
-    @include('admin.pengurus.form')
+    @include('bappeda.pengurus.form')
     {{--optionjob--}}
     <script>
         var $joboption1 = [];
@@ -337,7 +327,7 @@
             $('#load').show();
             $('.content .row').css("opacity", 0.4);
             $.ajax({
-                url: "{{route('admin.table.letter.cekhapus')}}",
+                url: "{{route('bappeda.table.letter.cekhapus')}}",
                 type: "get",
                 data: {'id': $id},
                 success: function (data) {
@@ -360,7 +350,7 @@
                     }).then(function (isConfirm) {
                         if (!$.trim(isConfirm.dismiss)) {
                             $.ajax({
-                                url: "{{route('admin.table.letter.hapus')}}",
+                                url: "{{route('bappeda.table.letter.hapus')}}",
                                 type: "get",
                                 data: {'entity': $entity, 'id': $id},
                                 success: function (data) {
@@ -431,7 +421,7 @@
                 // declareEdit();
 
                 $.ajax({
-                    url: "{{route('admin.table.letter.lihat')}}",
+                    url: "{{route('bappeda.table.letter.lihat')}}",
                     type: "get",
                     data: {'id': selectsurat},
                     success: function (data) {
@@ -491,7 +481,7 @@
             $action = $(asd).data('action');
             $status = $(asd).data('status');
             $.ajax({
-                url: "{{route('admin.table.letter.lihat')}}",
+                url: "{{route('bappeda.table.letter.lihat')}}",
                 type: "get",
                 data: {'id': $id},
                 success: function (data) {
@@ -584,7 +574,7 @@
             $('#load').fadeIn(500);
             // search = $('#inputsurat' + $index).val();
             $.ajax({
-                url: "{{route('admin.table.surat.api')}}",
+                url: "{{route('bappeda.table.surat.api')}}",
                 type: "get",
                 data: {'id': $index, 'pagination': pagination[prefix + $index], 'search': search[prefix + $index]},
                 success: function (data) {
@@ -768,208 +758,11 @@
 
         <!-- Main content -->
         <section class="content">
-            <div class="row">
-                <div class="col-xs-12">
-                    <div class="box" style="height: auto;">
-                    {{--<div class="box-header">--}}
-                    {{--<h3 class="box-title">Hover Data Table</h3>--}}
-                    {{--</div>--}}
-                    <!-- /.box-header -->
-                        <div class="box-body">
-                            <div class="form">
-                                <ul class="tab-group">
-                                    <li class="tab" id="surat1"><a href="#surat">Surat</a></li>
-                                    <li class="tab" id="user1"><a href="#user">Pengguna</a></li>
-                                </ul>
-
-                                <div class="tab-content2">
-                                    <div id="surat">
-                                        <ul class="nav nav-tabs">
-                                            <li class="active"><a data-toggle="tab" href="#data" id="add"
-                                                                  title="Klik tab untuk menambahkan data berkas surat">Tambah
-                                                    Jenis Surat</a>
-                                            </li>
-                                            @foreach($jobCategory as $row)
-                                                <li><a data-toggle="tab" href="#surat{{$row->id}}"
-                                                       id="lisurat{{$row->id}}"
-                                                       data-change="{{$row->name}}" data-id="{{$row->id}}"
-                                                       onclick="changeTitle(this)"
-                                                       title="Klik tab untuk melihat semua berkas surat {{$row->name}}">{{$row->name}}</a>
-                                                </li>
-                                            @endforeach
-                                        </ul>
-                                        <div class="tab-content" style="margin-top: 1em">
-                                            <div id="data" class="tab-pane fade in active text-center"><br>
-                                                <div class="box-header">
-                                                    <h4 class="box-title" style="font-size: 20px">Tambah
-                                                        Surat</h4>
-                                                    <p><em style="font-size: 14px">Isi Formulir Untuk Menambah
-                                                            Surat</em></p>
-                                                    <div class="box-tools">
-                                                        <div class="input-group input-group-sm"
-                                                             style="width: 150px;">
-                                                            <select placeholder="jumlah" id="jumlah2"
-                                                                    class="form-control pull-right"
-                                                                    name="jumlah2">
-                                                                @for($i=1;$i<=10;$i++)
-                                                                    @if($i==3)
-                                                                        <option value="{{$i}}" selected> {{$i}} Data
-                                                                        </option>
-                                                                    @else
-                                                                        <option value="{{$i}}"> {{$i}} Data</option>
-                                                                    @endif
-                                                                @endfor
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <br>
-                                                <form method="post" class="form-horizontal">
-                                                    {{ csrf_field() }} {{ method_field('post') }}
-                                                    <div id="isiinputsurat" class="col-md-10 col-md-offset-1">
-                                                        @for ($i=0;$i<3;$i++)
-                                                            <div class="row form-group has-feedback">
-                                                                <div class="col-md-3">
-                                                                    <input placeholder="Nama Surat" id="name[]"
-                                                                           type="text"
-                                                                           class="form-control name"
-                                                                           name="name[]"
-                                                                           required autofocus>
-                                                                </div>
-                                                                <div class="col-md-3 ">
-                                                                    <input placeholder="Singkatan Surat" id="singkatan[]"
-                                                                           type="text"
-                                                                           class="form-control singkatan"
-                                                                           name="singkatan[]"
-                                                                           required autofocus>
-                                                                </div>
-                                                                <div class="col-md-3">
-                                                                    <select placeholder="Pilih Seksi" id="job_id[]"
-                                                                            class="form-control seksi" data-id="{{$i}}"
-                                                                            name="job_id[]"
-                                                                            required autofocus>
-                                                                        <option value="" selected disabled> Pilih
-                                                                            Seksi
-                                                                        </option>
-                                                                        @foreach($jobCategory as $job)
-                                                                            <option value="{{$job->id}}">{{$job->name}}
-                                                                            </option>
-                                                                        @endforeach
-                                                                    </select>
-                                                                </div>
-                                                                <div class="col-md-3">
-                                                                    <textarea placeholder="Detail" title="detail"
-                                                                              id="desc[]"
-                                                                              class="form-control desc"
-                                                                              style="height: 33px"
-                                                                              name="desc[]"
-                                                                              required autofocus></textarea>
-                                                                </div>
-
-                                                            </div>
-                                                        @endfor
-                                                    </div>
-                                                    <br>
-                                                    <div class="col-md-10 col-md-offset-1">
-                                                        <button type="submit" class="btn btn-block btn-info btn-lg"
-                                                                style="margin-bottom: 30px"><em
-                                                                    id="berubah">Submit</em>
-                                                            <i class="fa fa-circle-o-notch fa-spin fa-1x fa-fw"
-                                                               id="loading1"></i></button>
-
-                                                    </div>
-                                                </form>
-                                            </div>
-
-                                            @foreach($jobCategory as $row)
-                                                <div id="surat{{$row->id}}" class="tab-pane fade in text-center"><br>
-
-                                                    <div class="row container-fluid">
-                                                        <div class="col-md-3">
-                                                            <button class="btn btn-default" type="button"
-                                                                    data-toggle="tooltip"
-                                                                    onclick="multidelete({{$row->id}})"
-                                                                    title="pilih data yang akan dihapus terlebih dahulu"
-                                                                    readonly="true"><i
-                                                                        class="fa fa-trash"></i> Hapus
-                                                            </button> &nbsp;
-                                                            <button class="btn btn-default" type="button"
-                                                                    data-toggle="tooltip"
-                                                                    onclick="multiedit({{$row->id}})"
-                                                                    title="pilih data yang akan dihapus terlebih dahulu"
-                                                                    readonly="true"><i
-                                                                        class=" fa fa-edit"></i> Rubah
-                                                            </button>
-                                                        </div>
-                                                        <div class="col-md-6 ">
-                                                            <h4 style="font-size: 20px">Daftar
-                                                                Jenis Surat</h4>
-                                                            <p><em style="font-size: 14px">{{$row->name}}</em></p>
-                                                        </div>
-                                                        <div class="col-md-2 col-sm-offset-1">
-                                                            <div class="input-group input-group-sm"
-                                                                 style="width: 150px;">
-                                                                <input type="text" name="inputsurat{{$row->id}}"
-                                                                       id="inputsurat{{$row->id}}"
-                                                                       class="form-control pull-right"
-                                                                       placeholder="Cari">
-
-                                                                <div class="input-group-btn">
-                                                                    <button type="submit" id="submitsurat{{$row->id}}"
-                                                                            class="btn btn-default cariBtn">
-                                                                        <i class="fa fa-search"
-                                                                           id="carisurat{{$row->id}}"></i>
-                                                                        <i class="fa fa-circle-o-notch fa-spin fa-1x fa-fw"
-                                                                           id="loadingsurat{{$row->id}}"></i></button>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-
-                                                    </div>
-                                                    <br>
-
-                                                    <div class="box-body">
-                                                        <div class="table-responsive">
-                                                            <table class="table no-margin">
-                                                                <thead>
-                                                                <tr>
-                                                                    <th style="text-align:center"><input type="checkbox"
-                                                                                                         data-toggle="tooltip"
-                                                                                                         title="centang semua"
-                                                                                                         data-id="{{$row->id}}"
-                                                                                                         class="checkall"
-                                                                                                         style="width: 30px">
-                                                                    </th>
-                                                                    <th style="text-align:center">Nama</th>
-                                                                    <th style="text-align:center">Singkatan</th>
-                                                                    <th style="text-align:center">Pembuat</th>
-                                                                    <th style="text-align:center">Dibuat</th>
-                                                                    <th style="width: 150px"></th>
-                                                                </tr>
-                                                                </thead>
-                                                                <tbody>
-                                                                </tbody>
-                                                            </table>
-                                                        </div>
-                                                        <!-- /.table-responsive -->
-                                                    </div>
-                                                </div>
-                                        @endforeach
-                                        <!-- /.box-body -->
-                                            <div class="overlay" id="load" style="display: none">
-                                                <img src="{{asset('images/loadingstyle/loadingimg.gif')}}"
-                                                     style="width: 30%;height: auto; position: absolute; top: 0; bottom:0; left: 0; right:0; margin: auto;">
-                                            </div>
-
-                                        </div>
-                                    </div>
-
                                     <div id="user">
                                         <ul class="nav nav-tabs">
                                             <li class="active"><a data-toggle="tab" href="#data2" data-id="0"
                                                                   onclick="changePenghuni(this)"
-                                                                  title="Klik tab untuk menambahkan data Pengguna">Tambah
-                                                    Pengguna</a>
+                                                                  title="Klik tab untuk menambahkan data Pengguna">Tambah Pengguna</a>
                                             </li>
                                             @foreach($jobCategory as $row)
                                                 <li><a data-toggle="tab" href="#job{{$row->id}}"
@@ -999,8 +792,8 @@
                                                             <select placeholder="jumlah" id="jumlah"
                                                                     class="form-control pull-right"
                                                                     name="jumlah">
-                                                                @for($i=1;$i<=10;$i++)
-                                                                    @if($i==3)
+                                                                @for($i=1;$i<=5;$i++)
+                                                                    @if($i==1)
                                                                         <option value="{{$i}}" selected> {{$i}} Data
                                                                         </option>
                                                                     @else
@@ -1015,13 +808,13 @@
                                                 <form method="post" class="form-horizontal">
                                                     {{ csrf_field() }} {{ method_field('post') }}
                                                     <div id="isiinputuser">
-                                                        @for ($i=0;$i<3;$i++)
+                                                        @for ($i=0;$i<1;$i++)
                                                             <div class="row form-group has-feedback" data-no="{{$i}}">
                                                                 <div class="col-md-2 ">
-                                                                    <input placeholder="Masukkan NIP" id="nip[]"
+                                                                    <input placeholder="Masukkan NIK" id="nik[]"
                                                                            type="text" onkeypress='numbertok(event)'
-                                                                           class="form-control nip"
-                                                                           name="nip[]" data-no="{{$i}}"
+                                                                           class="form-control nik"
+                                                                           name="nik[]" data-no="{{$i}}"
                                                                            required autofocus>
                                                                 </div>
                                                                 <div class="col-md-2">
@@ -1039,41 +832,25 @@
                                                                            required autofocus>
                                                                 </div>
                                                                 <div class="col-md-2">
-                                                                    <select placeholder="Pilih Seksi" id="job_id[]"
-                                                                            class="form-control seksi" data-id="{{$i}}"
-                                                                            name="job_id[]"
-                                                                            required autofocus>
-                                                                        <option value="" selected disabled> Pilih
-                                                                            Seksi
-                                                                        </option>
-                                                                        @foreach(\App\trDataJobDesc::orderBy('name','asc')->get() as $job)
-                                                                            <option value="{{$job->id}}">{{$job->name}}
-                                                                            </option>
-                                                                        @endforeach
-                                                                    </select>
+                                                                    @foreach(\App\trDataJobDesc::find($id=['3']) as $row)
+                                                                        <input id="job_id" type="hidden" class="form-control" name="job_id" value="{{$row->id}}" readonly>
+                                                                    @endforeach
                                                                 </div>
                                                                 <div class="col-md-2">
-                                                                    <select placeholder="Pilih Jabatan"
-                                                                            id="posisition_id[]"
-                                                                            class="form-control opsi jabatan{{$i}}"
-                                                                            name="posisition_id[]"
-                                                                            required autofocus>
-                                                                        <option value="" selected disabled> Pilih
-                                                                            Seksi Terlebih Dahulu
-                                                                        </option>
-                                                                    </select>
+                                                                    @foreach(\App\trDataPosisition::find($id=['3']) as $row)
+                                                                        <input id="posisition_id" type="hidden" class="form-control" name="posisition_id" value="{{$row->id}}" readonly>
+                                                                    @endforeach
                                                                 </div>
                                                                 <div class="col-md-2">
-                                                                    <select placeholder="Pilih Hak Akses" id="role_id[]"
-                                                                            class="form-control hak opsi"
-                                                                            name="role_id[]"
-                                                                            required autofocus>
-                                                                        <option value="" selected disabled> Pilih Hak
-                                                                            Akses
-                                                                        </option>
-                                                                        @foreach(\App\status::orderBy('name','asc')->get() as $status)
-                                                                            <option value="{{$status->id}}">{{$status->name}}
-                                                                            </option>
+                                                                    @foreach(\App\status::find($id=['3']) as $row)
+                                                                        <input id="role_id" type="hidden" class="form-control" name="role_id" value="{{$row->id}}" readonly>
+                                                                    @endforeach
+                                                                </div>
+                                                                <div class="col-md-4">
+                                                                    <select placeholder="Pilih Kota/Kabupaten" id="district_id[]" class="form-control wilayah" data-id="{{$i}}" name="district_id[]" required autofocus>
+                                                                        <option value="" selected disabled> Pilih Kota/Kabupaten</option>
+                                                                        @foreach(\App\district::orderBy('name','asc')->where('city_id', '=', Auth::user()->city_id)->get() as $value)
+                                                                            <option value="{{$value->id}}">{{$value->name}}</option>
                                                                         @endforeach
                                                                     </select>
                                                                 </div>
@@ -1147,7 +924,7 @@
                                                                                                          class="checkall"
                                                                                                          style="width: 30px">
                                                                     </th>
-                                                                    <th style="text-align:center">NIP</th>
+                                                                    <th style="text-align:center">NIK</th>
                                                                     <th style="text-align:center">Nama</th>
                                                                     <th style="text-align:center">Jobdesk</th>
                                                                     <th style="text-align:center">Hak Akses</th>
@@ -1221,7 +998,7 @@
                                                                                                      class="checkall"
                                                                                                      style="width: 30px">
                                                                 </th>
-                                                                <th style="text-align:center">NIP</th>
+                                                                <th style="text-align:center">NIK</th>
                                                                 <th style="text-align:center">Nama</th>
                                                                 <th style="text-align:center">Jobdesk</th>
                                                                 <th style="text-align:center">Hak Akses</th>
@@ -1274,7 +1051,7 @@
                                         $('#user1').addClass('active');
                                         $('#surat1').removeClass('active');
                                         $('.tittleopsi').text('Pengguna');
-                                        history.pushState(null, null, '/admin/table/user');
+                                        history.pushState(null, null, '/bappeda/table/user');
 
                                     }
                                     else {
@@ -1283,7 +1060,7 @@
                                         $('#surat1').addClass('active');
                                         $('#user1').removeClass('active');
                                         $('.tittleopsi').text('Surat');
-                                        history.pushState(null, null, '/admin/table/letter');
+                                        history.pushState(null, null, '/bappeda/table/letter');
                                     }
 
                                 });
@@ -1292,7 +1069,7 @@
                                     console.log(pengguna);
                                     $('.fa-envelope').parents('li').removeClass('active');
                                     $('.fa-group').parents('li').addClass('active');
-                                    history.pushState(null, null, '/admin/table/user');
+                                    history.pushState(null, null, '/bappeda/table/user');
                                     $('.pagiuser').hide(500);
                                     if (pengguna == 0) {
                                         $('.box-footer').hide(500);
@@ -1310,7 +1087,7 @@
                                     $('.fa-envelope').parents('li').addClass('active');
 
                                     console.log(surat);
-                                    history.pushState(null, null, '/admin/table/letter');
+                                    history.pushState(null, null, '/bappeda/table/letter');
                                     if (surat == 0) {
                                         $('.box-footer').hide(500);
                                     }
@@ -1503,7 +1280,7 @@
             $('#load').fadeIn(500);
             $('#request' + $index + ' table tbody').empty().append('<tr><td colspan="5">loading...</td></tr>');
             $.ajax({
-                url: "{{route('admin.table.surat.api')}}",
+                url: "{{route('bappeda.table.surat.api')}}",
                 type: "get",
                 data: {'id': $index, 'pagination': $pagi, 'search': search[prefix + $index]},
                 success: function (data) {
@@ -1688,7 +1465,7 @@
             $('#modal-form2 #job_id').addClass('disabled')  //disable class
                 .prop({disabled: true, 'name': 'job_id1'});
             $.ajax({
-                url: "{{route('admin.table.surat.edit')}}",
+                url: "{{route('bappeda.table.surat.edit')}}",
                 type: "post",
                 data: new FormData($('#modal-form2 form')[0]),
                 contentType: false,
@@ -1762,7 +1539,7 @@
             $('#modal-form3 .job_id').addClass('disabled')  //disable class
                 .prop({disabled: true, 'name': 'job_id1[]'});
             $.ajax({
-                url: "{{route('admin.table.surat.edit')}}",
+                url: "{{route('bappeda.table.surat.edit')}}",
                 type: "post",
                 data: new FormData($('#modal-form3 form')[0]),
                 contentType: false,
@@ -1825,7 +1602,7 @@
             $('#data .seksi option:not(:selected)').attr('disabled', 'disabled');
             $(':input[type="submit"]').prop('disabled', true);
             $.ajax({
-                url: "{{route('admin.table.letter.storesuratplus')}}",
+                url: "{{route('bappeda.table.letter.storesuratplus')}}",
                 type: "post",
                 data: new FormData($('#data form')[0]),
                 contentType: false,
@@ -1888,7 +1665,7 @@
             var $isiinputuser2 = $('#isiinputuser .row .col-md-2');
 //            console.log($isiinputuser.length);
             $(document).on('change', '#jumlah', function () {
-                $nip = [];
+                $nik = [];
                 $email = [];
                 $jabatan = [];
                 $seksi = [];
@@ -1899,10 +1676,10 @@
                 // $email = '<div class="col-md-2">' + $isiinputuser2.get(2).innerHTML + '</div>';
                 $hak = '<div class="col-md-2">' + $isiinputuser2.get(5).innerHTML + '</div>';
                 for ($i = 0; $i < $ulang; $i++) {
-                    $nip.push('<div class="col-md-2"><input placeholder="Masukkan NIP" id="nip[]"\n' +
+                    $nik.push('<div class="col-md-2"><input placeholder="Masukkan NIK" id="nik[]"\n' +
                         '                                                                           type="text" onkeypress=\'numbertok(event)\'\n' +
-                        '                                                                           class="form-control nip"\n' +
-                        '                                                                           name="nip[]"\n data-no="' + $i + '" ' +
+                        '                                                                           class="form-control nik"\n' +
+                        '                                                                           name="nik[]"\n data-no="' + $i + '" ' +
                         '                                                                           required autofocus></div>');
                     $email.push('<div class="col-md-2"><input placeholder="Email" id="email[]"\n' +
                         '                                                                           type="email"\n' +
@@ -1923,7 +1700,7 @@
 
                 $isi = '';
                 for ($i = 0; $i < $ulang; $i++) {
-                    $isi += '<div class="row form-group has-feedback" data-no="' + $i + '">' + $nip[$i] + $name + $email[$i] + $seksi[$i] + $jabatan[$i] + $hak + '</div>';
+                    $isi += '<div class="row form-group has-feedback" data-no="' + $i + '">' + $nik[$i] + $name + $email[$i] + $seksi[$i] + $jabatan[$i] + $hak + '</div>';
                 }
                 $('#isiinputuser').empty().append($isi).hide().fadeIn('slow');
             });
@@ -1933,7 +1710,7 @@
                 $("div#divLoading").addClass('show');
                 $.ajax({
                     type: 'get',
-                    url: '{{route('admin.table.user.getPosisition')}}',
+                    url: '{{route('bappeda.table.user.getPosisition')}}',
                     data: {'id': $(this).val()},
                     success: function (data) {
                         posi = $('#data2 form .jabatan' + $lock);
@@ -1999,5 +1776,5 @@
         });
     </script>
     {{--keyup--}}
-    @include('admin.pengurus.tabUser.table')
+    @include('bappeda.pengurus.tabUser.table')
 @endsection

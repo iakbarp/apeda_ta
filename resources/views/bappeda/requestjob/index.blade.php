@@ -1,4 +1,4 @@
-@extends('layouts.admin.admin_mst_dashboard')
+@extends('layouts.bappeda.bappeda_mst_dashboard')
 @section('title', 'Aplikasi Pembangunan Daerah | Dashboard')
 @section('style')
     <style>
@@ -84,13 +84,13 @@
 
 
         <li>
-            <a href="{{route('admin.dashboard')}}">
+            <a href="{{route('bappeda.dashboard')}}">
                 <i class="fa fa-dashboard"></i> <span>Dashboard</span>
                 </span>
             </a>
         </li>
         <li class="active">
-            <a href="{{route('admin.request.index')}}">
+            <a href="{{route('bappeda.request.index')}}">
                 <i class="fa fa-file-text"></i> <span>Permintaan</span>
                 </span>
             </a>
@@ -104,8 +104,8 @@
             </span>
             </a>
             <ul class="treeview-menu">
-                <li><a href="{{route('admin.table.user')}}"><i class="fa fa-group"></i> Pengguna</a></li>
-                <li><a href="{{route('admin.table.letter')}}"><i class="fa fa-envelope"></i>Jenis Surat</a></li>
+                <li><a href="{{route('bappeda.table.user')}}"><i class="fa fa-group"></i> Pengguna</a></li>
+                <li><a href="{{route('bappeda.table.letter')}}"><i class="fa fa-envelope"></i>Jenis Surat</a></li>
             </ul>
         </li>
     </ul>
@@ -395,7 +395,7 @@
                     $('.acceptall').prop('disabled', false);
                     $('.denyall').prop('disabled', false);
                     $.ajax({
-                        url: "{{route('bapedad.request.apiData')}}",
+                        url: "{{route('bappeda.request.apiData')}}",
                         type: "get",
                         data: {'id': index, 'pagination': $datapagi,'search':$search},
                         success: function (data) {
@@ -748,7 +748,7 @@
                 })
             }else {
                 $.ajax({
-                    url: "{{route('bapppeda.request.accept')}}",
+                    url: "{{route('bappeda.request.accept')}}",
                     type: "get",
                     data: {'id': $cek0},
                     success: function (data) {

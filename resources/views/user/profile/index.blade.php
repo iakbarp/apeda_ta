@@ -4,7 +4,11 @@
     <li><a href="{{url('home#fh5co-practices')}}">Beranda</a></li>
     <li class="active"><a href="{{url('profile')}}">Profil Aplikasi</a></li>
     <li><a href="{{url('employes')}}">Daftar Kecamatan</a></li>
-    <li><a href="{{url('FormUsulan')}}">Form Usulan</a></li>
+    @if ($user->role_id==2)
+        <li><a href="{{url('bappeda')}}">Halaman Admin</a></li>
+    @else
+        <li><a href="{{url('FormUsulan')}}">RKP</a></li>
+    @endif
 @endsection
 @section('content')
     <aside id="fh5co-hero" class="js-fullheight">

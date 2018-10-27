@@ -1,3 +1,4 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 
@@ -63,7 +64,7 @@
                                     <table class="" align="center" border="0" cellpadding="0" cellspacing="0"
                                            width="100%" style="height: 80px">
                                         <tbody>
-                                        <a href="">A<span>.</span>P<span>.</span>E<span>.</span>D<span>.</span></a>
+                                        <a href="">S<span>.</span>S<span>.</span>W<span>.</span>S<span>.</span></a>
                                         </tbody>
                                     </table>
                                 </td>
@@ -79,42 +80,42 @@
                                         <tr>
                                             <td class="email-content-block copy"
                                                 style='font-family: "Avenir Next", "Avenir", "Helvetica", sans-serif !important; padding-left: 25px; padding-right: 25px; padding-top: 50px;'>
-                                                <h2 style='margin: 0 0 0.5rem 0; line-height: 1.25; font-family: "Avenir Next", "Avenir", "Helvetica", sans-serif !important; color: #3e474c; font-size: 2rem; font-weight: 500; font-style: normal;'>
-                                                    Hi {{substr($name,0,$kurva)}},</h2>
+                                                {{--<h2 style='margin: 0 0 0.5rem 0; line-height: 1.25; font-family: "Avenir Next", "Avenir", "Helvetica", sans-serif !important; color: #3e474c; font-size: 2rem; font-weight: 500; font-style: normal;'>--}}
+                                                    {{--Hi {{substr($name,0,$kurva)}},</h2>--}}
 
                                                 <p style='margin-bottom: 15px; font-family: "Avenir Next", "Avenir", "Helvetica", sans-serif !important; font-weight: 400; font-size: 16px; line-height: 1.5;'>
                                                     Anda telah terdaftar pada akun APEDA. Berikut detail Akun:</p>
-                                                <table>
-                                                    <tr>
-                                                        <td>NIK</td><td> :</td><td>{{$nik}}</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>Nama</td><td> :</td><td>{{$name}}</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>Email</td><td> :</td><td>{{$email}}</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>Password</td><td> :</td><td>{{$password}}</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>Jobdesk</td><td> :</td><td>{{$posisition_id}} di {{$job_id}}</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>Hak Akses</td><td> :</td><td>{{$role_id}}</td>
-                                                    </tr>
+                                                {{--<table>--}}
+                                                    {{--<tr>--}}
+                                                        {{--<td>NIK</td><td> :</td><td>{{$nik}}</td>--}}
+                                                    {{--</tr>--}}
+                                                    {{--<tr>--}}
+                                                        {{--<td>Nama</td><td> :</td><td>{{$name}}</td>--}}
+                                                    {{--</tr>--}}
+                                                    {{--<tr>--}}
+                                                        {{--<td>Email</td><td> :</td><td>{{$email}}</td>--}}
+                                                    {{--</tr>--}}
+                                                    {{--<tr>--}}
+                                                        {{--<td>Password</td><td> :</td><td>{{$password}}</td>--}}
+                                                    {{--</tr>--}}
+                                                    {{--<tr>--}}
+                                                        {{--<td>Jobdesk</td><td> :</td><td>{{$posisition_id}} di {{$job_id}}</td>--}}
+                                                    {{--</tr>--}}
+                                                    {{--<tr>--}}
+                                                        {{--<td>Hak Akses</td><td> :</td><td>{{$role_id}}</td>--}}
+                                                    {{--</tr>--}}
 
-                                                </table>
+                                                {{--</table>--}}
                                                 <p style='font-family: "Avenir Next", "Avenir", "Helvetica", sans-serif !important; font-weight: 400; font-size: 16px;  ;'>
                                                     Untuk login gunakan email dan password yang terterah.</p>
                                                 <center style='font-family: "Avenir Next", "Avenir", "Helvetica", sans-serif !important;'>
 
                                                     <div class="section"
                                                          style='font-family: "Avenir Next", "Avenir", "Helvetica", sans-serif !important; padding: 50px 0;'>
-                                                        <a class="button" href="{{url('')}}"
+                                                        <a class="button" href="{{route('sendEmailDone', ["email" => $user->email, "verifyToken"=>$user->verifyToken])}}"
                                                            target="_blank"
                                                            style='-moz-transition: color 0.175s cubic-bezier(0.215, 0.61, 0.355, 1); -o-transition: color 0.175s cubic-bezier(0.215, 0.61, 0.355, 1); -webkit-transition: color 0.175s cubic-bezier(0.215, 0.61, 0.355, 1); transition: color 0.175s cubic-bezier(0.215, 0.61, 0.355, 1); color: white; font-family: "Avenir Next", "Avenir", "Helvetica", sans-serif !important; background-color: #3fbced; border-radius: 3px; padding: 15px 17px; text-decoration: none;'>
-                                                            login</a>
+                                                            Verifikasi Sekarang</a>
                                                     </div>
                                                 </center>
                                                 <p style='margin-bottom: 15px; font-family: "Avenir Next", "Avenir", "Helvetica", sans-serif !important; font-weight: 400; font-size: 16px; line-height: 1.5;'>

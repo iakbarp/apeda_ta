@@ -8,6 +8,16 @@
                     <div class="col-lg-8 col-lg-offset-2 fh5co-heading">
                         <div class="col-lg-8 col-lg-offset-2">
                             <div class="w3-panel w3-card">
+                                @if(session('status'))
+                                    <script>
+                                        swal("Akun berhasil terdaftar", 'Silahkan check email untuk verifikasi', "info", "1500")
+                                    </script>
+                                @endif
+                                    {{--@if(session('verif'))--}}
+                                        {{--<script>--}}
+                                            {{--swal("Akun berhasil terdaftar", 'Silahkan login untuk menggunakan aplikasi', "success", "1500")--}}
+                                        {{--</script>--}}
+                                    {{--@endif--}}
                                 <h2 style="padding-top: 5%" class="text-center">Silahkan Login</h2>
                                 {{--@if(session('status'))--}}
                                     {{--<div class="alert alert-success alert-dismissible">--}}

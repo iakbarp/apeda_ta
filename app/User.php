@@ -17,7 +17,7 @@ class User extends Authenticatable
      */
     protected $guarded = ['id', 'created_at'];
 //    protected $dates = ['deleted_at'];
-
+//    protected $fillable = ['verifyToken'];
     /**
      * The attributes that should be hidden for arrays.
      *
@@ -30,6 +30,14 @@ class User extends Authenticatable
     public function role()
     {
         return $this->belongsTo('App\status', 'role_id');
+    }
+    public function cities()
+    {
+        return $this->belongsTo('App\city', 'city_id');
+    }
+    public function status()
+    {
+        return $this->belongsTo('App\user', 'status');
     }
 
     public function jobs()
@@ -47,7 +55,7 @@ class User extends Authenticatable
     }
     public function verification()
     {
-        return $this->hasOne('App\verifyUser');
+        return $this->hasOne('App\verifyUser', 'user_id');
     }
 
 }

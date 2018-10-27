@@ -2,7 +2,20 @@
 
 namespace App\Http\Controllers;
 
+use App\Datacarousel;
+use App\mst_data;
+use App\status;
+use App\trDataCategory;
+use App\trDataJobDesc;
+use App\trDataPosisition;
+use App\trRequestChangeJob;
+use App\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Auth;
+use Redirect;
+use Yajra\Datatables\Datatables;
 
 class BappedaTableManageController extends Controller
 {
@@ -10,10 +23,10 @@ class BappedaTableManageController extends Controller
     {
         Carbon::setLocale('id');
         setlocale(LC_TIME, 'Indonesian');
-        Session::put('requ', count(trRequestChangeJob::where('bappeda_id', null)->orderBy('id', 'desc')->get()));
+        Session::put('requ', count(trRequestChangeJob::where('admin_id', null)->orderBy('id', 'desc')->get()));
         Carbon::setLocale('id');
         setlocale(LC_TIME, 'Indonesian');
-        $req = trRequestChangeJob::where('bappeda_id', null)->orderBy('id', 'desc')->get();
+        $req = trRequestChangeJob::where('admin_id', null)->orderBy('id', 'desc')->get();
         $jobType1 = trDataJobDesc::all();
         $countjob = count($jobType1);
         $jobType = trDataJobDesc::orderBy('name', 'asc')->skip(1)->take($countjob)->get();
@@ -126,7 +139,7 @@ class BappedaTableManageController extends Controller
                 $terima->ganti = null;
                 $terima->update();
                 $data->status = 1;
-                $data->bappeda_id = Auth::user()->id;
+                $data->admin_id = Auth::user()->id;
                 $data->update();
             }
         } else {
@@ -137,7 +150,7 @@ class BappedaTableManageController extends Controller
             $terima->ganti = null;
             $terima->update();
             $data->status = 1;
-            $data->bappeda_id = Auth::user()->id;
+            $data->admin_id = Auth::user()->id;
             $data->update();
         }
         return response()->json($id);
@@ -155,7 +168,7 @@ class BappedaTableManageController extends Controller
                 $terima->ganti = null;
                 $terima->update();
                 $data->status = 2;
-                $data->bappeda_id = Auth::user()->id;
+                $data->admin_id = Auth::user()->id;
                 $data->update();
             }
         } else {
@@ -166,7 +179,7 @@ class BappedaTableManageController extends Controller
             $terima->ganti = null;
             $terima->update();
             $data->status = 2;
-            $data->bappeda_id = Auth::user()->id;
+            $data->admin_id = Auth::user()->id;
             $data->update();
         }
         return response()->json($id);
@@ -218,4 +231,6 @@ class BappedaTableManageController extends Controller
 //            ->removeColumn('job_id', 'category_id', 'user_id')
             ->make(true);
     }
+
+
 }

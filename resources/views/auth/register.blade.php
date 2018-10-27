@@ -1,6 +1,9 @@
 @extends('layouts.user.mst_user_relog')
 @section('title', 'Aplikasi Pembangunan Daerah - Register')
 @section('content')
+    <script>
+        swal("Bagi Pengguna SKPD", "Harap hubungi Badan Perencanaan Pembangunan Daerah di Kota/Kabupaten anda untuk mendaftar sebagai pengguna SKPD", "info", "1500")
+    </script>
     <div class="container">
         <div class="row">
             <div class="col-md-8 col-md-offset-2">

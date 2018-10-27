@@ -48,15 +48,20 @@ class LoginController extends Controller
 
         if ($this->guard()->user()->role->name=='Admin'){
 
-            return redirect(url('home/'));
+            return redirect(url('bappeda/'));
         }
         elseif ($this->guard()->user()->role->name=='Bappeda'){
 
-            return redirect(url('bappeda/'));
+            return redirect(url('admin/'));
         }
         else{
             return redirect(url('home/'));
 
         }
+    }
+    protected function credentials(Request $request)
+    {
+        return ['email'=>$request->{$this->username()}, 'password'=>$request->password,'status'=>'1'];
+//        return ['email'=>$this->username(),'password'=>$request->getPassword()]
     }
 }

@@ -2,22 +2,37 @@
 
 namespace App\Http\Controllers;
 
+use App\historiSendEmail;
+use App\mst_data;
+use App\status;
+use App\trDataCategory;
+use App\trDataHistori;
+use App\trDataJobDesc;
+use App\trDataPosisition;
+use App\trFile;
+use App\trFileHistori;
+use App\trRequestChangeJob;
+use App\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Storage;
 
 class BappedaTableLetterController extends Controller
 {
     public function index($users)
     {
-        Session::put('requ', count(trRequestChangeJob::where('bappeda_id', null)->orderBy('id', 'desc')->get()));
+        Session::put('requ', count(trRequestChangeJob::where('admin_id', null)->orderBy('id', 'desc')->get()));
         Carbon::setLocale('id');
         setlocale(LC_TIME, 'Indonesian');
-        $req = trRequestChangeJob::where('bappeda_id', null)->orderBy('id', 'desc')->get();
+        $req = trRequestChangeJob::where('admin_id', null)->orderBy('id', 'desc')->get();
         $countCategory = count(trDataJobDesc::all()) - 1;
         $jobCategory = trDataJobDesc::orderBy('name', 'asc')->skip(1)->take($countCategory)->get();
         $user = User::orderBy('name', 'asc')->get();
 
         $category = trDataCategory::orderBy('id', 'desc')->get();
-        if ($users == 'user' || $users == 'letter') {
+        if ($users == 'superuser' || $users == 'superletter') {
             return view('bappeda.pengurus.user', compact('req', 'jobCategory', 'user', 'users', 'category'));
         } else {
             return redirect()->route('404');
@@ -230,7 +245,7 @@ class BappedaTableLetterController extends Controller
                     $data['entity'] = $entity;
                     foreach ($this->getPagination($r->id, $skip, $next) as $row) {
                         $data['list'][] = array('name' => $row->name,
-                            'nip' => $row->nip,
+                            'nik' => $row->nik,
                             'role' => $this->getRole($row->role_id),
                             'id' => $row->id,
                             'ps' => $this->getPosisition($row->posisition_id));
@@ -284,12 +299,12 @@ class BappedaTableLetterController extends Controller
             $role2 = $this->getRole($row->role_id);
             $ps2 = $this->getPosisition($row->posisition_id);
             $name = strpos(strtolower($row->name), strtolower($search));
-            $nip = strpos(strtolower($row->nip), strtolower($search));
+            $nik = strpos(strtolower($row->nik), strtolower($search));
             $ps = strpos(strtolower($ps2), strtolower($search));
             $role = strpos(strtolower($role2), strtolower($search));
 
-            if ($name !== false || $nip !== false || $ps !== false || $role !== false) {
-                $data['list'][] = array('name' => $row->name, 'nip' => $row->nip, 'ps' => $ps2, 'role' => $role2, 'id' => $row->id);
+            if ($name !== false || $nik !== false || $ps !== false || $role !== false) {
+                $data['list'][] = array('name' => $row->name, 'nik' => $row->nik, 'ps' => $ps2, 'role' => $role2, 'id' => $row->id);
                 $data['status'] = 1;
             }
         }
@@ -375,7 +390,7 @@ class BappedaTableLetterController extends Controller
             $compare[] = array('name' => $r->usw->name
             ,'id' => $r->id
             ,'status' => $r->status
-            , 'nip' => $r->usw->nip
+            , 'nik' => $r->usw->nik
             , 'job_id' => trDataJobDesc::findOrFail($r->usw->job_id)->name
             , 'posisition_id' => trDataPosisition::findOrFail($r->usw->posisition_id)->name
             , 'role_id' => status::findOrFail($r->usw->role_id)->name);
@@ -384,14 +399,14 @@ class BappedaTableLetterController extends Controller
         $data['status'] = 0;
         foreach ($compare as $row) {
             $name = strpos(strtolower($row['name']), strtolower($search));
-            $nip = strpos(strtolower($row['nip']), strtolower($search));
+            $nik = strpos(strtolower($row['nik']), strtolower($search));
             $ps = strpos(strtolower($row['posisition_id']), strtolower($search));
             $role = strpos(strtolower($row['role_id']), strtolower($search));
             $job= strpos(strtolower($row['job_id']), strtolower($search));
 
-            if ($name !== false || $nip !== false || $ps !== false || $role !== false|| $job !== false) {
+            if ($name !== false || $nik !== false || $ps !== false || $role !== false|| $job !== false) {
                 $data['list'][] = array('name' => $row['name'],
-                    'nip' => $row['nip'],
+                    'nik' => $row['nik'],
                     'posisition_id' => $row['posisition_id'],
                     'role_id' => $row['role_id'],
                     'job_id' => $row['job_id'],
@@ -410,7 +425,7 @@ class BappedaTableLetterController extends Controller
             $data[] = array('name' => $r->usw->name
             ,'id' => $r->id
             ,'status' => $r->status
-            , 'nip' => $r->usw->nip
+            , 'nik' => $r->usw->nik
             , 'job_id' => trDataJobDesc::findOrFail($r->usw->job_id)->name
             , 'posisition_id' => trDataPosisition::findOrFail($r->usw->posisition_id)->name
             , 'role_id' => status::findOrFail($r->usw->role_id)->name);;
@@ -420,4 +435,3 @@ class BappedaTableLetterController extends Controller
 
     }
 }
-

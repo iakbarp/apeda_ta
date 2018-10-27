@@ -2,7 +2,7 @@
 <script>
     var $index2 = '';
     var pagination2 = {}, search2 = {};
-    var prefix2 = 'user';
+    var prefix2 = 'user2';
     var selectuser = [];
     @foreach($jobCategory as $row)
         pagination2[prefix2 + '{{$row->id}}'] = 1;
@@ -31,7 +31,7 @@
 
             console.log('na');
             $.ajax({
-                url: "{{route('admin.table.penghuni.histori')}}",
+                url: "{{route('bappeda.table.penghuni.histori')}}",
                 type: "get",
                 data: {
                     // 'id': $index2,
@@ -75,7 +75,7 @@
                                 '                                                                               data-id="' + value.id + '"\n' +
                                 '                                                                               style="width: 30px">\n' +
                                 '                                                                    </td>\n' +
-                                '                                                                    <td>' + value.nip + '</td>\n' +
+                                '                                                                    <td>' + value.nik + '</td>\n' +
                                 '                                                                    <td>' + value.name + '</td>\n' +
                                 '                                                                    <td>' + value.posisition_id + ' di ' + value.job_id + '</td>\n' +
                                 '                                                                    <td>' + value.role_id + '</td>\n' +
@@ -187,7 +187,7 @@
         else {
             $('#job' + $index2 + ' table tbody').empty().append('<tr><td colspan="6">loading...</td></tr>');
             $.ajax({
-                url: "{{route('admin.table.penghuni.api')}}",
+                url: "{{route('bappeda.table.penghuni.api')}}",
                 type: "get",
                 data: {
                     'id': $index2,
@@ -218,7 +218,7 @@
                                 '                                                                               data-id="' + value.id + '"\n' +
                                 '                                                                               style="width: 30px">\n' +
                                 '                                                                    </td>\n' +
-                                '                                                                    <td>' + value.nip + '</td>\n' +
+                                '                                                                    <td>' + value.nik + '</td>\n' +
                                 '                                                                    <td>' + value.name + '</td>\n' +
                                 '                                                                    <td>' + value.ps + '</td>\n' +
                                 '                                                                    <td>' + value.role + '</td>\n' +
@@ -368,7 +368,7 @@
         $('#load2').fadeIn(500);
         $('#job' + $index2 + ' table tbody').empty().append('<tr><td colspan="6">loading...</td></tr>');
         $.ajax({
-            url: "{{route('admin.table.penghuni.api')}}",
+            url: "{{route('bappeda.table.penghuni.api')}}",
             type: "get",
             data: {'id': $index2,
                 'pagination': $pagi,
@@ -413,7 +413,7 @@
                                 '                                                                               data-id="' + value.id + '"\n' +
                                 '                                                                               style="width: 30px">\n' +
                                 '                                                                    </td>\n' +
-                                '                                                                    <td>' + value.nip + '</td>\n' +
+                                '                                                                    <td>' + value.nik + '</td>\n' +
                                 '                                                                    <td>' + value.name + '</td>\n' +
                                 '                                                                    <td>' + value.posisition_id + ' di ' + value.job_id + '</td>\n' +
                                 '                                                                    <td>' + value.role_id + '</td>\n' +
@@ -440,7 +440,7 @@
                                 '                                                                               data-id="' + value.id + '"\n' +
                                 '                                                                               style="width: 30px">\n' +
                                 '                                                                    </td>\n' +
-                                '                                                                    <td>' + value.nip + '</td>\n' +
+                                '                                                                    <td>' + value.nik + '</td>\n' +
                                 '                                                                    <td>' + value.name + '</td>\n' +
                                 '                                                                    <td>' + value.ps + '</td>\n' +
                                 '                                                                    <td>' + value.role + '</td>\n' +
@@ -606,8 +606,8 @@
         $('#modal-form #name').css('background-color', '#fcfdff');
         $('#modal-form #bio').prop('disabled', true);
         $('#modal-form #bio').css('background-color', '#fcfdff');
-        $('#modal-form #nip').prop('disabled', true);
-        $('#modal-form #nip').css('background-color', '#fcfdff');
+        $('#modal-form #nik').prop('disabled', true);
+        $('#modal-form #nik').css('background-color', '#fcfdff');
         $('#modal-form #email').prop('disabled', true);
         $('#modal-form #email').css('background-color', '#fcfdff');
         $('#modal-form #phone').prop('disabled', true);
@@ -621,7 +621,7 @@
         $status = $(asd).data('status');
 
         $.ajax({
-            url: "{{route('admin.table.pengguna.lihat')}}",
+            url: "{{route('bappeda.table.pengguna.lihat')}}",
             type: "get",
             data: {'id': $id},
             success: function (data) {
@@ -716,7 +716,7 @@ lockfilllihat();
 
                 $('#modal-form #id').val(data.id);
                 $('#modal-form #name').val(data.name);
-                $('#modal-form #nip').val(data.nip);
+                $('#modal-form #nik').val(data.nik);
                 $('#modal-form #alamat').val(data.alamat);
                 $('#modal-form #phone').val(data.phone);
                 $('#modal-form #email').val(data.email);
@@ -772,7 +772,7 @@ lockfilllihat();
     $('#modal-form').on('change', '#job_id', function (asd) {
         $.ajax({
             type: 'get',
-            url: '{{route('admin.table.user.getPosisition')}}',
+            url: '{{route('bappeda.table.user.getPosisition')}}',
             data: {'id': $(this).val()},
             success: function (data) {
                 if (!$.trim(data[0])) {
@@ -800,7 +800,7 @@ lockfilllihat();
         $key = $(this).data('no');
         $.ajax({
             type: 'get',
-            url: '{{route('admin.table.user.getPosisition')}}',
+            url: '{{route('bappeda.table.user.getPosisition')}}',
             data: {'id': $(this).val()},
             success: function (data) {
                 console.log(data);
@@ -834,7 +834,7 @@ lockfilllihat();
         $('#load2').show();
         $('.content .row').css("opacity", 0.4);
         $.ajax({
-            url: "{{route('admin.table.pengguna.cekhapus')}}",
+            url: "{{route('bappeda.table.pengguna.cekhapus')}}",
             type: "get",
             data: {'id': $id},
             success: function (data) {
@@ -856,7 +856,7 @@ lockfilllihat();
                 }).then(function (isConfirm) {
                     if (!$.trim(isConfirm.dismiss)) {
                         $.ajax({
-                            url: "{{route('admin.table.pengguna.hapus')}}",
+                            url: "{{route('bappeda.table.pengguna.hapus')}}",
                             type: "get",
                             data: {'id': $id},
                             success: function (data) {
@@ -971,7 +971,7 @@ lockfilllihat();
         // $('#modal-form #alamat').css('background-color', '#fcfdff');
         // $('#modal-form form').append('<input type="hidden" value="' + $('#modal-form2 #job_id').val() + '" name="job_id"/>');
         $.ajax({
-            url: "{{route('admin.table.pengguna.edit')}}",
+            url: "{{route('bappeda.table.pengguna.edit')}}",
             type: "post",
             data: new FormData($('#modal-form form')[0]),
             contentType: false,
@@ -1039,7 +1039,7 @@ lockfilllihat();
             // declareEdit();
 
             $.ajax({
-                url: "{{route('admin.table.pengguna.lihat')}}",
+                url: "{{route('bappeda.table.pengguna.lihat')}}",
                 type: "get",
                 data: {'id': selectuser},
                 success: function (data) {
@@ -1132,7 +1132,7 @@ lockfilllihat();
         $('#modal-form4 .role_id').css('background-color', '#fcfdff');
         console.log($('#modal-form4 form')[0]);
         $.ajax({
-            url: "{{route('admin.table.pengguna.edit')}}",
+            url: "{{route('bappeda.table.pengguna.edit')}}",
             type: "post",
             data: new FormData($('#modal-form4 form')[0]),
             contentType: false,
@@ -1209,44 +1209,44 @@ lockfilllihat();
     });
 
     function send($x, entit) {
-        $.ajax({
-            url: "{{route('admin.table.pengguna.storesuratplus')}}",
-            // async: false,
-            type: "post",
-            data: new FormData($('#data2 form')[0]),
-            contentType: false,
-            processData: false,
-            success: function (data) {
-                console.log(data);
-                $x = 1 + $x;
-                $('#data2 form #progresssurat').empty().append($x + '/' + countSend + ' Proses Kirim (Jangan Tutup/Refresh Halaman)');
-                if (data == 1) {
-                    swal({
-                        title: 'Berhasil!',
-                        text: 'user ' + $x + ' telah dibuat',
-                        type: 'success',
-                        timer: '1500'
-                    });
-                }
-                else {
-                    swal({
-                        title: 'Galat!',
-                        text: 'user ' + $x + ' gagal mengirim Email',
-                        type: 'info',
-                        timer: '1500'
-                    });
-                }
-                if (entit == $x) {
-                    doneSend();
-                    location.reload();
-                }
-                return $x;
-            },
-            error: function () {
-                doneSend();
-                errorNotif();
-            }
-        });
+        {{--$.ajax({--}}
+            {{--url: "{{route('bappeda.table.pengguna.storesuratplus')}}",--}}
+            {{--// async: false,--}}
+            {{--type: "post",--}}
+            {{--data: new FormData($('#data2 form')[0]),--}}
+            {{--contentType: false,--}}
+            {{--processData: false,--}}
+            {{--success: function (data) {--}}
+                {{--console.log(data);--}}
+                {{--$x = 1 + $x;--}}
+                {{--$('#data2 form #progresssurat').empty().append($x + '/' + countSend + ' Proses Kirim (Jangan Tutup/Refresh Halaman)');--}}
+                {{--if (data == 1) {--}}
+                    {{--swal({--}}
+                        {{--title: 'Berhasil!',--}}
+                        {{--text: 'user ' + $x + ' telah dibuat',--}}
+                        {{--type: 'success',--}}
+                        {{--timer: '1500'--}}
+                    {{--});--}}
+                {{--}--}}
+                {{--else {--}}
+                    {{--swal({--}}
+                        {{--title: 'Galat!',--}}
+                        {{--text: 'user ' + $x + ' gagal mengirim Email',--}}
+                        {{--type: 'info',--}}
+                        {{--timer: '1500'--}}
+                    {{--});--}}
+                {{--}--}}
+                {{--if (entit == $x) {--}}
+                    {{--doneSend();--}}
+                    {{--location.reload();--}}
+                {{--}--}}
+                {{--return $x;--}}
+            {{--},--}}
+            {{--error: function () {--}}
+                {{--doneSend();--}}
+                {{--errorNotif();--}}
+            {{--}--}}
+        {{--});--}}
 
     }
 
@@ -1272,34 +1272,34 @@ lockfilllihat();
 
 {{--cek email nip--}}
 <script>
-    $('#data2').on('input', '.nip', function (asd) {
-        var NIP = [];
-        $statusnip = 0;
-        $call = $('#data2 .nip');
+    $('#data2').on('input', '.nik', function (asd) {
+        var NIK = [];
+        $statusnik = 0;
+        $call = $('#data2 .nik');
         label = $(this).val();
         $target = $(this);
         $call.each(function () {
-            NIP.push(this.value);
+            NIK.push(this.value);
         });
         cut = $(this).data('no');
-        NIP.splice(cut, 1);
-        console.log(NIP);
+        NIK.splice(cut, 1);
+        console.log(NIK);
         console.log('anu ' + cut);
-        $.each(NIP, function (index, value) {
+        $.each(NIK, function (index, value) {
             if (label == value && label !== '') {
-                $statusnip = 1;
+                $statusnik = 1;
             }
             console.log(label + ' ddd ' + value + ' (das');
         });
 
         $(this).addClass('loadinglah');
         $.ajax({
-            url: "{{route('admin.table.pengguna.ceknip')}}",
+            url: "{{route('bappeda.table.pengguna.ceknik')}}",
             type: "get",
             data: {'cek': label, 'mode': 1},
             success: function (data) {
                 console.log(data);
-                if (data == 0 || $statusnip == 1) {
+                if (data == 0 || $statusnik == 1) {
                     $('#data2 form :input').prop('readonly', true);
                     $('#data2 form .email').prop('readonly', true);
                     $('#data2 .seksi').addClass('disabled');
@@ -1309,11 +1309,11 @@ lockfilllihat();
                     $('#data2 :input[type="submit"]').prop('disabled', true);
                     swal({
                         title: 'notice',
-                        text: 'NIP telah dipakai!',
+                        text: 'NIK telah dipakai!',
                         type: 'info',
                         timer: '1500'
                     })
-                    $('#data2 form #berubah').empty().append('NIP telah dipakai!');
+                    $('#data2 form #berubah').empty().append('NIK telah dipakai!');
                     // $( '#jadi-data form input:not(.'+urutancek+')' ).prop('readonly', true);
                     // $( '#jadi-data form .text1' ).prop('readonly', true);
                     // $('#bantu').empty().append(isicek1 + isicek2);
@@ -1369,7 +1369,7 @@ lockfilllihat();
 
         $target.addClass('loadinglah');
         $.ajax({
-            url: "{{route('admin.table.pengguna.ceknip')}}",
+            url: "{{route('bappeda.table.pengguna.ceknik')}}",
             type: "get",
             data: {'cek': label, 'mode': 0},
             success: function (data) {
@@ -1476,7 +1476,7 @@ lockfilllihat();
         }
         else {
             $.ajax({
-                url: "{{route('admin.table.pengguna.resend')}}",
+                url: "{{route('bappeda.table.pengguna.resend')}}",
                 type: "get",
                 data: {'id': $id},
                 success: function (data) {
@@ -1524,7 +1524,7 @@ lockfilllihat();
 
     function resendMulti($id,entity,anu) {
         $.ajax({
-            url: "{{route('admin.table.pengguna.resend')}}",
+            url: "{{route('bappeda.table.pengguna.resend')}}",
             type: "get",
             data: {'id': $id,'entitySend':entity},
             success: function (data) {

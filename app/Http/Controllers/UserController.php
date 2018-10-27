@@ -8,6 +8,8 @@ use App\trDataJobDesc;
 use App\trDataPosisition;
 use App\trRequestChangeJob;
 use App\User;
+use App\city;
+use App\district;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -26,7 +28,7 @@ class UserController extends Controller
         $user = User::findOrFail(Auth::user()->id);
         $category = trDataPosisition::where('job_id', $user->job_id)->get();
         $ganti = 0;
-        Session::put('jobupdate', $user->ganti);
+        Session::put('jobupdate',$user->ganti);
 //return Session::all();
         if (!is_null($user->ganti)) {
             $ganti = 1;
@@ -51,72 +53,32 @@ class UserController extends Controller
         $data1 = User::findOrFail($request->id);
         $job = $data1->job_id;
         $posisition = $data1->posisition_id;
-        $statem = 0;
-        $statgl = 0;
-        $data = $request->all();
-        if (!is_null($request->name)) {
-            $data1->name = $request->name;
-        }
-        else{
-            $data['name']='Data belum diisi';
-        }
-        if (!is_null($request->tempat_lahir)) {
-            $data1->tempat_lahir = $request->tempat_lahir;
-            $statem = 1;
-        }
-        if (!is_null($request->tgl_lahir)) {
-            $data1->tgl_lahir = Carbon::createFromFormat('d/m/Y', $request->tgl_lahir)->format('Y-m-d');
-            $statgl = 1;
-        }
-        if (!is_null($request->email)) {
-            $data1->email = $request->email;
-        }
-        else{
-            $data['email']='Data belum diisi';
-        }
-        if (!is_null($request->phone)) {
-            $data1->phone = $request->phone;
-        }
-        else{
-            $data['phone']='Data belum diisi';
-        }
+        $data1->name = $request->name;
+        $data1->tempat_lahir = $request->tempat_lahir;
+        $data1->tgl_lahir = $request->tgl_lahir;
+        $data1->email = $request->email;
+        $data1->phone = $request->phone;
         if (!is_null($request->password)) {
             $data1['password'] = Hash::make($request->password);
         }
-        if (!is_null($request->bio)) {
-            $data1->bio = $request->bio;
-        }
-        else{
-            $data['bio']='Data belum diisi';
-        }
-        if (!is_null($request->alamat)) {
-            $data1->alamat = $request->alamat;
-        }
-        else{
-            $data['alamat']='Data belum diisi';
-        }
+        $data1->bio = $request->bio;
+        $data1->alamat = $request->alamat;
         $coba = 0;
-
-            if ($request->job_id != $job || $request->posisition_id != $posisition) {
-                trRequestChangeJob::create(['user_id' => $request->id, 'changejob_id' => $request->job_id,
-                    'changeposisition_id' => $request->posisition_id, 'status' => 0,'posisition_id'=>Auth::user()->posisition_id,'job_id'=>Auth::user()->job_id]);
-                $data1->ganti = 1;
-                $coba = $data['status'] = 1;
-            }
+        $data = $request->all();
+//
+        if ($request->job_id != $job || $request->posisition_id != $posisition) {
+            trRequestChangeJob::create(['user_id' => $request->id, 'changejob_id' => $request->job_id,
+                'changeposisition_id' => $request->posisition_id, 'status' => 0,'posisition_id'=>Auth::user()->posisition_id,'job_id'=>Auth::user()->job_id]);
+            $data1->ganti = 1;
+            $coba = $data['status'] = 1;
+        }
 
         if ($coba == 1) {
             $data['jabatan'] = trDataPosisition::findOrFail($request->posisition_id)->name . ' di ' . trDataJobDesc::findOrFail($request->job_id)->name;
 
         }
-
-        if ($statem==1&&$statgl==1) {
-            $data['ttl'] = $request->tempat_lahir . ', ' . Carbon::createFromFormat('d/m/Y', $request->tgl_lahir)->formatLocalized('%d %B %Y');
-        }
-        else{
-            $data['ttl'] = 'Data belum diisi...';
-
-        }
-
+////
+        $data['ttl'] = $request->tempat_lahir . ', ' . Carbon::createFromFormat('Y-m-d', $request->tgl_lahir)->formatLocalized('%d %B %Y');
 //
         $data['job'] = trDataJobDesc::all();
         $data['job_id'] = $job;
@@ -124,23 +86,21 @@ class UserController extends Controller
         $data['job_idreq'] = $request->job_id;
         $data['posisition_idreq'] = $request->posisition_id;
         $data['posisition'] = trDataPosisition::where('job_id', $job)->get();
-
-        $data['file2'] = '';
-        if ($request->hasFile('ava')) {
-            $rand = rand(111, 999);
-            $name = Carbon::now()->format('dmy') . $rand . str_random(8) . rand(0, 9);
-            $filename = 'user/'
-                . str_slug($name, '-') . '.' . $request->ava->getClientOriginalExtension();
-            $request->ava->storeAs('public', $filename);
-            if (!is_null($data1->ava)) {
-                Storage::delete('public/' . substr($data1->ava, 8));
-            }
-            $data1->ava = $data['file2'] = 'storage/' . $filename;
-        }
+//
+//        $data['file2'] = '';
+//        if ($request->hasFile('ava')) {
+//            $rand = rand(111, 999);
+//            $name = Carbon::now()->format('dmy') . $rand . str_random(8) . rand(0, 9);
+//            $filename = 'user/'
+//                . str_slug($name, '-') . '.' . $request->ava->getClientOriginalExtension();
+//            $request->ava->storeAs('public', $filename);
+//            if (!is_null($data1->ava)) {
+//                Storage::delete('public/' . substr($data1->ava, 8));
+//            }
+//            $data1->ava = $data['file2'] = 'storage/' . $filename;
+//        }
         $data1->update();
-        $datefo=Carbon::createFromFormat('Y-m-d H:i:s',User::findOrFail($request->id)->updated_at);
-$data['waktu']=$datefo->formatLocalized('%d %B %Y ').$datefo->format('H:i').' WIB';
-        Session::put('jobupdate',1);
+//        Session::put('jobupdate',1);
 //
 //
         return response()->json($data);
@@ -152,30 +112,31 @@ $data['waktu']=$datefo->formatLocalized('%d %B %Y ').$datefo->format('H:i').' WI
         Carbon::setLocale('id');
         setlocale(LC_TIME, 'Indonesian');
         $data['waktu'] = User::findOrFail(Auth::user()->id)->updated_at->diffForHumans();
-        $cek = User::findOrFail(Auth::user()->id);
-        if (\session('jobupdate') == $cek->ganti) {
-            $data['statusupdate'] = false;
-        } else {
-            $data['statusupdate'] = true;
-            $requp = trRequestChangeJob::where('user_id', $cek->id)->orderBy('id', 'desc')->first();
-            if ($requp->status == 1) {
-                $data['statusperubahan'] = true;
-            } else {
-                $data['statusperubahan'] = false;
+        $cek=User::findOrFail(Auth::user()->id);
+        if (\session('jobupdate')==$cek->ganti){
+            $data['statusupdate']=false;
+        }
+        else{
+            $data['statusupdate']=true;
+            $requp=trRequestChangeJob::where('user_id',$cek->id)->orderBy('id','desc')->first();
+            if ($requp->status==1){
+                $data['statusperubahan']=true;
+            }else{
+                $data['statusperubahan']=false;
             }
 
-            $set = trDataJobDesc::all();
+            $set=trDataJobDesc::all();
             foreach ($set as $row) {
-                $data['listjob'][] = array('name' => $row->name, 'id' => $row->id);
+                $data['listjob'][]=array('name'=>$row->name,'id'=>$row->id);
             }
 
-            $set2 = trDataPosisition::where('job_id', $cek->job_id)->get();
+            $set2=trDataPosisition::where('job_id',$cek->job_id)->get();
             foreach ($set2 as $row) {
-                $data['listposisition'][] = array('name' => $row->name, 'id' => $row->id);
+                $data['listposisition'][]=array('name'=>$row->name,'id'=>$row->id);
             }
-            $data['rubah'] = array('job' => trDataJobDesc::findOrFail($cek->job_id)->name, 'posisition' => trDataPosisition::findOrFail($cek->posisition_id)->name,
-                'job_id' => $cek->job_id, 'posisition_id' => $cek->posisition_id);
-            Session::put('jobupdate', $cek->ganti);
+            $data['rubah']=array('job'=>trDataJobDesc::findOrFail($cek->job_id)->name,'posisition'=>trDataPosisition::findOrFail($cek->posisition_id)->name,
+                'job_id'=>$cek->job_id,'posisition_id'=>$cek->posisition_id);
+            Session::put('jobupdate',$cek->ganti);
 //            Session::put('posisitionupdate',$cek->posisition_id);
         }
         return response()->json($data);
@@ -201,11 +162,9 @@ $data['waktu']=$datefo->formatLocalized('%d %B %Y ').$datefo->format('H:i').' WI
 
     public function kirim(Request $request)
     {
-        $data['statuskirim'] = $count=count(trRequestChangeJob::where('user_id', $request->id)->orderBy('id', 'desc')->get());
-if ($count>0){
-    $data['list'] = trRequestChangeJob::where('user_id', $request->id)->orderBy('id', 'desc')->first()->admin_id;
+        $data['list'] = trRequestChangeJob::where('user_id', $request->id)->orderBy('id', 'desc')->first()->admin_id;
+        $data['statuskirim']=count(trRequestChangeJob::where('user_id', $request->id)->orderBy('id', 'desc')->get());
 
-}
         return $data;
 
     }

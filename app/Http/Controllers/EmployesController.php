@@ -37,7 +37,7 @@ class EmployesController extends Controller
 
     public function index()
     {
-        $user = User::all();
+        $user = User::where('city_id',Auth::user()->city_id)->get();
         $base_url = url('employes');
         return view('user.employes.index', compact('user', 'base_url'));
     }

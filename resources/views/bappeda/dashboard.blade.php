@@ -1,5 +1,5 @@
-@extends('layouts.admin.admin_mst_dashboard')
-@section('title', 'APEDA | Admin Dashboard')
+@extends('layouts.bappeda.bappeda_mst_dashboard')
+@section('title', 'APEDA | Bappeda Dashboard')
 @section('style')
     <style>
 
@@ -715,7 +715,7 @@
                         $('#ava').attr('src', '{!!URL::to('/')!!}' + '/' + data.ava);
                     }
                     trHTML = '';
-                    trHTML += '<tr><td width="50px">NIP</td><td>:</td><td>' + data.nip + '</td></tr>';
+                    trHTML += '<tr><td width="50px">NIK</td><td>:</td><td>' + data.nik + '</td></tr>';
                     trHTML += '<tr><td width="60px">Nama</td><td>:&nbsp;</td><td>' + data.name + '</td></tr>';
                     trHTML += '<tr><td width="60px">TTL</td><td>:&nbsp;</td><td>' + data.ttl + '</td></tr>';
                     trHTML += '<tr><td width="60px">Email</td><td>:&nbsp;</td><td><a href="mailto:' + data.email + '">' + data.email + '</a></td></tr>';

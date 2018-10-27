@@ -56,9 +56,10 @@ class Kernel extends HttpKernel
         'bindings' => \Illuminate\Routing\Middleware\SubstituteBindings::class,
         'role' => \App\Http\Middleware\pengurusMiddleware::class,
         'cekin' => \App\Http\Middleware\inMiddleware::class,
-        'adminloh' => \App\Http\Middleware\adminMiddleware::class,
         'can' => \Illuminate\Auth\Middleware\Authorize::class,
         'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
+        'super' => \App\Http\Middleware\SuperAdminMiddleware::class,
+        'admin' => \App\Http\Middleware\AdminMiddleware::class,
     ];
 }

@@ -1,7 +1,5 @@
 <?php
-
 namespace App\Http\Controllers;
-
 use App\mst_data;
 use App\trDataCategory;
 use App\trDataHistori;
@@ -14,7 +12,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Redirect;
 use Yajra\Datatables\Datatables;
-
 class UsulanController extends Controller
 {
     public function index()
@@ -30,17 +27,17 @@ class UsulanController extends Controller
         foreach ($job as $row) {
             $job3[] = array($row->singkatan);
         }
-$job_id=Auth::user()->job_id;
+        $job_id=Auth::user()->job_id;
 //        dd($job3);
         $a = -1;
         return view('user.usulan.index', compact('base_url','job_id', 'job', 'data2', 'job2', 'a', 'job3'));
     }
-
     public function store(Request $request)
     {
         if (is_array($request->name)) {
             for ($i = 0; $i < count($request->name); $i++) {
-                mst_data::create(['name' => $request->name[$i], 'desc' => $request->desc[$i], 'kode' => $request->kode[$i], 'category_id' => $request->category_id[$i],
+                mst_data::create(['name' => $request->name[$i], 'desc' => $request->desc[$i], 'lokasi' => $request->lokasi[$i], 'volume' => $request->volume[$i], 'anggaran' => $request->anggaran[$i],
+                    'city_id' => $request->city_id[$i], 'district_id' => $request->district_id[$i], 'kode' => $request->kode[$i], 'category_id' => $request->category_id[$i],
                     'user_id' => Auth::user()->id, 'job_id' => Auth::user()->job_id, 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()]);
                 $z = 1;
                 foreach ($request->file[$i + 1] as $row) {
@@ -52,9 +49,7 @@ $job_id=Auth::user()->job_id;
                     $row->storeAs('public', $filename);
                     trFile::create(['name' => 'storage/' . $filename, 'data_id' => mst_data::where('user_id', Auth::user()->id)->orderBy('id', 'desc')->first()->id]);
                 }
-
             }
-
         } else {
             $data = $request->except('file', 'status');
             $data['user_id'] = Auth::user()->id;
@@ -73,7 +68,6 @@ $job_id=Auth::user()->job_id;
         }
         return response()->json($request->all());
     }
-
     public function apiData()
     {
         $products = mst_data::where('job_id', Auth::user()->job_id)->orderBy('id', 'desc')->get();
@@ -93,7 +87,6 @@ $job_id=Auth::user()->job_id;
             ->addColumn('action', function ($products) {
                 $singkatan = trDataCategory::findOrFail($products->category_id)->singkatan;
                 $datalah = trFile::where('data_id', $products->id)->get();
-
                 return view('layouts.partials._action', [
                     'id' => $products->id,
                     'show' => 1,
@@ -107,27 +100,21 @@ $job_id=Auth::user()->job_id;
                 $datas = '<input placeholder="pilih data" class="form-control cek" 
                                                                    type="checkbox" value="' . $products->id . '"
                                                                    id="cek[]" name="cek[]" multiple>';
-
                 return html_entity_decode($datas);
             })
             ->rawColumns(['cek', 'action'])
             ->removeColumn('job_id', 'category_id', 'user_id')
             ->make(true);
     }
-
     public function apiData3()
     {
-
-            $products = mst_data::onlyTrashed()->where('job_id', Auth::user()->job_id)->orderBy('id', 'desc')->get();
-
-
+        $products = mst_data::onlyTrashed()->where('job_id', Auth::user()->job_id)->orderBy('id', 'desc')->get();
         Carbon::setLocale('id');
         setlocale(LC_TIME, 'Indonesian');
         return DataTables::of($products)
             ->addColumn('user', function ($products) {
                 if (!is_null($products->userdel)) {
                     return substr(User::findOrFail($products->userdel)->name, 0, 15) . '...';
-
                 } else {
                     return substr(User::findOrFail($products->user_id)->name, 0, 15) . '...';
                 }
@@ -141,7 +128,6 @@ $job_id=Auth::user()->job_id;
             })
             ->addColumn('action', function ($products) {
                 $datalah = trFile::where('data_id', $products->id)->get();
-
                 return view('layouts.partials.___action', [
                     'id' => $products->id,
                     'restore' => 1,
@@ -153,14 +139,12 @@ $job_id=Auth::user()->job_id;
                 $datas = '<input placeholder="pilih data" class="form-control cek" 
                                                                    type="checkbox" value="' . $products->id . '"
                                                                    id="cek[]" name="cek[]" multiple>';
-
                 return html_entity_decode($datas);
             })
             ->rawColumns(['cek', 'action'])
             ->removeColumn('job_id', 'category_id', 'user_id')
             ->make(true);
     }
-
     public function apiData2(Request $request)
     {
         $products = mst_data::where('category_id', $request->id)->orderBy('id', 'desc')->get();
@@ -180,7 +164,6 @@ $job_id=Auth::user()->job_id;
             ->addColumn('action', function ($products) {
                 $singkatan = trDataCategory::findOrFail($products->category_id)->singkatan;
                 $datalah = trFile::where('data_id', $products->id)->get();
-
                 return view('layouts.partials._action', [
                     'id' => $products->id,
                     'show' => 1,
@@ -194,20 +177,17 @@ $job_id=Auth::user()->job_id;
                 $datas = '<input placeholder="pilih data" class="form-control cek" 
                                                                    type="checkbox" value="' . $products->id . '"
                                                                    id="cek[]" name="cek[]" multiple>';
-
                 return html_entity_decode($datas);
             })
             ->rawColumns(['cek', 'action'])
             ->removeColumn('job_id', 'category_id', 'user_id')
             ->make(true);
     }
-
     public function jumlah(Request $request)
     {
         $data = trDataCategory::where('job_id', $request->id)->get();
         return response()->json($data);
     }
-
     public function edit(Request $request)
     {
         Carbon::setLocale('id');
@@ -228,19 +208,17 @@ $job_id=Auth::user()->job_id;
         } else {
             $data['diedit'] = NULL;
         }
-
         return response()->json($data);
     }
-
     public function cek(Request $request)
     {
         if (is_array($request->cek)) {
             if ($request->metode == 0) {
-
                 for ($i = 0; $i < count($request->cek); $i++) {
                     $data = mst_data::findOrFail($request->cek[$i]);
                     trDataHistori::create(['name' => $data->name,
-                        'kode' => $data->kode, 'desc' => $data->desc, 'user_id' => Auth::user()->id,
+                        'kode' => $data->kode, 'desc' => $data->desc, 'lokasi' => $data->lokasi, 'volume' => $data->volume, 'anggaran' => $data->anggaran,
+                        'city_id' => $data->city_id, 'district_id' => $data->district_id, 'user_id' => Auth::user()->id,
                         'category_id' => $data->category_id, 'job_id' => $data->job_id, 'data_id' => $request->cek[$i]
                         , 'deletes' => 0
                         , 'edit' => 0
@@ -252,7 +230,6 @@ $job_id=Auth::user()->job_id;
             } else {
                 if (count($request->cek) > 5) {
                     return response()->json(['gagal' => 0]);
-
                 }
                 for ($i = 0; $i < count($request->cek); $i++) {
                     $ambil = mst_data::findOrFail($request->cek[$i]);
@@ -267,14 +244,14 @@ $job_id=Auth::user()->job_id;
         }
         return response()->json($data);
     }
-
     public function multiupdate(Request $request)
     {
         for ($i = 0; $i < count($request->name); $i++) {
             $data = mst_data::findOrFail($request->id[$i]);
             if (!is_array($request->file[$i]) && /*&& !is_array($request->berkas[$i)*/
                 $request->name[$i] == $data->name &&
-                $request->kode[$i] == $data->kode && $request->desc[$i] == $data->desc && $request->category_id[$i] == $data->category_id) {
+                $request->kode[$i] == $data->kode && $request->desc[$i] == $data->desc && $request->lokasi[$i] == $data->lokasi && $request->volume[$i] == $data->volume && $request->anggaran[$i] == $data->anggaran &&
+                $request->city_id[$i] == $data->city_id && $request->district_id[$i] == $data->district_id && $request->category_id[$i] == $data->category_id) {
                 return response()->json(['gagal' => 0, 'ganti' => $request->name[$i], 'file' => $request->file[$i]]);
             }
         }
@@ -291,7 +268,8 @@ $job_id=Auth::user()->job_id;
             $z = 1;
             $data1 = mst_data::findOrFail($request->id[$i]);
             if ($request->name[$i] != $data1->name ||
-                $request->kode[$i] != $data1->kode || $request->desc[$i] != $data1->desc || $request->category_id[$i] != $data1->category_id) {
+                $request->kode[$i] != $data1->kode || $request->desc[$i] != $data1->desc || $request->lokasi[$i] != $data1->lokasi || $request->volume[$i] != $data1->volume || $request->anggaran[$i] != $data1->anggaran ||
+                $request->city_id[$i] != $data1->city_id || $request->district_id[$i] != $data1->district_id || $request->category_id[$i] != $data1->category_id) {
                 $data21['edit'] = 1;
             }
             if (is_array($request->file)) {
@@ -310,26 +288,26 @@ $job_id=Auth::user()->job_id;
             }
 ////
             trDataHistori::create(['name' => $data1->name,
-                'kode' => $data1->kode, 'desc' => $data1->desc, 'user_id' => Auth::user()->id,
+                'kode' => $data1->kode, 'desc' => $data1->desc, 'lokasi' => $data1->lokasi, 'volume' => $data1->volume, 'anggaran' => $data1->anggaran,
+                'city_id' => $data1->city_id, 'district_id' => $data1->district_id, 'user_id' => Auth::user()->id,
                 'category_id' => $data1->category_id, 'job_id' => $data1->job_id, 'data_id' => $request->id[$i]
                 , 'deletes' => $data21['delete']
                 , 'edit' => $data21['edit']
                 , 'tambah' => $data21['tambah'], 'deldata' => 0, 'resdata' => 0
             ]);
-            $data1->update(['name' => $request->name[$i], 'desc' => $request->desc[$i], 'kode' => $request->kode[$i], 'category_id' => $request->category_id[$i]]);
+            $data1->update(['name' => $request->name[$i], 'desc' => $request->desc[$i], 'lokasi' => $request->lokasi[$i], 'volume' => $request->volume[$i], 'anggaran' => $request->anggaran[$i], 'kode' => $request->kode[$i],
+                'city_id' => $request->city_id[$i], 'district_id' => $request->district_id[$i], 'category_id' => $request->category_id[$i]]);
         }
         return response()->json($data21);
-
-
     }
-
     public
     function destroy(Request $request)
     {
         $id = $request->id;
         $data = mst_data::findOrFail($id);
         trDataHistori::create(['name' => $data->name,
-            'kode' => $data->kode, 'desc' => $data->desc, 'user_id' => Auth::user()->id,
+            'kode' => $data->kode, 'desc' => $data->desc, 'lokasi' => $data->lokasi, 'volume' => $data->volume, 'anggaran' => $data->anggaran,
+            'city_id' => Auth::user()->city_id, 'district_id' => Auth::user()->district_id,'user_id' => Auth::user()->id,
             'category_id' => $data->category_id, 'job_id' => $data->job_id, 'data_id' => $id
             , 'deletes' => 0
             , 'edit' => 0
@@ -339,46 +317,36 @@ $job_id=Auth::user()->job_id;
         mst_data::destroy($id);
 //        $data2 = mst_data::withTrashed()->where('id', $id)->first();
 //        $data = trDataCategory::findOrFail($data2->category_id);
-
         return response()->json(['status' => 'sukses'/*, 'category' => $data->singkatan*/]);
     }
-
     function restore(Request $request)
     {
         $id = $request->id;
         $data = mst_data::onlyTrashed()->findOrFail($id);
         trDataHistori::create(['name' => $data->name,
-            'kode' => $data->kode, 'desc' => $data->desc, 'user_id' => Auth::user()->id,
+            'kode' => $data->kode, 'desc' => $data->desc, 'lokasi' => $data->lokasi, 'volume' => $data->volume, 'anggaran' => $data->anggaran, 'user_id' => Auth::user()->id, 'city_id' => Auth::user()->city_id, 'district_id' => Auth::user()->district_id,
             'category_id' => $data->category_id, 'job_id' => $data->job_id, 'data_id' => $id
             , 'deletes' => 0
             , 'edit' => 0
             , 'tambah' => 0, 'deldata' => 0, 'resdata' => 1
         ]);
-
         mst_data::onlyTrashed()->findOrFail($id)->restore();
-
-
         return response()->json(['status' => 'sukses']);
     }
-
     function deleteperm(Request $request)
     {
         $id = $request->id;
         $data = mst_data::onlyTrashed()->findOrFail($id);
         trDataHistori::create(['name' => $data->name,
-            'kode' => $data->kode, 'desc' => $data->desc, 'user_id' => $data->user_id,
+            'kode' => $data->kode, 'desc' => $data->desc, 'lokasi' => $data->lokasi, 'volume' => $data->volume, 'anggaran' => $data->anggaran, 'user_id' => $data->user_id,
             'category_id' => $data->category_id, 'job_id' => $data->job_id, 'data_id' => $id
             , 'deletes' => 0
             , 'edit' => 0
             , 'tambah' => 0, 'deldata' => 0, 'resdata' => 0
         ]);
-
         mst_data::onlyTrashed()->findOrFail($id)->restore();
-
-
         return response()->json(['status' => 'sukses']);
     }
-
     public
     function update(Request $request)
     {
@@ -387,8 +355,7 @@ $job_id=Auth::user()->job_id;
         $data21['delete'] = 0;
         $data21['edit'] = 0;
         $data21['tambah'] = 0;
-
-        if (!is_array($request->file) && !is_array($request->berkas) && $request->name == $data->name && $request->kode == $data->kode && $request->desc == $data->desc && $request->category_id == $data->category_id) {
+        if (!is_array($request->file) && !is_array($request->berkas) && $request->name == $data->name && $request->kode == $data->kode && $request->desc == $data->desc  && $request->lokasi == $data->lokasi  && $request->volume == $data->volume  && $request->anggaran == $data->anggaran  && $request->category_id == $data->category_id) {
             return response()->json(['gagal' => 0]);
         }
         $data23 = trFileHistori::where('data_id', $request->id)->orderBy('id', 'desc')->first();
@@ -412,7 +379,6 @@ $job_id=Auth::user()->job_id;
         }
         if (is_array($request->file)) {
             $z = 1;
-
             foreach ($request->file as $row) {
                 $rand = rand(111, 999);
                 $name = $request->name . '_' . Carbon::now()->format('dmy') . $rand . $z++;
@@ -427,24 +393,21 @@ $job_id=Auth::user()->job_id;
             }
             $data21['tambah'] = 1;
         }
-        if ($request->name != $data->name || $request->kode != $data->kode || $request->desc != $data->desc || $request->category_id != $data->category_id) {
+        if ($request->name != $data->name || $request->kode != $data->kode || $request->desc != $data->desc || $request->lokasi != $data->lokasi || $request->volume != $data->volume || $request->anggaran != $data->anggaran ||  $request->category_id != $data->category_id) {
             $data21['edit'] = 1;
         }
         trDataHistori::create(['name' => $data->name,
-            'kode' => $data->kode, 'desc' => $data->desc, 'user_id' => Auth::user()->id,
+            'kode' => $data->kode, 'desc' => $data->desc, 'lokasi' => $data->lokasi, 'volume' => $data->volume, 'anggaran' => $data->anggaran, 'user_id' => Auth::user()->id,
             'category_id' => $data->category_id, 'job_id' => $data->job_id, 'data_id' => $request->id
             , 'deletes' => $data21['delete']
             , 'edit' => $data21['edit']
             , 'tambah' => $data21['tambah'], 'deldata' => 0, 'resdata' => 0
         ]);
-        $data->update(['name' => $request->name, 'kode' => $request->kode, 'desc' => $request->desc, 'category_id' => $request->category_id]);
-
+        $data->update(['name' => $request->name, 'kode' => $request->kode, 'lokasi' => $request->lokasi, 'volume' => $request->volume, 'anggaran' => $request->anggaran, 'desc' => $request->desc, 'category_id' => $request->category_id]);
         return response()->json($data);
     }
-
     public function history(Request $request)
     {
-
         Carbon::setLocale('id');
         setlocale(LC_TIME, 'Indonesian');
         $data = trDataHistori::where('data_id', $request->id)->get();
@@ -458,7 +421,6 @@ $job_id=Auth::user()->job_id;
             $data1[$i]['user'] = User::withTrashed()->findOrFail($a->user_id)->name;
             $data1[$i]['tanggal'] = array('tanggal' => $waktu->copy()->toDateString(), 'tglStr' => $waktu->copy()->formatLocalized('%A %d %B %Y'),
                 'waktu' => $waktu->copy()->format('H:i') . ' WIB');
-
             if ($a->deletes == 1 || $a->tambah == 1) {
                 $j++;
                 if ($a->tambah == 1) {
@@ -482,15 +444,12 @@ $job_id=Auth::user()->job_id;
                     $data1[$i]['delete'] = $delet;
                 }
             }
-
         }
-
         $mst = mst_data::withTrashed()->findOrFail($request->id);
         $waktu1 = Carbon::createFromFormat('Y-m-d H:i:s', $mst->created_at);
         $data1[$i + 1] = $mst;
         $data1[$i + 1]['tanggal'] = array('tanggal' => $waktu1->copy()->toDateString(), 'tglStr' => $waktu1->copy()->formatLocalized('%A %d %B %Y'),
             'waktu' => $waktu1->copy()->format('H:i') . ' WIB');
-
         for ($i = 0; $i < count($data1) - 1; $i++) {
             if ($data1[$i]['edit'] == 1) {
                 $j = 0;
@@ -508,13 +467,24 @@ $job_id=Auth::user()->job_id;
                 if ($data1[$i]['desc'] !== $data1[$i + 1]['desc']) {
                     $editan[$j++] = array('name' => 'Detail', 'lama' => $data1[$i]['desc'], 'baru' => $data1[$i + 1]['desc']);
                 }
+                if ($data1[$i]['lokasi'] !== $data1[$i + 1]['lokasi']) {
+                    $editan[$j++] = array('name' => 'Lokasi', 'lama' => $data1[$i]['lokasi'], 'baru' => $data1[$i + 1]['lokasi']);
+                }
+                if ($data1[$i]['volume'] !== $data1[$i + 1]['volume']) {
+                    $editan[$j++] = array('name' => 'Volume', 'lama' => $data1[$i]['volume'], 'baru' => $data1[$i + 1]['volume']);
+                }
+                if ($data1[$i]['anggaran'] !== $data1[$i + 1]['anggaran']) {
+                    $editan[$j++] = array('name' => 'Anggaran', 'lama' => $data1[$i]['anggaran'], 'baru' => $data1[$i + 1]['anggaran']);
+                }
+                if ($data1[$i]['city_id'] !== $data1[$i + 1]['city_id']) {
+                    $editan[$j++] = array('name' => 'Kota', 'lama' => $data1[$i]['city_id'], 'baru' => $data1[$i + 1]['city_id']);
+                }
+                if ($data1[$i]['district_id'] !== $data1[$i + 1]['district_id']) {
+                    $editan[$j++] = array('name' => 'Anggaran', 'lama' => $data1[$i]['district_id'], 'baru' => $data1[$i + 1]['district_id']);
+                }
                 $data1[$i]['editan'] = $editan;
             }
         }
-
         return response()->json($data1);
-
     }
-
-
 }

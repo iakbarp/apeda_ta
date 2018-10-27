@@ -17,35 +17,28 @@
             text-align: center;
             vertical-align: center;
         }
-
         p {
             margin: 40px 0 10px;
         }
-
         .btn-flex {
             display: flex;
             align-items: stretch;
             align-content: stretch;
         }
-
         .btn-flex .btn:first-child {
             flex-grow: 1;
             text-align: left;
         }
-
     </style>
 
     {{--according modify--}}
     <style>
-
-
         .set {
             position: relative;
             width: 100%;
             height: auto;
             background-color: #ffffff;
         }
-
         .set > a {
             display: block;
             padding: 10px 15px;
@@ -57,12 +50,10 @@
             -moz-transition: all 0.2s linear;
             transition: all 0.2s linear;
         }
-
         .set > a i {
             float: right;
             margin-top: 2px;
         }
-
         .set > a.active {
             background-color: #f95959;
             color: #fff;
@@ -71,13 +62,11 @@
             background-color: rgba(249, 89, 89, 0.45);
             color: #fff;
         }
-
         .content {
             background-color: #fff;
             border-bottom: 1px solid #ddd;
             display: none;
         }
-
         .content p {
             padding: 10px 15px;
             margin: 0;
@@ -96,31 +85,26 @@
 
     {{--pagination--}}
     <style>
-
         .pagination {
             padding: 15px 0;
         }
-
         .pagination ul {
             margin: 0;
             padding: 0;
             list-style-type: none;
         }
-
         .pagination a {
             display: inline-block;
             padding: 10px 18px;
             color: #222;
         }
-
         .p8 a {
-            background-color: #f95959;
+            background-color: #0b97c4;
             margin: auto 5px;
             color: #fff;
             font-weight: bold;
-            border: 3px solid #f95959;
+            border: 3px solid #0b93d5;
         }
-
         .p8 a:hover {
             background-color: rgba(249, 89, 89, 0.45);
             margin: auto 5px;
@@ -128,12 +112,10 @@
             font-weight: bold;
             border: 3px solid rgba(249, 89, 89, 0.45);
         }
-
         .p8 .is-active {
             background-color: #fff;
-            color: #f95959;
+            color: #0b93d5;
         }
-
     </style>
     {{--pagination--}}
 @endsection
@@ -157,7 +139,6 @@
         page[prefix + '{{$row->id}}'] = 10;
                 @endforeach
         var selectsurat = [];
-
     </script>
     {{--initialization--}}
 
@@ -190,7 +171,7 @@
 
                 <div class="row animate-box">
                     <div class="col-md-8 col-md-offset-2 text-center fh5co-heading" style="margin-bottom: 3em">
-                        <h2><i class="fa fa-history"></i> Riwayat E:Berkas</h2>
+                        <h2><i class="fa fa-history"></i> Riwayat Usulan</h2>
                     </div>
                 </div>
 
@@ -226,7 +207,7 @@
                                     <div class="col-lg-12">
                                         <select class="form-control" name="jumlah" id="jumlah"
                                                 required>
-                                            @for($i=1;$i<=10;$i++)
+                                            @for($i=1;$i<=5;$i++)
                                                 @if($i==1)
                                                     <option value="{{$i}}" selected>---- {{$i}} Data ----</option>
 
@@ -245,26 +226,55 @@
                                         <div id="isiinputsurat" class="col-lg-12">
                                             @for ($i=0;$i<1;$i++)
                                                 <div class="row form-group has-feedback">
-                                                    <div class="col-md-2 ">
+                                                    <div class="col-md-3 ">
                                                         <input placeholder="input data" class="form-control addfile"
                                                                type="file"
                                                                id="file[0][]" name="file[]" multiple required
                                                                autofocus>
                                                     </div>
                                                     <div class="col-md-3">
-                                                        <input placeholder="Kode Surat" class="form-control"
+                                                        <input placeholder="Nama Kegiatan" class="form-control"
                                                                id="name[]"
-                                                               name="name[]" required autofocus>
+                                                               name="name[]" multiple required autofocus>
                                                     </div>
                                                     <div class="col-md-3">
-                                                        <input placeholder="Kode Berkas" class="form-control"
-                                                               id="kode[]"
-                                                               name="kode[]" required autofocus>
+                                                        <select placeholder="Tahun RKP" id="kode[]" type="text"
+                                                                class="form-control"
+                                                                name="kode[]"
+                                                                required autofocus>
+                                                            <option value="" disabled selected>-Tahun RKP -
+                                                            </option>
+                                                            <option value="2016">2016
+                                                            </option>
+                                                            <option value="2017">2017
+                                                            </option>
+                                                            <option value="2018">2018
+                                                            </option>
+                                                            <option value="2019">2019
+                                                            </option>
+                                                            <option value="2020">2020
+                                                            </option>
+                                                        </select>
                                                     </div>
-                                                    <div class="col-md-2">
+                                                    <div class="col-md-3">
+                                                        <input placeholder="Lokasi" class="form-control"
+                                                               id="lokasi[]"
+                                                               name="lokasi[]" multiple required autofocus>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <input placeholder="volume m2" class="form-control"
+                                                               id="volume[]"
+                                                               name="volume[]" multiple required autofocus>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <input placeholder="Anggaran" class="form-control"
+                                                               id="anggaran[]"
+                                                               name="anggaran[]" multiple required autofocus>
+                                                    </div>
+                                                    <div class="col-md-3">
                                                         <select class="form-control category_id"
                                                                 name="category_id[]"
-                                                                id="category_id[]" required>
+                                                                id="category_id[]"   required>
                                                             <option value="" disabled selected>- Pilih Kategori
                                                                 Surat -
                                                             </option>
@@ -275,12 +285,15 @@
                                                             @endforeach
                                                         </select>
                                                     </div>
-                                                    <div class="col-md-2">
+                                                    <div class="col-md-3">
                                                             <textarea class="form-control" placeholder="Keterangan"
                                                                       id="desc[]"
                                                                       name="desc[]" style="height: 54px"></textarea>
                                                     </div>
+                                                    <input id="city_id[]" type="hidden" class="form-control" name="city_id[]" value="{{app\user::where('city_id',Auth::user()->city_id)->first()->city_id}}" readonly>
 
+                                                    <input id="district_id[]" type="hidden" class="form-control" name="district_id[]" value="{{app\user::where('district_id',Auth::user()->district_id)->first()->district_id}}" readonly>
+                                                    <input id="approve_id[]" type="hidden" class="form-control" name="approve_id[]" value="0" readonly>
 
                                                 </div>
                                             @endfor
@@ -305,6 +318,230 @@
                                 <br>
                                 <div id="table2-data">
                                     {{--<form action="" method="post" enctype="multipart/form-data" class="form-horizontal">--}}
+                                    {{ csrf_field() }} {{ method_field('post') }}
+                                    <input type="hidden" name="metode" id="metode" class="metode">
+                                    <div class="row container-fluid">
+                                        <div class="col-md-4" style="margin-top: 5px; padding-left: 40px">
+
+                                            <button class="btn btn-primary" type="button"
+                                                    data-toggle="tooltip" data-method="1"
+                                                    onclick="multiDelete(this)"
+                                                    title="Hapus Banyak"
+                                                    readonly="true">
+                                                <i class="fa fa-times"></i>
+                                            </button>
+                                            <button class="btn btn-primary" type="button"
+                                                    data-toggle="tooltip"
+                                                    onclick="multiEdit('semua')"
+                                                    title="Ubah Banyak"
+                                                    readonly="true">
+                                                <i class="fa fa-edit"></i>
+                                            </button>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <h3 style="margin-top: 10px">- Data Semua Surat -</h3>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="row container-fluid">
+                                                <div class="col-md-2 col-md-offset-1">
+                                                    <select name="page" class="form-control page" id="page"
+                                                            {{--data-id="semua"--}}
+                                                            style="width: 90px">
+                                                        <option value="10">10</option>
+                                                        <option value="25">25</option>
+                                                        <option value="50">50</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-9">
+                                                    <div class="input-group input-group-sm"
+                                                         style="width: 250px;margin-left: 34px">
+                                                        <input type="text" name="inputsuratsemua"
+                                                               id="inputsuratsemua"
+                                                               class="form-control"
+                                                               style="height: 47px; font-size: 14px "
+                                                               placeholder="Cari">
+
+                                                        <div class="input-group-btn">
+                                                            <button href="javascript:void(0)" id="submitsurat"
+                                                                    type="button"
+                                                                    class="btn btn-primary cariBtn"
+                                                                    style="height: 47px;">
+                                                                <i class="fa fa-search"
+                                                                   id="carisuratsemua"></i>
+                                                                <i class="fa fa-circle-o-notch fa-spin fa-1x fa-fw"
+                                                                   id="loadingsuratsemua"></i></button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <br>
+
+                                    <table class="table table-responsive table-bordered table-hover" width="100%"
+                                           id="example2" cellspacing="0">
+                                        <thead>
+                                        <tr>
+
+                                            <th style="text-align:center" width="20px"><input type="checkbox"
+                                                                                              data-toggle="tooltip"
+                                                                                              title="centang semua"
+                                                                                              data-id="semua"
+                                                                                              class="checkall"
+                                                                                              style="width: 30px">
+                                            <th>
+                                                <center>Kode Berkas</center>
+                                            </th>
+                                            <th>
+                                                <center>Kode Surat</center>
+                                            </th>
+                                            {{--<th>--}}
+                                            {{--<center>Lokasi</center>--}}
+                                            {{--</th>--}}
+                                            {{--<th>--}}
+                                            {{--<center>Volume</center>--}}
+                                            {{--</th>--}}
+                                            {{--<th>--}}
+                                            {{--<center>Anggaran</center>--}}
+                                            {{--</th>--}}
+                                            <th>
+                                                <center>Jenis Surat</center>
+                                            </th>
+                                            <th>
+                                                <center>Pengirim</center>
+                                            </th>
+                                            <th>
+                                                <center>Dibuat Tanggal</center>
+                                            </th>
+                                            <th>
+                                                <center>Action</center>
+                                            </th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+
+                                        </tbody>
+
+                                    </table>
+                                    {{--</form>--}}
+                                </div>
+                            </div>
+
+                            <div id="suratsampah" class="tab-pane fade in text-center">
+                                <br>
+                                <div id="table2-data">
+                                    {{--<form action="" method="post" enctype="multipart/form-data" class="form-horizontal">--}}
+                                    {{ csrf_field() }} {{ method_field('post') }}
+                                    <input type="hidden" name="metode" id="metode" class="metode">
+                                    <div class="row container-fluid">
+                                        <div class="col-md-4" style="margin-top: 5px; padding-left: 40px">
+                                            <button data-toggle="tooltip" title="Hapus Permanen Banyak"
+                                                    value="delete"
+                                                    type="button" data-method="2"
+                                                    onclick="multiDelete(this)"
+                                                    data-limit="delete" id="delete"
+                                                    class="btn btn-primary">
+                                                <i class="fa fa-times"></i>
+                                            </button>
+                                            <button data-toggle="tooltip" title="Pulihkan Banyak" value="restore"
+                                                    type="button"
+                                                    data-limit="restore"
+                                                    class="btn btn-primary restore">
+                                                <i class="fa fa-reply"></i>
+                                            </button>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <h3 style="margin-top: 10px">- Data Sampah -</h3>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="row container-fluid">
+                                                <div class="col-md-2 col-md-offset-1">
+                                                    <select name="page" class="form-control page" id="page"
+                                                            {{--data-id="sampah"--}}
+                                                            style="width: 90px">
+                                                        <option value="10">10</option>
+                                                        <option value="25">25</option>
+                                                        <option value="50">50</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-9">
+                                                    <div class="input-group input-group-sm"
+                                                         style="width: 250px;margin-left: 34px">
+                                                        <input type="text" name="inputsuratsampah"
+                                                               id="inputsuratsampah"
+                                                               class="form-control"
+                                                               style="height: 47px; font-size: 14px "
+                                                               placeholder="Cari">
+
+                                                        <div class="input-group-btn">
+                                                            <button id="submitsurat" href="javascript:void(0)"
+                                                                    type="button"
+                                                                    class="btn btn-primary cariBtn"
+                                                                    style="height: 47px;">
+                                                                <i class="fa fa-search"
+                                                                   id="carisuratsampah"></i>
+                                                                <i class="fa fa-circle-o-notch fa-spin fa-1x fa-fw"
+                                                                   id="loadingsuratsampah"></i></button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <br>
+
+                                    <table class="table table-responsive table-bordered table-hover" width="100%"
+                                           id="example1" cellspacing="0">
+                                        <thead>
+                                        <tr>
+
+                                            <th style="text-align:center" width="20px"><input type="checkbox"
+                                                                                              data-toggle="tooltip"
+                                                                                              title="centang semua"
+                                                                                              data-id="sampah"
+                                                                                              class="checkall"
+                                                                                              style="width: 30px">
+                                            <th>
+                                                <center>Kode Berkas</center>
+                                            </th>
+                                            <th>
+                                                <center>Kode Surat</center>
+                                            </th>
+                                            {{--<th>--}}
+                                            {{--<center>Lokasi</center>--}}
+                                            {{--</th>--}}
+                                            {{--<th>--}}
+                                            {{--<center>Volume</center>--}}
+                                            {{--</th>--}}
+                                            {{--<th>--}}
+                                            {{--<center>Anggaran</center>--}}
+                                            {{--</th>--}}
+                                            <th>
+                                                <center>Penghapus</center>
+                                            </th>
+                                            <th>
+                                                <center>Dihapus Tanggal</center>
+                                            </th>
+                                            <th>
+                                                <center>Action</center>
+                                            </th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+
+                                        </tbody>
+
+                                    </table>
+                                    {{--</form>--}}
+                                </div>
+                            </div>
+
+                            @foreach($category as $row)
+                                <div id="surat{{$row->id}}" class="tab-pane fade in text-center">
+                                    <br>
+                                    <div id="table2-data">
+                                        {{--<form action="" method="post" enctype="multipart/form-data"--}}
+                                        {{--class="form-horizontal">--}}
                                         {{ csrf_field() }} {{ method_field('post') }}
                                         <input type="hidden" name="metode" id="metode" class="metode">
                                         <div class="row container-fluid">
@@ -319,20 +556,20 @@
                                                 </button>
                                                 <button class="btn btn-primary" type="button"
                                                         data-toggle="tooltip"
-                                                        onclick="multiEdit('semua')"
+                                                        onclick="multiEdit({{$row->id}})"
                                                         title="Ubah Banyak"
                                                         readonly="true">
                                                     <i class="fa fa-edit"></i>
                                                 </button>
                                             </div>
                                             <div class="col-md-4">
-                                                <h3 style="margin-top: 10px">- Data Semua Surat -</h3>
+                                                <h3 style="margin-top: 10px">- Data {{$row->name}} -</h3>
                                             </div>
                                             <div class="col-md-4">
                                                 <div class="row container-fluid">
                                                     <div class="col-md-2 col-md-offset-1">
                                                         <select name="page" class="form-control page" id="page"
-                                                                {{--data-id="semua"--}}
+                                                                {{--data-id="0" data-id2="{{$row->id}}"--}}
                                                                 style="width: 90px">
                                                             <option value="10">10</option>
                                                             <option value="25">25</option>
@@ -342,109 +579,8 @@
                                                     <div class="col-md-9">
                                                         <div class="input-group input-group-sm"
                                                              style="width: 250px;margin-left: 34px">
-                                                            <input type="text" name="inputsuratsemua"
-                                                                   id="inputsuratsemua"
-                                                                   class="form-control"
-                                                                   style="height: 47px; font-size: 14px "
-                                                                   placeholder="Cari">
-
-                                                            <div class="input-group-btn">
-                                                                <button href="javascript:void(0)" id="submitsurat"
-                                                                        type="button"
-                                                                        class="btn btn-primary cariBtn"
-                                                                        style="height: 47px;">
-                                                                    <i class="fa fa-search"
-                                                                       id="carisuratsemua"></i>
-                                                                    <i class="fa fa-circle-o-notch fa-spin fa-1x fa-fw"
-                                                                       id="loadingsuratsemua"></i></button>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <br>
-
-                                        <table class="table table-responsive table-bordered table-hover" width="100%"
-                                               id="example2" cellspacing="0">
-                                            <thead>
-                                            <tr>
-
-                                                <th style="text-align:center" width="20px"><input type="checkbox"
-                                                                                                  data-toggle="tooltip"
-                                                                                                  title="centang semua"
-                                                                                                  data-id="semua"
-                                                                                                  class="checkall"
-                                                                                                  style="width: 30px">
-                                                <th>
-                                                    <center>Kode Berkas</center>
-                                                </th>
-                                                <th>
-                                                    <center>Kode Surat</center>
-                                                </th>
-                                                <th>
-                                                    <center>Jenis Surat</center>
-                                                </th>
-                                                <th>
-                                                    <center>Pengirim</center>
-                                                </th>
-                                                <th>
-                                                    <center>Dibuat Tanggal</center>
-                                                </th>
-                                                <th></th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-
-                                            </tbody>
-
-                                        </table>
-                                    {{--</form>--}}
-                                </div>
-                            </div>
-
-                            <div id="suratsampah" class="tab-pane fade in text-center">
-                                <br>
-                                <div id="table2-data">
-                                    {{--<form action="" method="post" enctype="multipart/form-data" class="form-horizontal">--}}
-                                        {{ csrf_field() }} {{ method_field('post') }}
-                                        <input type="hidden" name="metode" id="metode" class="metode">
-                                        <div class="row container-fluid">
-                                            <div class="col-md-4" style="margin-top: 5px; padding-left: 40px">
-                                                <button data-toggle="tooltip" title="Hapus Permanen Banyak"
-                                                        value="delete"
-                                                        type="button" data-method="2"
-                                                        onclick="multiDelete(this)"
-                                                        data-limit="delete" id="delete"
-                                                        class="btn btn-primary">
-                                                    <i class="fa fa-times"></i>
-                                                </button>
-                                                <button data-toggle="tooltip" title="Pulihkan Banyak" value="restore"
-                                                        type="button"
-                                                        data-limit="restore"
-                                                        class="btn btn-primary restore">
-                                                    <i class="fa fa-reply"></i>
-                                                </button>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <h3 style="margin-top: 10px">- Data Sampah -</h3>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <div class="row container-fluid">
-                                                    <div class="col-md-2 col-md-offset-1">
-                                                        <select name="page" class="form-control page" id="page"
-                                                                {{--data-id="sampah"--}}
-                                                                style="width: 90px">
-                                                            <option value="10">10</option>
-                                                            <option value="25">25</option>
-                                                            <option value="50">50</option>
-                                                        </select>
-                                                    </div>
-                                                    <div class="col-md-9">
-                                                        <div class="input-group input-group-sm"
-                                                             style="width: 250px;margin-left: 34px">
-                                                            <input type="text" name="inputsuratsampah"
-                                                                   id="inputsuratsampah"
+                                                            <input type="text" name="inputsurat{{$row->id}}"
+                                                                   id="inputsurat"
                                                                    class="form-control"
                                                                    style="height: 47px; font-size: 14px "
                                                                    placeholder="Cari">
@@ -455,9 +591,9 @@
                                                                         class="btn btn-primary cariBtn"
                                                                         style="height: 47px;">
                                                                     <i class="fa fa-search"
-                                                                       id="carisuratsampah"></i>
+                                                                       id="carisurat{{$row->id}}"></i>
                                                                     <i class="fa fa-circle-o-notch fa-spin fa-1x fa-fw"
-                                                                       id="loadingsuratsampah"></i></button>
+                                                                       id="loadingsurat{{$row->id}}"></i></button>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -466,7 +602,9 @@
                                         </div>
                                         <br>
 
-                                        <table class="table table-responsive table-bordered table-hover" width="100%"
+
+                                        <table class="table table-responsive table-bordered table-hover"
+                                               width="100%"
                                                id="example1" cellspacing="0">
                                             <thead>
                                             <tr>
@@ -474,25 +612,34 @@
                                                 <th style="text-align:center" width="20px"><input type="checkbox"
                                                                                                   data-toggle="tooltip"
                                                                                                   title="centang semua"
-                                                                                                  data-id="sampah"
+                                                                                                  data-id="{{$row->id}}"
                                                                                                   class="checkall"
                                                                                                   style="width: 30px">
+                                                </th>
                                                 <th>
                                                     <center>Kode Berkas</center>
                                                 </th>
                                                 <th>
                                                     <center>Kode Surat</center>
                                                 </th>
+                                                {{--<th>--}}
+                                                {{--<center>Lokasi</center>--}}
+                                                {{--</th>--}}
+                                                {{--<th>--}}
+                                                {{--<center>Volume</center>--}}
+                                                {{--</th>--}}
+                                                {{--<th>--}}
+                                                {{--<center>Anggaran</center>--}}
+                                                {{--</th>--}}
                                                 <th>
-                                                    <center>Jenis Surat</center>
+                                                    <center>Pengirim</center>
                                                 </th>
                                                 <th>
-                                                    <center>Penghapus</center>
+                                                    <center>Dibuat</center>
                                                 </th>
                                                 <th>
-                                                    <center>Dihapus Tanggal</center>
+                                                    <center>Action</center>
                                                 </th>
-                                                <th></th>
                                             </tr>
                                             </thead>
                                             <tbody>
@@ -500,110 +647,6 @@
                                             </tbody>
 
                                         </table>
-                                    {{--</form>--}}
-                                </div>
-                            </div>
-
-                            @foreach($category as $row)
-                                <div id="surat{{$row->id}}" class="tab-pane fade in text-center">
-                                    <br>
-                                    <div id="table2-data">
-                                        {{--<form action="" method="post" enctype="multipart/form-data"--}}
-                                              {{--class="form-horizontal">--}}
-                                            {{ csrf_field() }} {{ method_field('post') }}
-                                            <input type="hidden" name="metode" id="metode" class="metode">
-                                            <div class="row container-fluid">
-                                                <div class="col-md-4" style="margin-top: 5px; padding-left: 40px">
-
-                                                    <button class="btn btn-primary" type="button"
-                                                            data-toggle="tooltip" data-method="1"
-                                                            onclick="multiDelete(this)"
-                                                            title="Hapus Banyak"
-                                                            readonly="true">
-                                                        <i class="fa fa-times"></i>
-                                                    </button>
-                                                    <button class="btn btn-primary" type="button"
-                                                            data-toggle="tooltip"
-                                                            onclick="multiEdit({{$row->id}})"
-                                                            title="Ubah Banyak"
-                                                            readonly="true">
-                                                        <i class="fa fa-edit"></i>
-                                                    </button>
-                                                </div>
-                                                <div class="col-md-4">
-                                                    <h3 style="margin-top: 10px">- Data {{$row->name}} -</h3>
-                                                </div>
-                                                <div class="col-md-4">
-                                                    <div class="row container-fluid">
-                                                        <div class="col-md-2 col-md-offset-1">
-                                                            <select name="page" class="form-control page" id="page"
-                                                                    {{--data-id="0" data-id2="{{$row->id}}"--}}
-                                                                    style="width: 90px">
-                                                                <option value="10">10</option>
-                                                                <option value="25">25</option>
-                                                                <option value="50">50</option>
-                                                            </select>
-                                                        </div>
-                                                        <div class="col-md-9">
-                                                            <div class="input-group input-group-sm"
-                                                                 style="width: 250px;margin-left: 34px">
-                                                                <input type="text" name="inputsurat{{$row->id}}"
-                                                                       id="inputsurat"
-                                                                       class="form-control"
-                                                                       style="height: 47px; font-size: 14px "
-                                                                       placeholder="Cari">
-
-                                                                <div class="input-group-btn">
-                                                                    <button id="submitsurat" href="javascript:void(0)"
-                                                                            type="button"
-                                                                            class="btn btn-primary cariBtn"
-                                                                            style="height: 47px;">
-                                                                        <i class="fa fa-search"
-                                                                           id="carisurat{{$row->id}}"></i>
-                                                                        <i class="fa fa-circle-o-notch fa-spin fa-1x fa-fw"
-                                                                           id="loadingsurat{{$row->id}}"></i></button>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <br>
-
-
-                                            <table class="table table-responsive table-bordered table-hover"
-                                                   width="100%"
-                                                   id="example1" cellspacing="0">
-                                                <thead>
-                                                <tr>
-
-                                                    <th style="text-align:center" width="20px"><input type="checkbox"
-                                                                                                      data-toggle="tooltip"
-                                                                                                      title="centang semua"
-                                                                                                      data-id="{{$row->id}}"
-                                                                                                      class="checkall"
-                                                                                                      style="width: 30px">
-                                                    </th>
-                                                    <th>
-                                                        <center>Kode Berkas</center>
-                                                    </th>
-                                                    <th>
-                                                        <center>Kode Surat</center>
-                                                    </th>
-                                                    <th>
-                                                        <center>Pengirim</center>
-                                                    </th>
-                                                    <th>
-                                                        <center>Dibuat</center>
-                                                    </th>
-                                                    <th></th>
-                                                </tr>
-                                                </thead>
-                                                <tbody>
-
-                                                </tbody>
-
-                                            </table>
                                         {{--</form>--}}
                                     </div>
                                 </div>
@@ -690,7 +733,6 @@
                                 timer: '1500'
                             });
                             $('#jadi-data form')[0].reset();
-
                         },
                         error: function () {
                             activeformadd();
@@ -700,14 +742,11 @@
                                 type: 'error',
                                 timer: '1500'
                             });
-
                         }
                     });
-
                     return false;
                 }
             });
-
             function activeformadd() {
                 $('#jadi-data form .category_id1').remove();
                 $('#jadi-data .category_id').removeClass('disabled')  //disable class
@@ -725,8 +764,6 @@
     <script>
         function ambilData(e) {
             index = $(e).data('id');
-
-
             if (index == 1) {
                 $id = 'sampah';
             }
@@ -736,17 +773,13 @@
             else {
                 $id = $(e).data('id2');
             }
-
             if (index == 3) {
-
                 $('.box-footer').hide();
             }
             else {
                 getData($id);
             }
-
         }
-
     </script>
     {{--changetab--}}
 
@@ -803,7 +836,7 @@
                                 '        <ul class="dropdown-menu">\n' +
                                 '            <li><a data-id="' + value.id + '" data-method="1" href="javascript:void(0)" data-role="edit" onclick="showForm(this)">Rubah</a></li>\n' +
                                 '            <li><a data-id="' + value.id + '" data-method="1" href="javascript:void(0)" onclick="deleteData(this)">Hapus</a></li>\n' +
-                                '            <li><a data-id="' + value.id + '" data-method="1" href="javascript:void(0)" onclick="historiData(this)">Histori</a></li>\n' +
+                                // '            <li><a data-id="' + value.id + '" data-method="1" href="javascript:void(0)" onclick="historiData(this)">Histori</a></li>\n' +
                                 '            <li role="separator" class="divider"></li>\n' +
                                 '            \n' + $filesurat +
                                 '            \n' +
@@ -841,7 +874,6 @@
                                 $replace = '<td> ' + value.category + ' </td>' +
                                     '<td> <a href="javascript:void(0)" onclick="showUser(' + value.user_id + ')">' + value.user + '</a> </td>' +
                                     '<td> ' + value.date + ' </td>' + $opsimenu;
-
                             }
                             $loopsurat += '<tr>' +
                                 '<td>' +
@@ -855,7 +887,6 @@
                                 '<td> ' + value.name + ' </td>' + $replace +
                                 '</tr>';
                         });
-
                         $dataafter = '';
                         $databefore = '';
                         for ($i = 1; $i <= $maxpage; $i++) {
@@ -900,7 +931,6 @@
                                     '                                        <li>'+$maxpage+'</li>\n' +
                                     '                                    </a>\n';
                             }
-
                             else {
                                 $dataafter = '';
                                 $databefore = '';
@@ -917,10 +947,8 @@
                                     '                                        <li>'+$maxpage+'</li>\n' +
                                     '                                    </a>\n';
                             }
-
                         }
                         $('.box-footer').hide(500);
-
                         if ($maxpage > 1) {
                             surat = 1;
                             $('.box-footer').show(500);
@@ -945,7 +973,6 @@
                         else {
                             $('#targerPagi .pagiPrevious').data('action', (parseInt($pagi) - 1));
                         }
-
                         $pagi2 = $('#targerPagi .pagi' + $pagi);
                         $pagi2.addClass('is-active').show(1500);
                         $pagi2.prop('disabled', true);
@@ -954,7 +981,6 @@
                     }
                     $('#surat' + $id + ' table tbody').empty().append($loopsurat);
                     $table.fadeIn('slow');
-
                 },
                 error: function () {
                     $checkall.prop('disabled', true);
@@ -971,17 +997,14 @@
                     })
                 }
             });
-
         }
         // pagination
-
         $('#targerPagi').on('click', '.page', function (asd) {
             $id = $(this).data('per');
             pagination[prefix + $id] = $(this).data('action');
             getData($id, $pagi);
         });
-
-    // pagination
+        // pagination
     </script>
     {{--getdata--}}
     {{--multidelete--}}
@@ -993,7 +1016,6 @@
             else {
                 swalInfo('Notice!', 'Select some data....');
             }
-
             return false;
         });
     </script>
@@ -1042,7 +1064,6 @@
 
     {{--focustr--}}
     <script>
-
     </script>
     {{--focustr--}}
     {{--notifselect--}}
@@ -1055,7 +1076,6 @@
                 timer: '1500'
             })
         }
-
         function notifsuccess($notif) {
             swal({
                 title: 'Berhasil!',
@@ -1064,7 +1084,6 @@
                 timer: '1500'
             })
         }
-
         function notiferror() {
             swal({
                 title: 'Error!',
@@ -1114,7 +1133,6 @@
                     }
                     trHTML += '<tr><td width="60px" valign="top">Deskripsi</td><td valign="top">:&nbsp;</td><td align="justify" >' + data.bio + '</td></tr>';
                     $('#modal-form-user #location').empty().append(trHTML);
-
                 },
                 error: function () {
                     swal({
@@ -1144,9 +1162,7 @@
                     timer: '1500'
                 })
             }
-
         }
-
         function multiEdit(id) {
             console.log(id);
             if (selectsurat.length > 0) {
@@ -1166,6 +1182,11 @@
                             $('#modal-form-multiple .keyi' + key + ' #kode').val(value.kode);
                             $('#modal-form-multiple .keyi' + key + ' #name').val(value.name);
                             $('#modal-form-multiple .keyi' + key + ' #desc').val(value.desc);
+                            $('#modal-form-multiple .keyi' + key + ' #lokasi').val(value.lokasi);
+                            $('#modal-form-multiple .keyi' + key + ' #volume').val(value.volume);
+                            $('#modal-form-multiple .keyi' + key + ' #anggaran').val(value.anggaran);
+                            $('#modal-form-multiple .keyi' + key + ' #city_id').val(value.city_id);
+                            $('#modal-form-multiple .keyi' + key + ' #district_id').val(value.district_id);
                             $selectMulti += '<option value="" selected disabled>--Pilih Kategori--</option>';
                             $.each(data.category_list, function (no, nilai) {
                                 if (nilai.id == value.category_id) {
@@ -1176,16 +1197,12 @@
                                 }
                             });
                             $('#modal-form-multiple .keyi' + key + ' #category_id').append($selectMulti);
-
                         });
-
-
                     },
                     error: function () {
                         swalError('Oops...', 'Something went wrong or data is empty!');
                     }
                 });
-
             }
             else {
                 swal({
@@ -1195,7 +1212,6 @@
                     timer: '1500'
                 })
             }
-
         }
     </script>
     {{--multi function--}}
@@ -1216,7 +1232,6 @@
             if ($("#inputsurat" + $id + ":focus") && (e.keyCode === 13)) {
                 searchsurat();
             }
-
         });
     </script>
     {{--keyup--}}
@@ -1226,7 +1241,6 @@
         $('.cariBtn').on('click', function () {
             searchsurat();
         });
-
         function searchsurat() {
             $('#carisurat' + $id).hide();
             $('#loadingsurat' + $id).show();
@@ -1250,9 +1264,7 @@
                 $('#modal-form').modal('hide');
             }
             deleteSurat($(e).data("id"), $methodDelete);
-
         }
-
         function deleteSurat(eId, metode) {
             $methodDelete = metode;
             swal({
@@ -1268,7 +1280,6 @@
                 confirmButtonText: 'Ya!',
                 preConfirm: function () {
                     return new Promise(function (resolve) {
-
                         resolve([
                             $('#swal-input1').val()
                         ])
@@ -1313,7 +1324,6 @@
                                                 if ($methodDelete == 2) {
                                                     swalSuccess('Berhasil!', 'Data Terhapus');
                                                 }
-
                                                 getData($id);
                                             },
                                             error: function () {
@@ -1343,7 +1353,6 @@
                 }
                 return false;
             });
-
             return false;
         }
     </script>
@@ -1352,7 +1361,6 @@
     {{--restore data--}}
     <script>
         function restoreForm(e) {
-
         }
     </script>
     {{--restore data--}}
@@ -1381,7 +1389,6 @@
                         $('#modal-form-see .lihatsurat').show();
                         $('#modal-form-see .hapussurat').show();
                         $('#modal-form-see #deleteBerkas').empty().append('Berkas:');
-
                     }
                     else if ($showRole == 'edit') {
                         $('#modal-form-see .contentshow').attr('disabled', false);
@@ -1395,26 +1402,27 @@
                     else {
                         swalError('Peringatan!', 'Perintah Tidak Terdaftar');
                     }
-
                 },
                 error: function () {
                     swalError('Oops...', 'Something went wrong or data is empty!');
                 }
             });
-
         }
-
         function loadShow(e) {
             $('#modal-form-see form')[0].reset();
             $('#modal-form-see #kode').val(e.kode);
             $('#modal-form-see #id').val(e.id);
             $('#modal-form-see #desc').val(e.desc);
+            $('#modal-form-see #lokasi').val(e.lokasi);
+            $('#modal-form-see #volume').val(e.volume);
+            $('#modal-form-see #anggaran').val(e.anggaran);
+            $('#modal-form-see #city_id').val(e.city_id);
+            $('#modal-form-see #district_id').val(e.district_id);
             $('#modal-form-see #name').val(e.name);
             $('#modal-form-see #name').val(e.name);
             $('#modal-form-see #user_id').css('background-color', '#ffffff');
             $('#modal-form-see #user_id').val(e.user_id);
             $('#modal-form-see #changeUser').empty().append('Dibuat Oleh:');
-
             $selectShow = '';
             $selectShow += '<option value="" disabled>- Pilih Kategori - </option>';
             $.each(e.job_list, function (key, value) {
@@ -1423,7 +1431,6 @@
                 }
                 else {
                     $selectShow += '<option value="' + value.id + '">' + value.name + '</option>';
-
                 }
             });
             $contentFile = '';
@@ -1431,7 +1438,6 @@
                 $.each(e.file, function (key, value) {
                     $contentFile += '<input type="checkbox" value="' + value.id + '" class="editFile" name="hapus[]">' +
                         '<a target="_blank" href="{!!URL::to('/')!!}/' + value.url + '" class="contentFile">' + value.name + '</a><br>';
-
                 });
             }
             else {
@@ -1458,7 +1464,6 @@
                 $('#modal-form-see #changeUser').empty().append('Dihapus Oleh:');
                 $('#modal-form-see .hapussurat').attr('data-method', 2);
             }
-
         }
     </script>
     {{--lihat edit--}}
@@ -1467,7 +1472,6 @@
     <script>
         $(function () {
             $('#modal-form-see form').on('submit', function (e) {
-
                 if (!e.isDefaultPrevented()) {
                     $('#modal-form-see').modal('hide');
                     swal({
@@ -1483,7 +1487,6 @@
                         confirmButtonText: 'Ya!',
                         preConfirm: function () {
                             return new Promise(function (resolve) {
-
                                 resolve([
                                     $('#swal-input1').val()
                                 ])
@@ -1532,19 +1535,15 @@
                                                         timer: '1500'
                                                     });
                                                 }
-
                                                 $('#jadi-data form')[0].reset();
-
                                             },
                                             error: function () {
-
                                                 swal({
                                                     title: 'Oops...',
                                                     text: 'Something went wrong!',
                                                     type: 'error',
                                                     timer: '1500'
                                                 });
-
                                             }
                                         });
                                     } else {
@@ -1568,12 +1567,10 @@
                         }
                         return false;
                     });
-
                     return false;
                 }
             });
             $('#modal-form-multiple form').on('submit', function (e) {
-
                 if (!e.isDefaultPrevented()) {
                     $('#modal-form-multiple').modal('hide');
                     swal({
@@ -1589,7 +1586,6 @@
                         confirmButtonText: 'Ya!',
                         preConfirm: function () {
                             return new Promise(function (resolve) {
-
                                 resolve([
                                     $('#swal-input1').val()
                                 ])
@@ -1638,19 +1634,15 @@
                                                         timer: '1500'
                                                     });
                                                 }
-
                                                 $('#jadi-data form')[0].reset();
-
                                             },
                                             error: function () {
-
                                                 swal({
                                                     title: 'Oops...',
                                                     text: 'Something went wrong!',
                                                     type: 'error',
                                                     timer: '1500'
                                                 });
-
                                             }
                                         });
                                     } else {
@@ -1674,7 +1666,6 @@
                         }
                         return false;
                     });
-
                     return false;
                 }
             });
@@ -1701,7 +1692,6 @@
                 confirmButtonText: 'Ya!',
                 preConfirm: function () {
                     return new Promise(function (resolve) {
-
                         resolve([
                             $('#swal-input1').val()
                         ])
@@ -1720,7 +1710,6 @@
                                 swalInfo('Cek Password!', 'Password belum diisi!');
                             }
                             else if (data.status == 1) {
-
                                 swal({
                                     title: 'Pulihkan Data?',
                                     text: 'Data akan kembali ke tab sebelumnya',
@@ -1767,7 +1756,6 @@
                 }
                 return false;
             });
-
             return false;
         }
     </script>
@@ -1840,6 +1828,21 @@
                         '                                                            <td valign="top">:</td>\n' +
                         '                                                            <td id="fill-desc">Datto</td>\n' +
                         '                                                        </tr>\n' +
+                        '                                                        <tr>\n' +
+                        '                                                            <td style="width: 45px" valign="top">Detail</td>\n' +
+                        '                                                            <td valign="top">:</td>\n' +
+                        '                                                            <td id="fill-lokasi">Datto</td>\n' +
+                        '                                                        </tr>\n' +
+                        '                                                        <tr>\n' +
+                        '                                                            <td style="width: 45px" valign="top">Detail</td>\n' +
+                        '                                                            <td valign="top">:</td>\n' +
+                        '                                                            <td id="fill-volume">Datto</td>\n' +
+                        '                                                        </tr>\n' +
+                        '                                                        <tr>\n' +
+                        '                                                            <td style="width: 45px" valign="top">Detail</td>\n' +
+                        '                                                            <td valign="top">:</td>\n' +
+                        '                                                            <td id="fill-Anggaran">Datto</td>\n' +
+                        '                                                        </tr>\n' +
                         '                                                    </table>\n' +
                         '                                                </div>\n' +
                         '                                            </div>\n' +
@@ -1850,13 +1853,10 @@
                     }
                     console.log($labelmulti);
                     $('#modal-form-spoiler form #fill').empty().append('');
-
                     if (!$.trim(data.ava)) {
                         $('#modal-form-spoiler form #fill').append($labelmulti);
-
                     }
                     $fileadds = '';
-
                     $.each(data.lists, function (key, v) {
                         $fillDels = '';
                         $fillAdds = '';
@@ -1866,7 +1866,6 @@
                         $.each(v.listDel, function (key3, v3) {
                             $fillDels += '<a href="' + v3.url + '" target="_blank">' + v3.name + '</a><br>\n';
                         });
-
                         $('#modal-form-spoiler form #fill').append('<div class="set loopmulti spoiler' + key + '">' + $labelmulti + '</div>');
                         $contenthistori = '';
                         if (v.del == 1) {
@@ -1876,7 +1875,6 @@
                         else {
                             $('#modal-form-spoiler .spoiler' + key + ' .hapus-file').hide();
                         }
-
                         if (v.res == 1) {
                             $('#modal-form-spoiler .spoiler' + key + ' .res-file').show();
                             $contenthistori += ' Pulihkan Data |';
@@ -1896,7 +1894,6 @@
                             $contenthistori += ' Hapus File |';
                             $('#modal-form-spoiler .spoiler' + key + ' .del-file').show();
                             $('#modal-form-spoiler .spoiler' + key + ' #fill-del').empty().append($fillDels);
-
                         }
                         else {
                             $('#modal-form-spoiler .spoiler' + key + ' .del-file').hide();
@@ -1908,24 +1905,24 @@
                             $('#modal-form-spoiler .spoiler' + key + ' #fill-kode').empty().append(v.listEdit.kode);
                             $('#modal-form-spoiler .spoiler' + key + ' #fill-kategori').empty().append(v.listEdit.category);
                             $('#modal-form-spoiler .spoiler' + key + ' #fill-desc').empty().append(v.listEdit.desc);
+                            $('#modal-form-spoiler .spoiler' + key + ' #fill-lokasi').empty().append(v.listEdit.lokasi);
+                            $('#modal-form-spoiler .spoiler' + key + ' #fill-volume').empty().append(v.listEdit.volume);
+                            $('#modal-form-spoiler .spoiler' + key + ' #fill-anggaran').empty().append(v.listEdit.anggaran);
+                            $('#modal-form-spoiler .spoiler' + key + ' #fill-city_id').empty().append(v.listEdit.city_id);
+                            $('#modal-form-spoiler .spoiler' + key + ' #fill-district_id').empty().append(v.listEdit.district_id);
                         }
                         else {
                             $('#modal-form-spoiler .spoiler' + key + ' .edit-data').hide();
                         }
                         $('#modal-form-spoiler .spoiler' + key + ' .judul-spoiler').empty().append(v.date + ' | ' + v.user_id + ' |' + $contenthistori + '<i class="fa fa-plus"></i>');
-
-
                     });
                     $('#modal-form-spoiler').modal('show');
-
-
                     // getData($id);
                 },
                 error: function () {
                     swalError('Oops...', 'something wrong!');
                 }
             });
-
         }
     </script>
     {{--histori--}}
@@ -1940,7 +1937,6 @@
                 timer: '1500'
             })
         }
-
         function swalInfo($swalTittle, $swalContent) {
             swal({
                 title: $swalTittle,
@@ -1949,7 +1945,6 @@
                 timer: '1500'
             })
         }
-
         function swalSuccess($swalTittle, $swalContent) {
             swal({
                 title: $swalTittle,
@@ -1974,7 +1969,6 @@
 
     {{--accordion--}}
     <script>
-
         $("#modal-form-spoiler .set > a").on("click", function () {
             console.log('aaaaaa');
             if ($(this).hasClass("active")) {
@@ -2001,7 +1995,6 @@
                     .slideDown(200);
             }
         });
-
         function spoiler(e) {
             if ($(e).hasClass("active")) {
                 $(e).removeClass("active");
@@ -2027,8 +2020,6 @@
                     .slideDown(200);
             }
         }
-
-
     </script>
     <script>
         var title = document.getElementsByTagName("title")[0].innerHTML;

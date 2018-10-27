@@ -245,7 +245,7 @@ class AdminTableLetterController extends Controller
                     $data['entity'] = $entity;
                     foreach ($this->getPagination($r->id, $skip, $next) as $row) {
                         $data['list'][] = array('name' => $row->name,
-                            'nip' => $row->nip,
+                            'nik' => $row->nik,
                             'role' => $this->getRole($row->role_id),
                             'id' => $row->id,
                             'ps' => $this->getPosisition($row->posisition_id));
@@ -299,12 +299,12 @@ class AdminTableLetterController extends Controller
             $role2 = $this->getRole($row->role_id);
             $ps2 = $this->getPosisition($row->posisition_id);
             $name = strpos(strtolower($row->name), strtolower($search));
-            $nip = strpos(strtolower($row->nip), strtolower($search));
+            $nik = strpos(strtolower($row->nik), strtolower($search));
             $ps = strpos(strtolower($ps2), strtolower($search));
             $role = strpos(strtolower($role2), strtolower($search));
 
-            if ($name !== false || $nip !== false || $ps !== false || $role !== false) {
-                $data['list'][] = array('name' => $row->name, 'nip' => $row->nip, 'ps' => $ps2, 'role' => $role2, 'id' => $row->id);
+            if ($name !== false || $nik !== false || $ps !== false || $role !== false) {
+                $data['list'][] = array('name' => $row->name, 'nik' => $row->nik, 'ps' => $ps2, 'role' => $role2, 'id' => $row->id);
                 $data['status'] = 1;
             }
         }
@@ -390,7 +390,7 @@ class AdminTableLetterController extends Controller
             $compare[] = array('name' => $r->usw->name
             ,'id' => $r->id
             ,'status' => $r->status
-            , 'nip' => $r->usw->nip
+            , 'nik' => $r->usw->nik
             , 'job_id' => trDataJobDesc::findOrFail($r->usw->job_id)->name
             , 'posisition_id' => trDataPosisition::findOrFail($r->usw->posisition_id)->name
             , 'role_id' => status::findOrFail($r->usw->role_id)->name);
@@ -399,14 +399,14 @@ class AdminTableLetterController extends Controller
         $data['status'] = 0;
         foreach ($compare as $row) {
             $name = strpos(strtolower($row['name']), strtolower($search));
-            $nip = strpos(strtolower($row['nip']), strtolower($search));
+            $nik = strpos(strtolower($row['nik']), strtolower($search));
             $ps = strpos(strtolower($row['posisition_id']), strtolower($search));
             $role = strpos(strtolower($row['role_id']), strtolower($search));
             $job= strpos(strtolower($row['job_id']), strtolower($search));
 
-            if ($name !== false || $nip !== false || $ps !== false || $role !== false|| $job !== false) {
+            if ($name !== false || $nik !== false || $ps !== false || $role !== false|| $job !== false) {
                 $data['list'][] = array('name' => $row['name'],
-                    'nip' => $row['nip'],
+                    'nik' => $row['nik'],
                     'posisition_id' => $row['posisition_id'],
                     'role_id' => $row['role_id'],
                     'job_id' => $row['job_id'],
@@ -425,7 +425,7 @@ class AdminTableLetterController extends Controller
             $data[] = array('name' => $r->usw->name
             ,'id' => $r->id
             ,'status' => $r->status
-            , 'nip' => $r->usw->nip
+            , 'nik' => $r->usw->nik
             , 'job_id' => trDataJobDesc::findOrFail($r->usw->job_id)->name
             , 'posisition_id' => trDataPosisition::findOrFail($r->usw->posisition_id)->name
             , 'role_id' => status::findOrFail($r->usw->role_id)->name);;

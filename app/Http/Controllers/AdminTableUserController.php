@@ -12,6 +12,7 @@ use App\trDataJobDesc;
 use App\trDataPosisition;
 use App\trRequestChangeJob;
 use App\User;
+use App\district;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
@@ -282,6 +283,7 @@ class AdminTableUserController extends Controller
 
     }
 
+
     public function storesuratplus(Request $r)
     {
         $x = \session('proSend');
@@ -304,7 +306,7 @@ class AdminTableUserController extends Controller
             'password' => $pss['ps']];
 
         Mail::send('admin.pengurus.mail.send', $data, function ($message) use ($data) {
-            $message->from('vreallyla@gmail.com', 'reberkas');
+            $message->from('akbardoto@gmail.com', 'APEDA');
             $message->to($data['email']);
             $message->subject($data['subject']);
         });
@@ -335,6 +337,12 @@ class AdminTableUserController extends Controller
             'job_id' => $r->job_id[$i],
             'posisition_id' => $r->posisition_id[$i],
             'role_id' => $r->role_id[$i],
+            'district_id' => $r->district_id[$i],
+            'city_id' => $r->city_id[$i],
+            'tempat_lahir' => $r->tempat_lahir[$i],
+            'tgl_lahir' => $r->tgl_lahir[$i],
+            'status' => 1,
+//            'remember_token' => Str::random(12),
             'email' => $r->email[$i], 'nik' => $r->nik[$i], 'password' => bcrypt($a)])->id;
         $ids = historiSendEmail::create(['user_id' => $id, 'status' => 't'])->id;
         $pss = ['ps' => $a, 'id' => $ids];
@@ -445,7 +453,7 @@ class AdminTableUserController extends Controller
     {
 
         Mail::send('admin.pengurus.mail.send', $data, function ($message) use ($data) {
-            $message->from('vreallyla@gmail.com', 'reberkas');
+            $message->from('akbardoto@gmail.com', 'APEDA');
             $message->to($data['email']);
             $message->subject($data['subject']);
         });

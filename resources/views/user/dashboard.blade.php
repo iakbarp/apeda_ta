@@ -4,12 +4,33 @@
     <li class="active"><a href="{{url('home#fh5co-practices')}}">Beranda</a></li>
     <li><a href="{{url('profile')}}">Profil Aplikasi</a></li>
     <li><a href="{{url('employes')}}">Daftar Pegawai</a></li>
-    <li><a href="{{url('FormUsulan')}}">Form Usulan</a></li>
+    @if ($user->role_id==2)
+    <li><a href="{{url('admin')}}">Halaman Admin</a></li>
+        @else
+        <li class="has-dropdown">
+            <a href="#" class="" id="userfill"><span>Menu</span></a>
+            <ul class="dropdown">
+                <li><a href="{{url('FormUsulan')}}"><i
+                                class="fa fa-edit"></i> RKP</a></li>
+                <li>
+                    <a href="{{ route('logout') }}"
+                       onclick="event.preventDefault();document.getElementById('logout-form').submit();">
+                        <i class="fa fa-sign-out"></i> RPJMD
+                    </a>
+
+                    <form id="logout-form" action="{{ route('logout') }}" method="POST"
+                          style="display: none;">
+                        {{ csrf_field() }}
+                    </form>
+                </li>
+            </ul>
+        </li>
+    @endif
 @endsection
 @section('content')
     <div class="fh5co-loader"></div>
     <script>
-        swal("Selamat Datang di APPEDA", 'Anda Login Sebagai {{\App\city::findOrFail($user->city_id)->name}}', "info", "1500")
+        swal("Selamat Datang di APPEDA", 'Anda Login Sebagai {{\App\trDataJobDesc::findOrFail($user->job_id)->name}} {{\App\city::findOrFail($user->city_id)->name}}', "info", "1500")
     </script>
     <aside id="fh5co-hero" class="js-fullheight">
         <div class="flexslider js-fullheight">
@@ -36,48 +57,47 @@
         </div>
     </aside>
 
-    <div id="fh5co-counter" class="fh5co-counters fh5co-bg-section">
-        <div class="container">
-            <div id="fh5co-practices">
-                <div class="row animate-box">
-                    <div class="col-md-8 col-md-offset-2 text-center fh5co-heading">
-                        <h2>Jumlah Berkas Surat Terupload</h2>
-                    </div>
-                </div>
+    {{--<div id="fh5co-counter" class="fh5co-counters fh5co-bg-section">--}}
+        {{--<div class="container">--}}
+            {{--<div id="fh5co-practices">--}}
+                {{--<div class="row animate-box">--}}
+                    {{--<div class="col-md-8 col-md-offset-2 text-center fh5co-heading">--}}
+                        {{--<h2>Jumlah Berkas Surat Terupload</h2>--}}
+                    {{--</div>--}}
+                {{--</div>--}}
 
-                <div class="row" id="data8">
-                    @foreach($jobdesc as $row)
-                        @if($row->name=='Admin')
-                        @else
-                            <div class="col-md-6 text-center animate-box" data-toggle="tooltip" title="{{$row->desc}}">
-                        <span class="icon"><i><img width="50%" style="margin: 0 auto;color:#0d3625  "
-                                                   src="{{asset($row->icon)}}" alt="" class="img-responsive"></i></span>
-                                <?php $data = 0?>
-                                @foreach($jumlah as $row3)
-                                    @if($row->id == $row3->job_id)
-                                        <?php $data = $data + 1 ?>
-                                    @endif
-                                @endforeach
-                                <span class="fh5co-counter js-counter" data-from="0" data-to="{{$data}}"
-                                      data-speed="3000"
-                                      data-refresh-interval="50"></span>
-                                <span class="fh5co-counter-label">{{$row->name}}</span>
-                            </div>
-                        @endif
-                    @endforeach
+                {{--<div class="row" id="data8">--}}
+                    {{--@foreach($jobdesc as $row)--}}
+                        {{--@if($row->name=='Admin')--}}
+                        {{--@else--}}
+                            {{--<div class="col-md-6 text-center animate-box" data-toggle="tooltip" title="{{$row->desc}}">--}}
+                        {{--<span class="icon"><i><img width="50%" style="margin: 0 auto;color:#0d3625  "--}}
+                                                   {{--src="{{asset($row->icon)}}" alt="" class="img-responsive"></i></span>--}}
+                                {{--<?php $data = 0?>--}}
+                                {{--@foreach($jumlah as $row3)--}}
+                                    {{--@if($row->id == $row3->job_id)--}}
+                                        {{--<?php $data = $data + 1 ?>--}}
+                                    {{--@endif--}}
+                                {{--@endforeach--}}
+                                {{--<span class="fh5co-counter js-counter" data-from="0" data-to="{{$data}}"--}}
+                                      {{--data-speed="3000"--}}
+                                      {{--data-refresh-interval="50"></span>--}}
+                                {{--<span class="fh5co-counter-label">{{$row->name}}</span>--}}
+                            {{--</div>--}}
+                        {{--@endif--}}
+                    {{--@endforeach--}}
 
-                </div>
-            </div>
-        </div>
-    </div>
+                {{--</div>--}}
+            {{--</div>--}}
+        {{--</div>--}}
+    {{--</div>--}}
 
     <div id="fh5co-practice" class="fh5co-bg-section">
         <div class="container">
             <div class="row animate-box">
                 <div class="col-md-8 col-md-offset-2 text-center fh5co-heading">
-                    <h2>re:eBerkas</h2>
-                    <p> re:eBerkas merupakan pengarsipan data melalui media online, yang menyediakan Daftar Pegawai dan
-                        pengarsipan surat </p>
+                    <h2>APEDA</h2>
+                    <p> APEDA merupakan Aplikasi Usulan Perencanaan Pembangunan Daerah yang menjembatani Satuan Kerja Pembangunan Daerah (SKPD) yang berdomisili di Kecamatan dengan Badan Perencanaan Pembangunan Daerah (BAPPEDA) yang berdomisili di Kota/Kabupaten dalam hal usulan perencanaan pembangunan daerah. </p>
                 </div>
             </div>
             <div class="row">

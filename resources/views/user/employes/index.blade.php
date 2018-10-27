@@ -4,7 +4,7 @@
     <li><a href="{{url('home')}}">Home</a></li>
     <li><a href="{{url('profile')}}">Profil Aplikasi</a></li>
     <li class="active"><a href="#fh5co-about">Daftar Kecamatan</a></li>
-    <li><a href="{{url('FormUsulan')}}">Form Usulan</a></li>
+    <li><a href="{{url('FormUsulan')}}">Menu</a></li>
 @endsection
 @section('content')
     <aside id="fh5co-hero" class="js-fullheight">
@@ -16,8 +16,8 @@
                         <div class="row">
                             <div class="col-md-8 col-md-offset-2 text-center js-fullheight slider-text">
                                 <div class="slider-text-inner">
-                                    <h1>About Us</h1>
-                                    <p class="fh5co-lead">Wanna know more about us? You're in the right place.</p>
+                                    <h1>Daftar Kecamatan</h1>
+                                    <p class="fh5co-lead">Daftar Kecamatan</p>
                                 </div>
                             </div>
                         </div>
@@ -37,7 +37,7 @@
             <div class="row animate-box">
                 <ul class="nav nav-tabs">
                     @foreach(\App\trDataJobDesc::find($id=['3']) as $row)
-                        @if($row->name=='Tim Pelaksana Kegiatan')
+                        @if($row->name=='SKPD')
                             <li class="active"><a data-toggle="tab" href="#{{$row->id}}"
                                                   title="Klik tab untuk melihat {{$row->desc}}">{{$row->name}}</a></li>
                         @else
@@ -49,7 +49,7 @@
                 </ul>
                 <div class="tab-content" style="margin-top: 1em">
                     @foreach(\App\trDataJobDesc::find($id=['3']) as $row)
-                        @if($row->name=='Tim Pelaksana Kegiatan')
+                        @if($row->name=='SKPD')
                             <div id="{{$row->id}}" class="tab-pane fade in active text-center"><br>
                                 @else
                                     <div id="{{$row->id}}" class="tab-pane text-center animate-box"
@@ -105,7 +105,7 @@
                                                                 <a onclick="showForm({{ $id }})">
                                                                     <h3>{{$name}}</h3></a>
                                                                 <a onclick="showForm({{ $id }})"><strong
-                                                                            class="role">{{\App\trDataJobDesc::findOrFail($row2->job_id)->name}}</strong></a>
+                                                                            class="role"> Kecamatan {{\App\district::findOrFail($row2->district_id)->name}}</strong></a>
                                                                 {{--<p>20th years old student, an Informatics Engineering student in--}}
                                                                 {{--UNESA (State--}}
                                                                 {{--University--}}

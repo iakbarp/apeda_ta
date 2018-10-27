@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Datacarousel;
 use App\historiSendEmail;
 use App\mst_data;
@@ -13,7 +12,9 @@ use App\trDataJobDesc;
 use App\trDataPosisition;
 use App\trRequestChangeJob;
 use App\User;
+use App\district;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session;
 
@@ -30,8 +31,8 @@ class BappedaTableUserController extends Controller
         $user = User::orderBy('name', 'asc')->get();
 
         $category = trDataCategory::orderBy('id', 'desc')->get();
-        if ($users == 'user' || $users == 'letter') {
-            return view('bappeda.pengurus.user', compact('req', 'jobCategory', 'user', 'users', 'category'));
+        if ($users == 'superuser' || $users == 'superletter') {
+            return view('admin.pengurus.user', compact('req', 'jobCategory', 'user', 'users', 'category'));
         } else {
             return redirect()->route('404');
         }
@@ -282,6 +283,7 @@ class BappedaTableUserController extends Controller
 
     }
 
+
     public function storesuratplus(Request $r)
     {
         $x = \session('proSend');
@@ -335,6 +337,9 @@ class BappedaTableUserController extends Controller
             'job_id' => $r->job_id[$i],
             'posisition_id' => $r->posisition_id[$i],
             'role_id' => $r->role_id[$i],
+            'district_id' => $r->district_id[$i],
+            'city_id' => $r->city_id[$i],
+            'status' => 1,
             'email' => $r->email[$i], 'nik' => $r->nik[$i], 'password' => bcrypt($a)])->id;
         $ids = historiSendEmail::create(['user_id' => $id, 'status' => 't'])->id;
         $pss = ['ps' => $a, 'id' => $ids];
@@ -459,4 +464,12 @@ class BappedaTableUserController extends Controller
 
 
         return $status;
-    }}
+    }
+
+//    public function multiDelete(Request $request)
+//    {
+//        trDataCategory::whereIn('id',$request->id)->delete();
+//    }
+
+}
+

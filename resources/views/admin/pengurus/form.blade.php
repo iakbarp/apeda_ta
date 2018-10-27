@@ -24,10 +24,10 @@
                             <div class="col-md-8 animate-box" data-animate-effect="fadeIn">
                                 <div class="row form-group has-feedback">
                                     <div class="col-md-6">
-                                        <span>NIP :</span>
-                                        <input placeholder="NIP" id="nip" type="text"
+                                        <span>NIK :</span>
+                                        <input placeholder="NIK" id="nik" type="text"
                                                class="form-control contentshow"
-                                               name="nip"
+                                               name="nik"
                                                required autofocus>
                                         <input id="id" name="id" type="hidden">
                                     </div>

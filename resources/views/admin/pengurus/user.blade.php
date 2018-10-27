@@ -811,8 +811,8 @@
                                                             <select placeholder="jumlah" id="jumlah2"
                                                                     class="form-control pull-right"
                                                                     name="jumlah2">
-                                                                @for($i=1;$i<=10;$i++)
-                                                                    @if($i==3)
+                                                                @for($i=1;$i<=5;$i++)
+                                                                    @if($i==1)
                                                                         <option value="{{$i}}" selected> {{$i}} Data
                                                                         </option>
                                                                     @else
@@ -968,8 +968,7 @@
                                         <ul class="nav nav-tabs">
                                             <li class="active"><a data-toggle="tab" href="#data2" data-id="0"
                                                                   onclick="changePenghuni(this)"
-                                                                  title="Klik tab untuk menambahkan data Pengguna">Tambah
-                                                    Pengguna</a>
+                                                                  title="Klik tab untuk menambahkan data Pengguna">Tambah Pengguna</a>
                                             </li>
                                             @foreach($jobCategory as $row)
                                                 <li><a data-toggle="tab" href="#job{{$row->id}}"
@@ -993,35 +992,35 @@
                                                         Pengguna</h4>
                                                     <p><em style="font-size: 14px">Isi Formulir Untuk Menambah
                                                             Pengguna</em></p>
-                                                    <div class="box-tools">
-                                                        <div class="input-group input-group-sm"
-                                                             style="width: 150px;">
-                                                            <select placeholder="jumlah" id="jumlah"
-                                                                    class="form-control pull-right"
-                                                                    name="jumlah">
-                                                                @for($i=1;$i<=10;$i++)
-                                                                    @if($i==3)
-                                                                        <option value="{{$i}}" selected> {{$i}} Data
-                                                                        </option>
-                                                                    @else
-                                                                        <option value="{{$i}}"> {{$i}} Data</option>
-                                                                    @endif
-                                                                @endfor
-                                                            </select>
-                                                        </div>
-                                                    </div>
+                                                    {{--<div class="box-tools">--}}
+                                                        {{--<div class="input-group input-group-sm"--}}
+                                                             {{--style="width: 150px;">--}}
+                                                            {{--<select placeholder="jumlah" id="jumlah"--}}
+                                                                    {{--class="form-control pull-right"--}}
+                                                                    {{--name="jumlah">--}}
+                                                                {{--@for($i=1;$i<=5;$i++)--}}
+                                                                    {{--@if($i==1)--}}
+                                                                        {{--<option value="{{$i}}" selected> {{$i}} Data--}}
+                                                                        {{--</option>--}}
+                                                                    {{--@else--}}
+                                                                        {{--<option value="{{$i}}"> {{$i}} Data</option>--}}
+                                                                    {{--@endif--}}
+                                                                {{--@endfor--}}
+                                                            {{--</select>--}}
+                                                        {{--</div>--}}
+                                                    {{--</div>--}}
                                                 </div>
                                                 <br>
                                                 <form method="post" class="form-horizontal">
                                                     {{ csrf_field() }} {{ method_field('post') }}
                                                     <div id="isiinputuser">
-                                                        @for ($i=0;$i<3;$i++)
+                                                        @for ($i=0;$i<1;$i++)
                                                             <div class="row form-group has-feedback" data-no="{{$i}}">
                                                                 <div class="col-md-2 ">
-                                                                    <input placeholder="Masukkan NIP" id="nip[]"
+                                                                    <input placeholder="Masukkan NIK" id="nik[]"
                                                                            type="text" onkeypress='numbertok(event)'
-                                                                           class="form-control nip"
-                                                                           name="nip[]" data-no="{{$i}}"
+                                                                           class="form-control nik"
+                                                                           name="nik[]" data-no="{{$i}}"
                                                                            required autofocus>
                                                                 </div>
                                                                 <div class="col-md-2">
@@ -1038,45 +1037,49 @@
                                                                            name="email[]" data-no="{{$i}}"
                                                                            required autofocus>
                                                                 </div>
-                                                                <div class="col-md-2">
-                                                                    <select placeholder="Pilih Seksi" id="job_id[]"
-                                                                            class="form-control seksi" data-id="{{$i}}"
-                                                                            name="job_id[]"
-                                                                            required autofocus>
-                                                                        <option value="" selected disabled> Pilih
-                                                                            Seksi
-                                                                        </option>
-                                                                        @foreach(\App\trDataJobDesc::orderBy('name','asc')->get() as $job)
-                                                                            <option value="{{$job->id}}">{{$job->name}}
-                                                                            </option>
+                                                                <div class="col-md-4">
+                                                                    <select placeholder="Pilih Kota/Kabupaten" id="district_id[]" class="form-control wilayah" data-id="{{$i}}" name="district_id[]" required autofocus>
+                                                                        <option value="" selected disabled> Pilih Kota/Kabupaten</option>
+                                                                        @foreach(\App\district::orderBy('name','asc')->where('city_id', '=', Auth::user()->city_id)->get() as $value)
+                                                                            <option value="{{$value->id}}">{{$value->name}}</option>
                                                                         @endforeach
                                                                     </select>
                                                                 </div>
                                                                 <div class="col-md-2">
-                                                                    <select placeholder="Pilih Jabatan"
-                                                                            id="posisition_id[]"
-                                                                            class="form-control opsi jabatan{{$i}}"
-                                                                            name="posisition_id[]"
-                                                                            required autofocus>
-                                                                        <option value="" selected disabled> Pilih
-                                                                            Seksi Terlebih Dahulu
-                                                                        </option>
-                                                                    </select>
+                                                                    <input placeholder="Tempat_lahir" id="tempat_lahir[]"
+                                                                           type="text"
+                                                                           class="form-control"
+                                                                           name="tempat_lahir[]"
+                                                                           required autofocus>
+                                                                    <input placeholder="Tanggal Lahir" id="tgl_lahir[]"
+                                                                           type="date"
+                                                                           class="form-control"
+                                                                           name="tgl_lahir[]"
+                                                                           required autofocus>
                                                                 </div>
                                                                 <div class="col-md-2">
-                                                                    <select placeholder="Pilih Hak Akses" id="role_id[]"
-                                                                            class="form-control hak opsi"
-                                                                            name="role_id[]"
-                                                                            required autofocus>
-                                                                        <option value="" selected disabled> Pilih Hak
-                                                                            Akses
-                                                                        </option>
-                                                                        @foreach(\App\status::orderBy('name','asc')->get() as $status)
-                                                                            <option value="{{$status->id}}">{{$status->name}}
-                                                                            </option>
-                                                                        @endforeach
-                                                                    </select>
+                                                                    @foreach(\App\trDataJobDesc::find($id=['3']) as $row)
+                                                                        <input id="job_id[]" type="hidden" class="form-control seksi" name="job_id[]" value="{{$row->id}}" readonly>
+                                                                    @endforeach
                                                                 </div>
+                                                                <div class="col-md-2">
+
+                                                                        @foreach(\App\trDataPosisition::find($id=['3']) as $row)
+                                                                            <input id="posisition_id[]" type="hidden" class="form-control opsi jabatan" name="posisition_id[]" value="{{$row->id}}" readonly>
+                                                                        @endforeach
+
+                                                                </div>
+                                                                <div class="col-md-2">
+                                                                        @foreach(\App\status::find($id=['3']) as $row)
+                                                                            <input id="role_id[]" type="hidden" class="form-control" name="role_id[]" value="{{$row->id}}" readonly>
+                                                                        @endforeach
+                                                                </div>
+                                                                <div class="col-md-2">
+                                                                    @foreach(app\user::where('city_id',Auth::user()->city_id)->get() as $row)
+                                                                        <input id="city_id[]" type="hidden" class="form-control" name="city_id[]" value="{{$row->city_id}}" readonly>
+                                                                    @endforeach
+                                                                </div>
+
                                                             </div>
                                                         @endfor
                                                     </div>
@@ -1147,7 +1150,7 @@
                                                                                                          class="checkall"
                                                                                                          style="width: 30px">
                                                                     </th>
-                                                                    <th style="text-align:center">NIP</th>
+                                                                    <th style="text-align:center">NIK</th>
                                                                     <th style="text-align:center">Nama</th>
                                                                     <th style="text-align:center">Jobdesk</th>
                                                                     <th style="text-align:center">Hak Akses</th>
@@ -1221,7 +1224,7 @@
                                                                                                      class="checkall"
                                                                                                      style="width: 30px">
                                                                 </th>
-                                                                <th style="text-align:center">NIP</th>
+                                                                <th style="text-align:center">NIK</th>
                                                                 <th style="text-align:center">Nama</th>
                                                                 <th style="text-align:center">Jobdesk</th>
                                                                 <th style="text-align:center">Hak Akses</th>
@@ -1888,10 +1891,14 @@
             var $isiinputuser2 = $('#isiinputuser .row .col-md-2');
 //            console.log($isiinputuser.length);
             $(document).on('change', '#jumlah', function () {
-                $nip = [];
+                $nik = [];
                 $email = [];
                 $jabatan = [];
                 $seksi = [];
+                $city = [];
+                $district = [];
+                $tempat = [];
+                $tanggal = [];
                 countSend = $ulang = $(this).val();
                 $('#data2 form #entitySend').val($ulang);
                 // $nip = '<div class="col-md-2">' + $isiinputuser2.get(0).innerHTML + '</div>';
@@ -1899,10 +1906,10 @@
                 // $email = '<div class="col-md-2">' + $isiinputuser2.get(2).innerHTML + '</div>';
                 $hak = '<div class="col-md-2">' + $isiinputuser2.get(5).innerHTML + '</div>';
                 for ($i = 0; $i < $ulang; $i++) {
-                    $nip.push('<div class="col-md-2"><input placeholder="Masukkan NIP" id="nip[]"\n' +
+                    $nik.push('<div class="col-md-2"><input placeholder="Masukkan NIK" id="nik[]"\n' +
                         '                                                                           type="text" onkeypress=\'numbertok(event)\'\n' +
-                        '                                                                           class="form-control nip"\n' +
-                        '                                                                           name="nip[]"\n data-no="' + $i + '" ' +
+                        '                                                                           class="form-control nik"\n' +
+                        '                                                                           name="nik[]"\n data-no="' + $i + '" ' +
                         '                                                                           required autofocus></div>');
                     $email.push('<div class="col-md-2"><input placeholder="Email" id="email[]"\n' +
                         '                                                                           type="email"\n' +
@@ -1919,11 +1926,34 @@
                         '                                                                            name="posisition_id[]"\n' +
                         '                                                                            required autofocus>' +
                         $isiinputuser.find('.jabatan0').clone().attr('class', 'form-control jabatan' + $i).get(0).innerHTML + '</select></div>');
+                    $city.push('<div class="col-md-2"><select id="city_id[]"\n' +
+                        '                                                                            class="form-control wilayah' + $i + '"\n' +
+                        '                                                                            name="city_id[]"\n' +
+                        '                                                                            required autofocus>' +
+                        $isiinputuser.find('.wilayah').clone().attr('class', 'form-control wilayah' + $i).get(0).innerHTML + '</select></div>');
+                    $district.push('<div class="col-md-4"><select placeholder="Pilih Kota/Kabupaten" id="district_id[]"\n' +
+                        '                                                                            class="form-control wilayah" data-id="' +
+                        $i + '"\n' +
+                        '                                                                            name="district_id[]"\n' +
+                        '                                                                            required autofocus>' +
+                        $isiinputuser.find('.wilayah').clone().attr('class', 'form-control wilayah' + $i).get(0).innerHTML + '</select></div>');
+                    $tempat.push('<div class="col-md-4"><select placeholder="Pilih Tempat Lahir" id="tempat_lahir[]"\n' +
+                        '                                                                            class="form-control" data-id="' +
+                        $i + '"\n' +
+                        '                                                                            name="tempat_lahir[]"\n' +
+                        '                                                                            required autofocus>' +
+                        $isiinputuser.find('.wilayah').clone().attr('class', 'form-control' + $i).get(0).innerHTML + '</select></div>');
+                    $tanggal.push('<div class="col-md-4"><select placeholder="Pilih tanggal" id="tgl_lahir[]"\n' +
+                        '                                                                            class="form-control" data-id="' +
+                        $i + '"\n' +
+                        '                                                                            name="tgl_lahir[]"\n' +
+                        '                                                                            required autofocus>' +
+                        $isiinputuser.find('.wilayah').clone().attr('class', 'form-control' + $i).get(0).innerHTML + '</select></div>');
                 }
 
                 $isi = '';
                 for ($i = 0; $i < $ulang; $i++) {
-                    $isi += '<div class="row form-group has-feedback" data-no="' + $i + '">' + $nip[$i] + $name + $email[$i] + $seksi[$i] + $jabatan[$i] + $hak + '</div>';
+                    $isi += '<div class="row form-group has-feedback" data-no="' + $i + '">' + $nik[$i] + $name + $email[$i]+ $city[$i] + $district[$i] + $tempat[$i] + $tanggal[$i] +  $seksi[$i] + $jabatan[$i] + $hak + '</div>';
                 }
                 $('#isiinputuser').empty().append($isi).hide().fadeIn('slow');
             });

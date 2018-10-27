@@ -65,15 +65,15 @@
 
                             <div class="row form-group has-feedback">
                                 <div class="col-md-6">
-                                    <span>Kode Berkas :</span>
-                                    <input placeholder="Nama Kategori Surat" id="kode" type="text"
+                                    <span>Tahun :</span>
+                                    <input placeholder="Tahun RKP" id="kode" type="text"
                                            class="form-control contentshow"
                                            name="kode"
                                            required autofocus>
                                 </div>
                                 <div class="col-md-6">
-                                    <span>Kode Surat :</span>
-                                    <input placeholder="Singkatan Kategori Surat" id="name" type="text"
+                                    <span>Nama Kegiatan :</span>
+                                    <input placeholder="Nama Kegiatan" id="name" type="text"
                                            class="form-control contentshow"
                                            name="name"
                                            required autofocus>
@@ -106,6 +106,33 @@
                                               required autofocus></textarea>
                                 </div>
                             </div>
+                            <div class="row form-group has-feedback">
+                                <div class="col-md-12">
+                                    <span>Lokasi :</span>
+                                    <textarea placeholder="Lokasi" id="lokasi"
+                                              class="form-control contentshow "
+                                              name="lokasi"
+                                              required autofocus></textarea>
+                                </div>
+                            </div>
+                            <div class="row form-group has-feedback">
+                                <div class="col-md-12">
+                                    <span>Volume m2 :</span>
+                                    <textarea placeholder="Volume m2" id="volume"
+                                              class="form-control contentshow "
+                                              name="volume"
+                                              required autofocus></textarea>
+                                </div>
+                            </div>
+                            <div class="row form-group has-feedback">
+                                <div class="col-md-12">
+                                    <span>Estimasi Anggaran :</span>
+                                    <textarea placeholder="Anggaran" id="anggaran"
+                                              class="form-control contentshow "
+                                              name="anggaran"
+                                              required autofocus></textarea>
+                                </div>
+                            </div>
                         </div>
 
                     </div>
@@ -117,7 +144,7 @@
                     </button>
                     <button type="button" class="btn btn-primary lihatsurat lihatform" data-action="edit"
                             data-status="0" data-id="1" data-method="0"
-                            onclick="lihatsurat(this)">Rubah
+                            onclick="lihatsurat(this)">Ubah
                     </button>
                     <button type="button" class="btn btn-danger hapussurat lihatform" data-dismiss="modal"
                             onclick="deleteData(this)">Hapus
@@ -147,16 +174,16 @@
                         <div class="row container-fluid loopmulti">
                             <div class="row form-group has-feedback">
                                 <div class="col-md-3">
-                                    <span>Kode Berkas :</span>
+                                    <span>Tahun :</span>
                                     <input type="hidden" id="id" name="id[]">
-                                    <input placeholder="Nama Kategori Surat" id="kode" type="text"
+                                    <input placeholder="Tahun RKP" id="kode" type="text"
                                            class="form-control"
                                            name="kode[]"
                                            required autofocus>
                                 </div>
                                 <div class="col-md-3">
-                                    <span>Kode Surat :</span>
-                                    <input placeholder="Singkatan Kategori Surat" id="name" type="text"
+                                    <span>Nama Kegiatan :</span>
+                                    <input placeholder="Nama Kegiatan" id="name" type="text"
                                            class="form-control"
                                            name="name[]"
                                            required autofocus>
@@ -174,6 +201,27 @@
                                     <textarea placeholder="Detail" id="desc"
                                               class="form-control"
                                               name="desc[]" style="height: 54px;"
+                                              required autofocus></textarea>
+                                </div>
+                                <div class="col-md-3">
+                                    <span>Lokasi :</span>
+                                    <textarea placeholder="Lokasi" id="lokasi"
+                                              class="form-control"
+                                              name="lokasi[]" style="height: 54px;"
+                                              required autofocus></textarea>
+                                </div>
+                                <div class="col-md-3">
+                                    <span>Volume m2 :</span>
+                                    <textarea placeholder="Detail" id="volumw"
+                                              class="form-control"
+                                              name="volume[]" style="height: 54px;"
+                                              required autofocus></textarea>
+                                </div>
+                                <div class="col-md-3">
+                                    <span>Estimasi Anggaran :</span>
+                                    <textarea placeholder="Anggaran" id="anggaran"
+                                              class="form-control"
+                                              name="anggaran[]" style="height: 54px;"
                                               required autofocus></textarea>
                                 </div>
                             </div>
@@ -248,12 +296,12 @@
                                                     <b>Rubah Data</b>
                                                     <table>
                                                         <tr>
-                                                            <td style="width: 100px" valign="top">Kode Berkas</td>
+                                                            <td style="width: 100px" valign="top">Tahun RKP</td>
                                                             <td style="width: 10px" valign="top">:</td>
                                                             <td id="fill-kode">Datto</td>
                                                         </tr>
                                                         <tr>
-                                                            <td style="width: 45px" valign="top">Kode Surat</td>
+                                                            <td style="width: 45px" valign="top">Nama Kegiatan</td>
                                                             <td valign="top">:</td>
                                                             <td id="fill-name">Datto</td>
                                                         </tr>
@@ -266,6 +314,21 @@
                                                             <td style="width: 45px" valign="top">Detail</td>
                                                             <td valign="top">:</td>
                                                             <td id="fill-desc">Datto</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="width: 45px" valign="top">Lokasi</td>
+                                                            <td valign="top">:</td>
+                                                            <td id="fill-lokasi">Datto</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="width: 45px" valign="top">Volume</td>
+                                                            <td valign="top">:</td>
+                                                            <td id="fill-volume">Datto</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="width: 45px" valign="top">Anggaran</td>
+                                                            <td valign="top">:</td>
+                                                            <td id="fill-anggaran">Datto</td>
                                                         </tr>
                                                     </table>
                                                 </div>

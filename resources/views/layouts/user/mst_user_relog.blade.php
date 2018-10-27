@@ -726,7 +726,7 @@
                                         @endif
                                         <li><a href="{{url('user/update')}}"><i
                                                         class="fa fa-edit"></i> Edit
-                                                Profile</a></li>
+                                                Profil</a></li>
                                         <li>
                                             <a href="{{ route('logout') }}"
                                                onclick="event.preventDefault();document.getElementById('logout-form').submit();">
@@ -743,6 +743,7 @@
                             @endif
                         </ul>
                     </div>
+
                 </div>
 
             </div>
@@ -757,8 +758,8 @@
 
                 <div class="row animate-box">
                     <div class="col-md-8 col-md-offset-2 text-center fh5co-heading">
-                        <h2>Legal Advice</h2>
-                        <p>Aplikasi E:Berkas bertujuan memudahkan anda selaku karyawan di KPP Madya Surabaya dalam penyimpanan Berkas secara tersistem, disertai profil kantor dan daftar pegawai.</p>
+                        <h2>APEDA</h2>
+                        <p>APEDA bertujuan memudahkan proses pembamgunan daerah di bidang Perencanaan pembangunan Daerah dari Kecamatan ke Kota/Kabupaten setempat.</p>
                     </div>
                 </div>
 

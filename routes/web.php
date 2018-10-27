@@ -1,5 +1,4 @@
 <?php
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -10,26 +9,25 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
-
-Route::get('/', function () {
+Route::get('/', 'welcomeController@index', function () {
     if (\Illuminate\Support\Facades\Auth::guest())
-        return redirect(url('home'));
+        return redirect(url('welcome'));
     else
         $cek = \Illuminate\Support\Facades\Auth::user()->role->name;
     if ($cek == 'Admin') {
         return redirect(url('home'));
-    } else
+    }
+    elseif ($cek == 'Bappeda') {
+        return redirect(url('home'));
+    }else
         return redirect(url('home'));
 });
 Route::get('/register', function(){
     return redirect(url('register'));
 });
 Auth::routes();
-
 Route::get('404',['as'=>'404','uses'=>'ErrorHandlerController@errorCode404']);
-
 Route::get('405',['as'=>'405','uses'=>'ErrorHandlerController@errorCode405']);
-
 //Route::match(['get', 'post'], 'register', function () {
 //    if (\Illuminate\Support\Facades\Auth::guest())
 //        return redirect(url('home'));
@@ -40,20 +38,18 @@ Route::get('405',['as'=>'405','uses'=>'ErrorHandlerController@errorCode405']);
 //    } else
 //        return redirect(url('home'));
 //});
-
 Route::group(['middleware' => ['auth']], function () {
     Route::group(['prefix' => 'api'], function () {
         Route::get('mst/data2', 'UsulanController@apiData2')->name('api.mst.data2');
         Route::get('mst/data3', 'UsulanController@apiData3')->name('api.mst.data3');
         Route::get('mst/data', 'UsulanController@apiData')->name('api.mst.data4');
 
+
     });
     Route::group(['prefix' => 'profile'], function () {
         Route::get('/', 'profileController@index')->name('profile');
-
     });
-
-    Route::group(['prefix' => 'admin'], function () {
+    Route::group(['prefix' => 'admin', 'middleware' => ['admin']], function () {
         Route::get('/', 'AdminController@index')->name('admin.dashboard');
         Route::get('dataget', 'AdminController@dataget')->name('admin.dataget');
         Route::get('datauniv', 'AdminController@datauniv')->name('admin.datauniv');
@@ -65,13 +61,11 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('carouseladd', 'AdminController@carouseladd')->name('admin.carouseladd');
         Route::post('carouseledit', 'AdminController@carouseledit')->name('admin.carouseledit');
         Route::get('carouseldelete', 'AdminController@carouseldelete')->name('admin.carouseldelete');
-
         Route::group(['prefix' => 'request'], function () {
             Route::get('/', 'AdminTableManageController@index')->name('admin.request.index');
             Route::get('/apiData', 'AdminTableManageController@apiData')->name('admin.request.apiData');
             Route::get('/accept', 'AdminTableManageController@accept')->name('admin.request.accept');
             Route::get('/deny', 'AdminTableManageController@deny')->name('admin.request.deny');
-
         });
         Route::group(['prefix' => 'table'], function () {
             Route::get('{users}', 'AdminTableUserController@index')->name('admin.table.user');
@@ -84,7 +78,7 @@ Route::group(['middleware' => ['auth']], function () {
                 Route::get('/lihat', 'AdminTableUserController@lihat')->name('admin.table.pengguna.lihat');
                 Route::get('/cekhapus', 'AdminTableUserController@cekhapus')->name('admin.table.pengguna.cekhapus');
                 Route::get('/hapus', 'AdminTableUserController@hapus')->name('admin.table.pengguna.hapus');
-                Route::get('/ceknip', 'AdminTableUserController@ceknip')->name('admin.table.pengguna.ceknip');
+                Route::get('/ceknik', 'AdminTableUserController@ceknik')->name('admin.table.pengguna.ceknik');
                 Route::post('/edit', 'AdminTableUserController@edit')->name('admin.table.pengguna.edit');
                 Route::post('/storesuratplus', 'AdminTableUserController@storesuratplus')->name('admin.table.pengguna.storesuratplus');
                 Route::get('/resend', 'AdminTableUserController@resend')->name('admin.table.pengguna.resend');
@@ -99,14 +93,19 @@ Route::group(['middleware' => ['auth']], function () {
                 Route::post('/storesuratplus', 'AdminTableLetterController@storesuratplus')->name('admin.table.letter.storesuratplus');
                 Route::get('/apisurat', 'AdminTableUserController@apiSurat')->name('admin.table.surat.api');
                 Route::post('/edit', 'AdminTableLetterController@edit')->name('admin.table.surat.edit');
-
-
             });
         });
-
     });
 
-    Route::group(['prefix' => 'bappeda'], function () {
+//    Route::group(['prefix' => 'bappeda'], function () {
+//        Route::group(['prefix' => 'table'], function () {
+//            Route::group(['prefix' => 'user'], function () {
+//                Route::post('/store', 'BappedaTableUserController@store')->name('bappeda.table.pengguna.store');
+//            });
+//        });
+//    });
+
+    Route::group(['prefix' => 'super', 'middleware' => ['super']], function () {
         Route::get('/', 'BappedaController@index')->name('bappeda.dashboard');
         Route::get('dataget', 'BappedaController@dataget')->name('bappeda.dataget');
         Route::get('datauniv', 'BappedaController@datauniv')->name('bappeda.datauniv');
@@ -118,17 +117,15 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('carouseladd', 'BappedaController@carouseladd')->name('bappeda.carouseladd');
         Route::post('carouseledit', 'BappedaController@carouseledit')->name('bappeda.carouseledit');
         Route::get('carouseldelete', 'BappedaController@carouseldelete')->name('bappeda.carouseldelete');
-
         Route::group(['prefix' => 'request'], function () {
             Route::get('/', 'BappedaTableManageController@index')->name('bappeda.request.index');
             Route::get('/apiData', 'BappedaTableManageController@apiData')->name('bappeda.request.apiData');
             Route::get('/accept', 'BappedaTableManageController@accept')->name('bappeda.request.accept');
             Route::get('/deny', 'BappedaTableManageController@deny')->name('bappeda.request.deny');
-
         });
         Route::group(['prefix' => 'table'], function () {
             Route::get('{users}', 'BappedaTableUserController@index')->name('bappeda.table.user');
-            Route::group(['prefix' => 'user'], function () {
+            Route::group(['prefix' => 'superuser'], function () {
                 Route::get('/', 'BappedaTableUserController@index')->name('bappeda.table.user');
                 Route::get('/api', 'BappedaTableUserController@apiUser')->name('bappeda.table.user.api');
                 Route::get('/getPosisition', 'BappedaTableUserController@getPosisition')->name('bappeda.table.user.getPosisition');
@@ -137,12 +134,11 @@ Route::group(['middleware' => ['auth']], function () {
                 Route::get('/lihat', 'BappedaTableUserController@lihat')->name('bappeda.table.pengguna.lihat');
                 Route::get('/cekhapus', 'BappedaTableUserController@cekhapus')->name('bappeda.table.pengguna.cekhapus');
                 Route::get('/hapus', 'BappedaTableUserController@hapus')->name('bappeda.table.pengguna.hapus');
-                Route::get('/ceknip', 'BappedaTableUserController@ceknip')->name('bappeda.table.pengguna.ceknip');
+                Route::get('/ceknik', 'BappedaTableUserController@ceknik')->name('bappeda.table.pengguna.ceknik');
                 Route::post('/edit', 'BappedaTableUserController@edit')->name('bappeda.table.pengguna.edit');
-                Route::post('/storesuratplus', 'BappedaTableUserController@storesuratplus')->name('bappeda.table.pengguna.storesuratplus');
                 Route::get('/resend', 'BappedaTableUserController@resend')->name('bappeda.table.pengguna.resend');
             });
-            Route::group(['prefix' => 'letter'], function () {
+            Route::group(['prefix' => 'superletter'], function () {
                 Route::get('/', 'BappedaTableLetterController@index')->name('bappeda.table.letter');
                 Route::get('/api', 'BappedaTableLetterController@api')->name('bappeda.table.letter.api');
                 Route::get('/lihat', 'BappedaTableLetterController@lihat')->name('bappeda.table.letter.lihat');
@@ -152,13 +148,9 @@ Route::group(['middleware' => ['auth']], function () {
                 Route::post('/storesuratplus', 'BappedaTableLetterController@storesuratplus')->name('bappeda.table.letter.storesuratplus');
                 Route::get('/apisurat', 'BappedaTableUserController@apiSurat')->name('bappeda.table.surat.api');
                 Route::post('/edit', 'BappedaTableLetterController@edit')->name('bappeda.table.surat.edit');
-
             });
         });
-
     });
-
-
     Route::group(['prefix' => 'user'], function () {
         Route::get('update', 'UserController@index')->name('user.update');
         Route::get('getjob', 'UserController@getjob')->name('user.getjob');
@@ -178,7 +170,6 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/', 'UsulanduaController@index')->name('usulan.index');
 //        Route::post('save', 'eBerkasController@store')->name('eberkas.store');
         Route::post('save', 'UsulanduaController@store')->name('usulan.store');
-
         Route::get('apiusulan', 'UsulanduaController@api')->name('usulan.api');
         Route::get('jumlah', 'UsulanController@jumlah')->name('usulan.jumlah');
         Route::get('show', 'UsulanduaController@edit')->name('usulan.show');
@@ -198,8 +189,14 @@ Route::group(['middleware' => ['auth']], function () {
     });
 });
 
+Route::get('verifyEmailFirst', 'Auth\RegisterController@verifyEmailFirst')->name('verifyEmailFirst');
+
+Route::get('verify/{email}/{verifyToken}', 'Auth\RegisterController@sendEmailDone')->name('sendEmailDone');
+//Route::get('verify/{email}/{verifyToken}', 'Auth\RegisterController@sendEmailDone')->name('sendEmailDone');
+//Route::get('/admin', 'AdminController@setuju')->name('admin.dashboard.setuju');
+
 Route::get('/home', 'GeneralController@index')->name('dashboard');
 Route::get('/get', 'GeneralController@get')->name('get');
 Route::get('/coba', 'GeneralController@index')->name('rumah');
 Route::get('/tryemil', 'AdminTableUserController@tryna')->name('tryna');
-
+//Route::get('/tryemil', 'BappedaTableUserController@tryna')->name('tryna');

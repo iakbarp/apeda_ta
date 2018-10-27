@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Datacarousel;
 use App\mst_data;
 use App\sesion;
@@ -12,9 +11,11 @@ use App\trDataPosisition;
 use App\trRequestChangeJob;
 use App\User;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
+
 class BappedaController extends Controller
 {
     public function index()
@@ -85,7 +86,7 @@ class BappedaController extends Controller
         $data['change'] = count(trRequestChangeJob::all());
         $data['surat'] = count(mst_data::all());
         $data['user'] = count(User::all());
-        $datauser=User::orderBy('id', 'desc')->take(8)->get();
+$datauser=User::orderBy('id', 'desc')->take(8)->get();
 //
         if (\session('usercount') ==$datauser) {
             $data['status1'] = 0;
@@ -312,7 +313,7 @@ class BappedaController extends Controller
         $data1=array('name'=>$data->name,'singkatan'=>$data->singkatan,'desc'=>$data->desc,
             'user'=>User::withTrashed()->find($data->user_id)->name,
             'job'=>trDataJobDesc::find($data->job_id)->name,
-        );
+            );
         return response()->json($data1);
     }
 
@@ -333,7 +334,7 @@ class BappedaController extends Controller
             'job_id'=>trDataJobDesc::find($data1->job_id)->name,'user_id'=>User::find($data1->user_id)->name,
             'create_at'=>Carbon::createFromFormat('Y-m-d H:i:s', $data1->created_at)->formatLocalized('%d %B %Y'),
             'desc'=>$data1->desc
-        );
+            );
         return response()->json($data);
     }
 }

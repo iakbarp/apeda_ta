@@ -122,22 +122,22 @@
         <section class="content">
             <!-- Small boxes (Stat box) -->
             <div class="row">
-                <div class="col-lg-4 col-xs-6">
-                    <!-- small box -->
-                    <div class="small-box bg-aqua">
-                        <div class="inner">
-                            <h3 id="change">{{$change}}</h3>
+                {{--<div class="col-lg-4 col-xs-6">--}}
+                    {{--<!-- small box -->--}}
+                    {{--<div class="small-box bg-aqua">--}}
+                        {{--<div class="inner">--}}
+                            {{--<h3 id="change">{{$change}}</h3>--}}
 
-                            <p>Perubahan Jabatan</p>
-                        </div>
-                        <div class="icon">
-                            <i class="ion ion-clipboard"></i>
-                        </div>
-                        <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
-                    </div>
-                </div>
+                            {{--<p>Perubahan Jabatan</p>--}}
+                        {{--</div>--}}
+                        {{--<div class="icon">--}}
+                            {{--<i class="ion ion-clipboard"></i>--}}
+                        {{--</div>--}}
+                        {{--<a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>--}}
+                    {{--</div>--}}
+                {{--</div>--}}
                 <!-- ./col -->
-                <div class="col-lg-4 col-xs-6">
+                <div class="col-lg-6 col-xs-7">
                     <!-- small box -->
                     <div class="small-box bg-green">
                         <div class="inner">
@@ -151,7 +151,7 @@
                     </div>
                 </div>
                 <!-- ./col -->
-                <div class="col-lg-4 col-xs-6">
+                <div class="col-lg-6 col-xs-6">
                     <!-- small box -->
                     <div class="small-box bg-yellow">
                         <div class="inner">
@@ -182,99 +182,8 @@
 
 
                 <section class="col-lg-7 connectedSortable">
-
-                    <div class="box box-info">
-                        {{--<button id="perco">dasdasd</button>--}}
-                        <div class="box-header with-border">
-                            <h3 class="box-title">Presentase Surat</h3>
-
-                            <div class="box-tools pull-right">
-                                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
-                                            class="fa fa-minus"></i>
-                                </button>
-                                <button type="button" class="btn btn-box-tool" data-widget="remove"><i
-                                            class="fa fa-times"></i></button>
-                            </div>
-                        </div>
-                    </div>
                     <!-- TABLE: LATEST ORDERS -->
-                    <div class="box box-default">
-                        <div class="box-header with-border">
-                            <h3 class="box-title">Permintaan Perubahan Jabatan</h3>
 
-                            <div class="box-tools pull-right">
-                                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
-                                            class="fa fa-minus"></i>
-                                </button>
-                                <button type="button" class="btn btn-box-tool" data-widget="remove"><i
-                                            class="fa fa-times"></i></button>
-                            </div>
-                        </div>
-                        <!-- /.box-header -->
-                        <div class="box-body">
-                            <div class="table-responsive">
-                                <table class="table no-margin">
-                                    <thead>
-                                    <tr>
-                                        <th align="center">Nama</th>
-                                        <th align="center">Pergantian</th>
-                                        <th align="center">Status</th>
-                                        <th align="center">Dibuat</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody id="isipermintaan">
-                                    @if (count($gantijob)>0)
-                                        @foreach($gantijob as $row)
-                                            <?php $list2 = \App\User::findOrFail($row->user_id);
-                                            $waktu = \Illuminate\Support\Carbon::createFromFormat('Y-m-d H:i:s', $row->created_at);
-                                            ?>
-                                            <tr>
-                                                <td>{{$list2->name}}</td>
-                                                <td>
-                                                    {{\App\trDataPosisition::findOrFail($list2->posisition_id)->name. ' di ' .\App\trDataJobDesc::findOrFail($list2->job_id)->name}}
-                                                    <br>&rarr;
-                                                    {{\App\trDataPosisition::findOrFail($row->changeposisition_id)->name. ' di ' .\App\trDataJobDesc::findOrFail($row->changejob_id)->name}}
-                                                </td>
-                                                <td>
-                                                    @if($row->status==0)
-                                                        <span class="label label-info" data-toggle="tooltip"
-                                                              title="Menunggu Konfirmasi">Menunggu</span>
-                                                    @elseif($row->status==1)
-                                                        <span class="label label-success" data-toggle="tooltip"
-                                                              title="Permintaan telah terkonfirmasi">Terkonfirmasi</span>
-                                                    @else
-                                                        <span class="label label-danger" data-toggle="tooltip"
-                                                              title="Permintaan ditolak">Ditolak</span>
-
-                                                    @endif
-                                                </td>
-                                                <td><span class="label label-default" data-toggle="tooltip"
-                                                          title="{{$waktu->copy()->diffForHumans()}}">
-                                                        {{$waktu->copy()->formatLocalized('%d %B %Y')}}
-                                                    </span></td>
-                                            </tr>
-                                        @endforeach
-                                    @else
-                                        <tr>
-                                            <td colspan="3" align="center">Data Kosong</td>
-                                        </tr>
-                                    @endif
-                                    </tbody>
-                                </table>
-                            </div>
-                            <!-- /.table-responsive -->
-                        </div>
-                        <!-- /.box-body -->
-                        <div class="overlay" id="rekapjabatan">
-                            <img src="{{asset('images/loadingstyle/loadingimg.gif')}}"
-                                 style="width: 30%;height: auto; position: absolute; top: 0; bottom:0; left: 0; right:0; margin: auto;">
-                        </div>
-                        <div class="box-footer clearfix">
-                            <a href="javascript:void(0)" class="btn btn-sm btn-info btn-flat pull-left">Lihat Semua</a>
-                            <a href="{{route('user.update')}}" class="btn btn-sm btn-default btn-flat pull-right">Ajukan Perubahan Jabatan</a>
-                        </div>
-                        <!-- /.box-footer -->
-                    </div>
                     <!-- /.box -->
                     <!-- DIRECT CHAT -->
                     <div class="box box-warning">
@@ -298,25 +207,32 @@
                                 <table class="table no-margin">
                                     <thead>
                                     <tr>
-                                        <th>Kode Surat</th>
-                                        <th>Nama Surat</th>
-                                        <th>Seksi</th>
+                                        <th>Kecamatan</th>
+                                        <th>Nama Usulan</th>
+                                        <th>Tahun</th>
                                         <th>Dibuat</th>
+                                        <th>Action</th>
                                     </tr>
                                     </thead>
                                     <tbody>
                                     @foreach($suratfill6 as $row)
                                         <?php $waktu = \Illuminate\Support\Carbon::createFromFormat('Y-m-d H:i:s', $row->created_at); ?>
                                         <tr>
-                                            <td><a href="javascript:void(0)" onclick="mstdataShow({{$row->id}})">{{$row->kode}}</a></td>
+                                            <td><a href="javascript:void(0)" onclick="mstdataShow({{$row->id}})">{{$row->district_id}}</a></td>
                                             <td>{{$row->name}}</td>
                                             <td>
-                                                <span class="label label-warning">{{\App\trDataJobDesc::findOrFail($row->job_id)->name}}</span>
+                                                <span class="label label-warning">{{$row->kode}}</span>
                                             </td>
                                             <td><span class="label label-default" data-toggle="tooltip"
                                                       title="{{$waktu->copy()->diffForHumans()}}">
                                                         {{$waktu->copy()->formatLocalized('%d %B %Y')}}
                                                     </span></td>
+                                            <td>
+                                                <a class="button" href="#"
+                                                   target="_blank"
+                                                   style='-moz-transition: color 0.175s cubic-bezier(0.215, 0.61, 0.355, 1); -o-transition: color 0.175s cubic-bezier(0.215, 0.61, 0.355, 1); -webkit-transition: color 0.175s cubic-bezier(0.215, 0.61, 0.355, 1); transition: color 0.175s cubic-bezier(0.215, 0.61, 0.355, 1); color: white; font-family: "Avenir Next", "Avenir", "Helvetica", sans-serif !important; background-color: #3fbced; border-radius: 3px; padding: 7px 10px; text-decoration: none;'>
+                                                    Setujui</a>
+                                            </td>
                                         </tr>
                                     @endforeach
                                     </tbody>
@@ -715,7 +631,7 @@
                         $('#ava').attr('src', '{!!URL::to('/')!!}' + '/' + data.ava);
                     }
                     trHTML = '';
-                    trHTML += '<tr><td width="50px">NIP</td><td>:</td><td>' + data.nip + '</td></tr>';
+                    trHTML += '<tr><td width="50px">NIK</td><td>:</td><td>' + data.nik + '</td></tr>';
                     trHTML += '<tr><td width="60px">Nama</td><td>:&nbsp;</td><td>' + data.name + '</td></tr>';
                     trHTML += '<tr><td width="60px">TTL</td><td>:&nbsp;</td><td>' + data.ttl + '</td></tr>';
                     trHTML += '<tr><td width="60px">Email</td><td>:&nbsp;</td><td><a href="mailto:' + data.email + '">' + data.email + '</a></td></tr>';
@@ -757,8 +673,8 @@
                     $('#modal-form5').modal('show');
                     $('#modal-form5 .modal-title').text('Detail Surat');
                     $('#modal-form5 #name').val(data.name);
-                    $('#modal-form5 #kode').val(data.kode);
-                    $('#modal-form5 #kode').val(data.kode);
+                    $('#modal-form5 #district_id').val(data.district_id);
+                    $('#modal-form5 #district_id').val(data.district_id);
                     $('#modal-form5 #category_id').val(data.category_id);
                     $('#modal-form5 #user_id').val(data.user_id);
                     $('#modal-form5 #category_id').val(data.category_id);

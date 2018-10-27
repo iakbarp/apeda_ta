@@ -31,14 +31,14 @@ class CreateUsersTable extends Migration
             $table->foreign('job_id')->references('id')->on('tr_data_job_descs');
             $table->integer('posisition_id')->unsigned()->nullable();
             $table->foreign('posisition_id')->references('id')->on('tr_data_posisitions');
-            $table->integer('province_id')->unsigned()->nullable();
-            $table->foreign('province_id')->references('id')->on('provinces');
             $table->integer('city_id')->unsigned()->nullable();
             $table->foreign('city_id')->references('id')->on('cities');
             $table->integer('district_id')->unsigned()->nullable();
             $table->foreign('district_id')->references('id')->on('districts');
             $table->integer('status_id')->unsigned()->nullable();
             $table->foreign('status_id')->references('id')->on('statuses');
+            $table->integer('user_id');
+            $table->foreign('user_id')->references('id')->on('verify_users');
             $table->rememberToken();
             $table->timestamps();
             $table->softDeletes();

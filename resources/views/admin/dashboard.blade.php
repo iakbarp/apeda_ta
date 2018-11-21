@@ -83,7 +83,7 @@
         </li>
         <li>
             <a href="{{route('admin.request.index')}}">
-                <i class="fa fa-file-text"></i> <span>Permintaan</span>
+                <i class="fa fa-file-text"></i> <span>Tambah Visi & Misi</span>
                 </span>
             </a>
         </li>
@@ -262,7 +262,7 @@
                             <h3 class="box-title">User Terakhir Ditambah</h3>
 
                             <div class="box-tools pull-right">
-                                <span class="label label-danger"><em id="user1">{{$user}}</em> Pengguna</span>
+                                <span class="label label-danger"><em id="user1"></em></span>
                                 <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
                                             class="fa fa-minus"></i>
                                 </button>

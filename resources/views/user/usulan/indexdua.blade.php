@@ -171,7 +171,7 @@
 
                 <div class="row animate-box">
                     <div class="col-md-8 col-md-offset-2 text-center fh5co-heading" style="margin-bottom: 3em">
-                        <h2><i class="fa fa-history"></i> Riwayat Usulan</h2>
+                        <h2><i class="fa fa-history"></i> Data RKP dan RPJMD</h2>
                     </div>
                 </div>
 
@@ -179,6 +179,7 @@
                     <div class="col-lg-12 text-center" style="margin-bottom: 3em">
 
                         <ul class="nav nav-tabs">
+                            @if ($user->role_id==4)
                             <li class="active"><a data-id="3" data-toggle="tab" href="#data" onclick="ambilData(this)"
                                                   title="Klik tab untuk menambahkan data berkas surat">Tambah Data</a>
                             </li>
@@ -198,11 +199,30 @@
                                    title="Klik tab untuk melihat semua berkas surat">Sampah</a>
                             </li>
 
+                            @else
+                                <li><a data-id="2" data-toggle="tab" href="#suratsemua" onclick="ambilData(this)"
+                                       title="Klik tab untuk melihat semua berkas surat">Semua</a>
+                                </li>
+
+                                @foreach($category as $row)
+                                    <li><a data-id="0" data-id2="{{$row->id}}" data-toggle="tab"
+                                           href="#surat{{$row->id}}"
+                                           onclick="ambilData(this)"
+                                           title="Klik tab untuk melihat berkas {{$row->name}} ">{{$row->singkatan}}</a>
+                                    </li>
+                                @endforeach
+
+                                <li><a data-id="1" data-toggle="tab" href="#suratsampah" onclick="ambilData(this)"
+                                       title="Klik tab untuk melihat semua berkas surat">Sampah</a>
+                                </li>
+                            @endif
+
 
                         </ul>
                         <div class="tab-content" id="fill-content" style="margin-top: 1em">
+                            @if ($user->role_id==4)
                             <div id="data" class="tab-pane fade in active text-center"><br>
-                                <h3>- Tambah Berkas Surat -</h3>
+                                <h3>- Tambah Usulan -</h3>
                                 <div class="row form-group">
                                     <div class="col-lg-12">
                                         <select class="form-control" name="jumlah" id="jumlah"
@@ -242,22 +262,15 @@
                                                                 class="form-control"
                                                                 name="kode[]"
                                                                 required autofocus>
-                                                            <option value="" disabled selected>-Tahun RKP -
+                                                            <option value="" disabled selected>- Jenis RKP -
                                                             </option>
-                                                            <option value="2016">2016
+                                                            <option value="Baru">(B) Baru
                                                             </option>
-                                                            <option value="2017">2017
-                                                            </option>
-                                                            <option value="2018">2018
-                                                            </option>
-                                                            <option value="2019">2019
-                                                            </option>
-                                                            <option value="2020">2020
-                                                            </option>
+                                                            <option value="Lanjutan">(L) Lanjutan
                                                         </select>
                                                     </div>
                                                     <div class="col-md-3">
-                                                        <input placeholder="Lokasi" class="form-control"
+                                                        <input placeholder="Detail Lokasi" class="form-control"
                                                                id="lokasi[]"
                                                                name="lokasi[]" multiple required autofocus>
                                                     </div>
@@ -271,6 +284,19 @@
                                                                id="anggaran[]"
                                                                name="anggaran[]" multiple required autofocus>
                                                     </div>
+                                                    {{--<div class="col-md-3">--}}
+                                                    {{--<select placeholder="Sumber Anggaran" id="sumber[]" type="text"--}}
+                                                    {{--class="form-control"--}}
+                                                    {{--name="sumber[]"--}}
+                                                    {{--required autofocus>--}}
+                                                    {{--<option value="" disabled selected>- Sumber Anggaran ---}}
+                                                    {{--</option>--}}
+                                                    {{--<option value="Dana Desa">Dana Desa--}}
+                                                    {{--</option>--}}
+                                                    {{--<option value="APBD">APBD--}}
+                                                    {{--</option>--}}
+                                                    {{--</select>--}}
+                                                    {{--</div>--}}
                                                     <div class="col-md-3">
                                                         <select class="form-control category_id"
                                                                 name="category_id[]"
@@ -293,7 +319,12 @@
                                                     <input id="city_id[]" type="hidden" class="form-control" name="city_id[]" value="{{app\user::where('city_id',Auth::user()->city_id)->first()->city_id}}" readonly>
 
                                                     <input id="district_id[]" type="hidden" class="form-control" name="district_id[]" value="{{app\user::where('district_id',Auth::user()->district_id)->first()->district_id}}" readonly>
-                                                    <input id="approve_id[]" type="hidden" class="form-control" name="approve_id[]" value="0" readonly>
+                                                    <input id="village_id[]" type="hidden" class="form-control"
+                                                           name="village_id[]"
+                                                           value="{{app\user::where('village_id',Auth::user()->village_id)->first()->village_id}}"
+                                                           readonly>
+                                                    <input id="approve_id[]" type="hidden" class="form-control"
+                                                           name="approve_id[]" value="1" readonly>
 
                                                 </div>
                                             @endfor
@@ -308,11 +339,11 @@
 
                                         </div>
                                     </form>
-
-
                                 </div>
-
                             </div>
+                            @else
+
+                            @endif
 
                             <div id="suratsemua" class="tab-pane fade in text-center">
                                 <br>
@@ -415,6 +446,9 @@
                                             </th>
                                             <th>
                                                 <center>Action</center>
+                                            </th>
+                                            <th>
+                                                <center>Status Usulan</center>
                                             </th>
                                         </tr>
                                         </thead>
@@ -563,7 +597,7 @@
                                                 </button>
                                             </div>
                                             <div class="col-md-4">
-                                                <h3 style="margin-top: 10px">- Data {{$row->name}} -</h3>
+                                                <h3 style="margin-top: 10px">- Usulan Tahun {{$row->name}} -</h3>
                                             </div>
                                             <div class="col-md-4">
                                                 <div class="row container-fluid">
@@ -640,6 +674,9 @@
                                                 <th>
                                                     <center>Action</center>
                                                 </th>
+                                                <th>
+                                                    <center>Status Usulan</center>
+                                                </th>
                                             </tr>
                                             </thead>
                                             <tbody>
@@ -673,6 +710,7 @@
     </div>
     <br><br><br>
     @include('user.usulan.formdua')
+    @include('user.usulan.formtiga')
 @endsection
 @section('script')
     <script>
@@ -834,14 +872,16 @@
                                 '            <span class="sr-only">Toggle Dropdown</span>\n' +
                                 '        </button>\n' +
                                 '        <ul class="dropdown-menu">\n' +
-                                '            <li><a data-id="' + value.id + '" data-method="1" href="javascript:void(0)" data-role="edit" onclick="showForm(this)">Rubah</a></li>\n' +
+                                '            <li><a data-id="' + value.id + '" data-method="1" href="javascript:void(0)" data-role="edit" onclick="showForm(this)">Ubah</a></li>\n' +
                                 '            <li><a data-id="' + value.id + '" data-method="1" href="javascript:void(0)" onclick="deleteData(this)">Hapus</a></li>\n' +
-                                // '            <li><a data-id="' + value.id + '" data-method="1" href="javascript:void(0)" onclick="historiData(this)">Histori</a></li>\n' +
+                                // '            <li><a data-id="' + value.id + '" data-method="1" href="javascript:void(0)" data-role="kirim" onclick="kirimData(this)">Kirim</a></li>\n' +
                                 '            <li role="separator" class="divider"></li>\n' +
                                 '            \n' + $filesurat +
                                 '            \n' +
                                 '        </ul>\n' +
                                 '    </div>' +
+                                '        <button type="button" class="btn btn-primary" href="javascript:void(0)" data-id="' + value.id + '" data-role="kirim" data-method="1" onclick="kirimData(this)">Kirim</button>\n' +
+                                '<br>' +
                                 '</td>';
                             $opsimenu2 = '<td>' +
                                 '<div class="btn-group">\n' +
@@ -875,6 +915,19 @@
                                     '<td> <a href="javascript:void(0)" onclick="showUser(' + value.user_id + ')">' + value.user + '</a> </td>' +
                                     '<td> ' + value.date + ' </td>' + $opsimenu;
                             }
+                            var approve_id = '';
+                            if (value.approve_id == 1) {
+                                approve_id = 'Belum dilaporkan';
+
+                            } else if (value.approve_id == 2) {
+                                approve_id = 'Pending Kecamatan';
+
+                            } else if (value.approve_id == 3) {
+                                approve_id = 'Pending Kabupaten';
+
+                            } else if (value.approve_id == 4) {
+                                approve_id = 'Laporan disetujui';
+                            }
                             $loopsurat += '<tr>' +
                                 '<td>' +
                                 '                                                                        <input type="checkbox"\n' +
@@ -885,6 +938,7 @@
                                 '</td>' +
                                 '<td> ' + value.kode + ' </td>' +
                                 '<td> ' + value.name + ' </td>' + $replace +
+                                '<td> ' + approve_id + ' </td>' +
                                 '</tr>';
                         });
                         $dataafter = '';
@@ -1185,8 +1239,11 @@
                             $('#modal-form-multiple .keyi' + key + ' #lokasi').val(value.lokasi);
                             $('#modal-form-multiple .keyi' + key + ' #volume').val(value.volume);
                             $('#modal-form-multiple .keyi' + key + ' #anggaran').val(value.anggaran);
+                            $('#modal-form-multiple .keyi' + key + ' #sumber').val(value.sumber);
                             $('#modal-form-multiple .keyi' + key + ' #city_id').val(value.city_id);
                             $('#modal-form-multiple .keyi' + key + ' #district_id').val(value.district_id);
+                            $('#modal-form-multiple .keyi' + key + ' #village_id').val(value.village_id);
+                            $('#modal-form-multiple .keyi' + key + ' #approve_id').val(value.approve_id);
                             $selectMulti += '<option value="" selected disabled>--Pilih Kategori--</option>';
                             $.each(data.category_list, function (no, nilai) {
                                 if (nilai.id == value.category_id) {
@@ -1365,6 +1422,100 @@
     </script>
     {{--restore data--}}
 
+    {{--<script>--}}
+    {{--function kirimData(e) {--}}
+    {{--$showRole = $(e).data("role");--}}
+    {{--$showMetode = $(e).data("method");--}}
+    {{--$.ajax({--}}
+    {{--url: "{{route('usulan.show')}}",--}}
+    {{--type: "get",--}}
+    {{--data: {'id': $(e).data("id"), 'metode': $showMetode},--}}
+    {{--success: function (data) {--}}
+    {{--console.log(data);--}}
+    {{--if ($showMetode > 0) {--}}
+    {{--loadShow(data);--}}
+    {{--$('#modal-form-see').modal('show');--}}
+    {{--}--}}
+    {{--if ($showRole == 'kirim') {--}}
+    {{--$('#modal-form-see .contentshow').attr('disabled', false);--}}
+    {{--$('#modal-form-see .btn-save').show();--}}
+    {{--$('#modal-form-see .editFile').show();--}}
+    {{--$('#modal-form-see .uploadfile').show();--}}
+    {{--$('#modal-form-see .lihatsurat').hide();--}}
+    {{--$('#modal-form-see .hapussurat').hide();--}}
+    {{--$('#modal-form-see #deleteBerkas').empty().append('Hapus Berkas:');--}}
+    {{--}--}}
+    {{--else {--}}
+    {{--swalError('Peringatan!', 'Perintah Tidak Terdaftar');--}}
+    {{--}--}}
+    {{--},--}}
+    {{--error: function () {--}}
+    {{--swalError('Oops...', 'Something went wrong or data is empty!');--}}
+    {{--}--}}
+    {{--});--}}
+    {{--}--}}
+    {{--function loadShow(e) {--}}
+    {{--$('#modal-form-see form')[0].reset();--}}
+    {{--$('#modal-form-see #kode').val(e.kode);--}}
+    {{--$('#modal-form-see #id').val(e.id);--}}
+    {{--$('#modal-form-see #desc').val(e.desc);--}}
+    {{--$('#modal-form-see #lokasi').val(e.lokasi);--}}
+    {{--$('#modal-form-see #volume').val(e.volume);--}}
+    {{--$('#modal-form-see #anggaran').val(e.anggaran);--}}
+    {{--$('#modal-form-see #sumber').val(e.sumber);--}}
+    {{--$('#modal-form-see #city_id').val(e.city_id);--}}
+    {{--$('#modal-form-see #district_id').val(e.district_id);--}}
+    {{--$('#modal-form-see #village_id').val(e.village_id);--}}
+    {{--$('#modal-form-see #approve_id').val(e.approve_id);--}}
+    {{--$('#modal-form-see #name').val(e.name);--}}
+    {{--$('#modal-form-see #name').val(e.name);--}}
+    {{--$('#modal-form-see #user_id').css('background-color', '#ffffff');--}}
+    {{--$('#modal-form-see #user_id').val(e.user_id);--}}
+    {{--$('#modal-form-see #changeUser').empty().append('Dibuat Oleh:');--}}
+    {{--$selectShow = '';--}}
+    {{--$selectShow += '<option value="" disabled>- Pilih Kategori - </option>';--}}
+    {{--$.each(e.job_list, function (key, value) {--}}
+    {{--if (value.id == e.job_id) {--}}
+    {{--$selectShow += '<option value="' + value.id + '" selected>' + value.name + '</option>';--}}
+    {{--}--}}
+    {{--else {--}}
+    {{--$selectShow += '<option value="' + value.id + '">' + value.name + '</option>';--}}
+    {{--}--}}
+    {{--});--}}
+    {{--$contentFile = '';--}}
+    {{--if (e.file.length > 0) {--}}
+    {{--$.each(e.file, function (key, value) {--}}
+    {{--$contentFile += '<input type="checkbox" value="' + value.id + '" class="editFile" name="hapus[]">' +--}}
+    {{--'<a target="_blank" href="{!!URL::to('/')!!}/' + value.url + '" class="contentFile">' + value.name + '</a><br>';--}}
+    {{--});--}}
+    {{--}--}}
+    {{--else {--}}
+    {{--$contentFile = 'Berkas Kosong';--}}
+    {{--}--}}
+    {{--console.log($contentFile + ' ddd');--}}
+    {{--$('#modal-form-see #contentBerkas').empty().append($contentFile);--}}
+    {{--$('#modal-form-see #category_id').empty().append($selectShow);--}}
+    {{--$('#modal-form-see .lihatsurat').empty().append('Edit');--}}
+    {{--$('#modal-form-see .lihatsurat').attr('data-id', e.id);--}}
+    {{--$('#modal-form-see .lihatsurat').attr('data-role', 'kirim');--}}
+    {{--$('#modal-form-see .lihatsurat').attr('onclick', 'kirimData(this)');--}}
+    {{--$('#modal-form-see .lihatsurat').removeAttr('data-dismiss');--}}
+    {{--$('#modal-form-see .hapussurat').attr('data-id', e.id);--}}
+    {{--$('#modal-form-see .hapussurat').attr('data-method', 1);--}}
+    {{--if ($.trim(e.userdel)) {--}}
+    {{--$('#modal-form-see .lihatsurat').empty().append('Pulihkan');--}}
+    {{--$('#modal-form-see .lihatsurat').attr('data-role', 'pulihkan');--}}
+    {{--$('#modal-form-see .lihatsurat').attr('onclick', 'restoreData(' + e.id + ')');--}}
+    {{--$('#modal-form-see .lihatsurat').attr('data-dismiss', 'modal');--}}
+    {{--}--}}
+    {{--if ($.trim(e.userdel)) {--}}
+    {{--$('#modal-form-see #user_id').val(e.userdel);--}}
+    {{--$('#modal-form-see #changeUser').empty().append('Dihapus Oleh:');--}}
+    {{--$('#modal-form-see .hapussurat').attr('data-method', 2);--}}
+    {{--}--}}
+    {{--}--}}
+    {{--</script>--}}
+
     {{--lihat edit--}}
     <script>
         function showForm(e) {
@@ -1381,7 +1532,7 @@
                         $('#modal-form-see').modal('show');
                     }
                     if ($showRole == 'lihat') {
-                        $('#modal-form-see .contentshow').attr('disabled', true);
+                        $('#modal-form-see .contentshow').attr('disabled', false);
                         $('#modal-form-see .contentshow').css('background-color', '#ffffff');
                         $('#modal-form-see .btn-save').hide();
                         $('#modal-form-see .editFile').hide();
@@ -1398,6 +1549,47 @@
                         $('#modal-form-see .lihatsurat').hide();
                         $('#modal-form-see .hapussurat').hide();
                         $('#modal-form-see #deleteBerkas').empty().append('Hapus Berkas:');
+                    }
+                    // else if ($showRole == 'kirim') {
+                    //     $('#modal-form-see .contentshow').attr('disabled', false);
+                    //     $('#modal-form-see .btn-save').show();
+                    //     $('#modal-form-see .editFile').show();
+                    //     $('#modal-form-see .uploadfile').show();
+                    //     $('#modal-form-see .lihatsurat').hide();
+                    //     $('#modal-form-see .hapussurat').hide();
+                    //     $('#modal-form-see #deleteBerkas').empty().append('Hapus Berkas:');
+                    // }
+                    else {
+                        swalError('Peringatan!', 'Perintah Tidak Terdaftar');
+                    }
+                },
+                error: function () {
+                    swalError('Oops...', 'Something went wrong or data is empty!');
+                }
+            });
+        }
+
+        function kirimData(e) {
+            $showRole = $(e).data("role");
+            $showMetode = $(e).data("method");
+            $.ajax({
+                url: "{{route('usulan.show')}}",
+                type: "get",
+                data: {'id': $(e).data("id"), 'metode': $showMetode},
+                success: function (data) {
+                    console.log(data);
+                    if ($showMetode > 0) {
+                        loadShow2(data);
+                        $('#modal-form-see2').modal('show');
+                    }
+                    if ($showRole == 'kirim') {
+                        $('#modal-form-see2 .contentshow').attr('disabled', false);
+                        $('#modal-form-see2 .btn-save').show();
+                        $('#modal-form-see2 .editFile').show();
+                        $('#modal-form-see2 .uploadfile').show();
+                        $('#modal-form-see2 .lihatsurat').hide();
+                        $('#modal-form-see2 .hapussurat').hide();
+                        $('#modal-form-see2 #deleteBerkas').empty().append('Hapus Berkas:');
                     }
                     else {
                         swalError('Peringatan!', 'Perintah Tidak Terdaftar');
@@ -1416,8 +1608,11 @@
             $('#modal-form-see #lokasi').val(e.lokasi);
             $('#modal-form-see #volume').val(e.volume);
             $('#modal-form-see #anggaran').val(e.anggaran);
+            $('#modal-form-see #sumber').val(e.sumber);
             $('#modal-form-see #city_id').val(e.city_id);
             $('#modal-form-see #district_id').val(e.district_id);
+            $('#modal-form-see #village_id').val(e.village_id);
+            $('#modal-form-see #approve_id').val(e.approve_id);
             $('#modal-form-see #name').val(e.name);
             $('#modal-form-see #name').val(e.name);
             $('#modal-form-see #user_id').css('background-color', '#ffffff');
@@ -1458,6 +1653,67 @@
                 $('#modal-form-see .lihatsurat').attr('data-role', 'pulihkan');
                 $('#modal-form-see .lihatsurat').attr('onclick', 'restoreData(' + e.id + ')');
                 $('#modal-form-see .lihatsurat').attr('data-dismiss', 'modal');
+            }
+            if ($.trim(e.userdel)) {
+                $('#modal-form-see #user_id').val(e.userdel);
+                $('#modal-form-see #changeUser').empty().append('Dihapus Oleh:');
+                $('#modal-form-see .hapussurat').attr('data-method', 2);
+            }
+        }
+
+        function loadShow2(e) {
+            $('#modal-form-see2 form')[0].reset();
+            $('#modal-form-see2 #kode').val(e.kode);
+            $('#modal-form-see2 #id').val(e.id);
+            $('#modal-form-see2 #desc').val(e.desc);
+            $('#modal-form-see2 #lokasi').val(e.lokasi);
+            $('#modal-form-see2 #volume').val(e.volume);
+            $('#modal-form-see2 #anggaran').val(e.anggaran);
+            $('#modal-form-see2 #sumber').val(e.sumber);
+            $('#modal-form-see2 #city_id').val(e.city_id);
+            $('#modal-form-see2 #district_id').val(e.district_id);
+            $('#modal-form-see2 #village_id').val(e.village_id);
+            $('#modal-form-see2 #approve_id').val(e.approve_id);
+            $('#modal-form-see2 #name').val(e.name);
+            $('#modal-form-see2 #name').val(e.name);
+            $('#modal-form-see2 #user_id').css('background-color', '#ffffff');
+            $('#modal-form-see2 #user_id').val(e.user_id);
+            $('#modal-form-see2 #changeUser').empty().append('Dibuat Oleh:');
+            $selectShow = '';
+            $selectShow += '<option value="" disabled>- Pilih Kategori - </option>';
+            $.each(e.job_list, function (key, value) {
+                if (value.id == e.job_id) {
+                    $selectShow += '<option value="' + value.id + '" selected>' + value.name + '</option>';
+                }
+                else {
+                    $selectShow += '<option value="' + value.id + '">' + value.name + '</option>';
+                }
+            });
+            $contentFile = '';
+            if (e.file.length > 0) {
+                $.each(e.file, function (key, value) {
+                    $contentFile += '<input type="checkbox" value="' + value.id + '" class="editFile" name="hapus[]">' +
+                        '<a target="_blank" href="{!!URL::to('/')!!}/' + value.url + '" class="contentFile">' + value.name + '</a><br>';
+                });
+            }
+            else {
+                $contentFile = 'Berkas Kosong';
+            }
+            console.log($contentFile + ' ddd');
+            $('#modal-form-see2 #contentBerkas').empty().append($contentFile);
+            $('#modal-form-see2 #category_id').empty().append($selectShow);
+            $('#modal-form-see2 .lihatsurat').empty().append('Edit');
+            $('#modal-form-see2 .lihatsurat').attr('data-id', e.id);
+            $('#modal-form-see2 .lihatsurat').attr('data-role', 'edit');
+            $('#modal-form-see2 .lihatsurat').attr('onclick', 'showForm(this)');
+            $('#modal-form-see2 .lihatsurat').removeAttr('data-dismiss');
+            $('#modal-form-see2 .hapussurat').attr('data-id', e.id);
+            $('#modal-form-see2 .hapussurat').attr('data-method', 1);
+            if ($.trim(e.userdel)) {
+                $('#modal-form-see2 .lihatsurat').empty().append('Pulihkan');
+                $('#modal-form-see2 .lihatsurat').attr('data-role', 'pulihkan');
+                $('#modal-form-see2 .lihatsurat').attr('onclick', 'restoreData(' + e.id + ')');
+                $('#modal-form-see2 .lihatsurat').attr('data-dismiss', 'modal');
             }
             if ($.trim(e.userdel)) {
                 $('#modal-form-see #user_id').val(e.userdel);
@@ -1843,6 +2099,11 @@
                         '                                                            <td valign="top">:</td>\n' +
                         '                                                            <td id="fill-Anggaran">Datto</td>\n' +
                         '                                                        </tr>\n' +
+                        '                                                        <tr>\n' +
+                        '                                                            <td style="width: 45px" valign="top">Detail</td>\n' +
+                        '                                                            <td valign="top">:</td>\n' +
+                        '                                                            <td id="fill-Sumber">Datto</td>\n' +
+                        '                                                        </tr>\n' +
                         '                                                    </table>\n' +
                         '                                                </div>\n' +
                         '                                            </div>\n' +
@@ -1908,8 +2169,11 @@
                             $('#modal-form-spoiler .spoiler' + key + ' #fill-lokasi').empty().append(v.listEdit.lokasi);
                             $('#modal-form-spoiler .spoiler' + key + ' #fill-volume').empty().append(v.listEdit.volume);
                             $('#modal-form-spoiler .spoiler' + key + ' #fill-anggaran').empty().append(v.listEdit.anggaran);
+                            $('#modal-form-spoiler .spoiler' + key + ' #fill-sumber').empty().append(v.listEdit.sumber);
                             $('#modal-form-spoiler .spoiler' + key + ' #fill-city_id').empty().append(v.listEdit.city_id);
                             $('#modal-form-spoiler .spoiler' + key + ' #fill-district_id').empty().append(v.listEdit.district_id);
+                            $('#modal-form-spoiler .spoiler' + key + ' #fill-village_id').empty().append(v.listEdit.village_id);
+                            $('#modal-form-spoiler .spoiler' + key + ' #fill-approve_id').empty().append(v.listEdit.approve_id);
                         }
                         else {
                             $('#modal-form-spoiler .spoiler' + key + ' .edit-data').hide();

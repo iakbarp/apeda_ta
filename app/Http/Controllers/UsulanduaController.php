@@ -1,22 +1,27 @@
 <?php
 namespace App\Http\Controllers;
 use App\mst_data;
+use App\status;
 use App\trDataCategory;
 use App\trDataHistori;
 use App\trFile;
 use App\trFileHistori;
 use App\User;
 use Carbon\Carbon;
+use foo\bar;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
+use Symfony\Component\VarDumper\Cloner\Data;
+
 class UsulanduaController extends Controller
 {
     public function index()
     {
         $category = $this->getCatagories();
-        return view('user.usulan.indexdua', compact('category'));
+        $user = User::findOrFail(Auth::user()->id);
+        return view('user.usulan.indexdua', compact('category', 'user'));
     }
     private function getCatagories()
     {
@@ -28,7 +33,7 @@ class UsulanduaController extends Controller
     {
         for ($i = 0; $i < count($request->name); $i++) {
             mst_data::create(['name' => $request->name[$i], 'desc' => $request->desc[$i], 'lokasi' => $request->lokasi[$i], 'volume' => $request->volume[$i], 'anggaran' => $request->anggaran[$i], 'kode' => $request->kode[$i],
-                'city_id' => $request->city_id[$i], 'district_id' => $request->district_id[$i], 'category_id' => $request->category_id[$i],
+                'city_id' => $request->city_id[$i], 'district_id' => $request->district_id[$i], 'village_id' => $request->village_id[$i], 'approve_id' => $request->approve_id[$i], 'category_id' => $request->category_id[$i],
                 'user_id' => Auth::user()->id, 'job_id' => Auth::user()->job_id, 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()]);
             $z = 1;
             foreach ($request->file[$i] as $row) {
@@ -82,6 +87,8 @@ class UsulanduaController extends Controller
                 $anggaran = $r->anggaran;
                 $city_id = $r->city_id;
                 $district_id = $r->district_id;
+                $village_id = $r->village_id;
+                $approve_id = $r->approve_id;
                 $name = $r->name;
                 $user_id = $r->user_id;
                 $id = $r->id;
@@ -120,7 +127,7 @@ class UsulanduaController extends Controller
                             $rela[] = array('url' => $url, 'name' => substr($tr->name, 21));
                         }
                         $result['data'][] = array('kode' => $kode, 'lokasi' => $lokasi, 'volume' => $volume, 'anggaran' => $anggaran,
-                            '$city_id' => $city_id, '$district_id' => $district_id, 'name' => $name, 'user_id' => $user_id, 'user' => $user, 'date' => $date
+                            'city_id' => $city_id, 'district_id' => $district_id, 'village_id' => $village_id, 'approve_id' => $approve_id, 'name' => $name, 'user_id' => $user_id, 'user' => $user, 'date' => $date
                         , 'id' => $id, 'relation' => $rela);
                     }
                 } elseif ($index == 1) {
@@ -146,7 +153,7 @@ class UsulanduaController extends Controller
                             $rela[] = array('url' => $url, 'name' => substr($tr->name, 21));
                         }
                         $result['data'][] = array('kode' => $kode, 'lokasi' => $lokasi, 'volume' => $volume, 'anggaran' => $anggaran,
-                            '$city_id' => $city_id, '$district_id' => $district_id,
+                            'city_id' => $city_id, 'district_id' => $district_id, 'village_id' => $village_id, 'approve_id' => $approve_id,
                             'name' => $name, 'user_id' => $user_id, 'user' => $user, 'category' => $category, 'date' => $date
                         , 'id' => $id, 'relation' => $rela);
                     }
@@ -167,42 +174,79 @@ class UsulanduaController extends Controller
         }
         return $result;
     }
-    private function inputArray($kode, $lokasi, $volume, $anggaran, $city_id, $district_id, $name, $user_id, $id, $user, $userdel_id, $userdel, $category, $date, $date2)
+
+    private function inputArray($kode, $lokasi, $volume, $anggaran, $city_id, $district_id, $village_id, $approve_id, $name, $user_id, $id, $user, $userdel_id, $userdel, $category, $date, $date2)
     {
         $result['status'] = 1;
         $result['entity'] = $result['entity'] + 1;
         $result['data'][] = array('kode' => $kode, 'lokasi' => $lokasi, 'volume' => $volume, 'anggaran' => $anggaran,
-            '$city_id' => $city_id, '$district_id' => $district_id, 'name' => $name, 'user_id' => $user_id, 'user' => $user, 'category' => $category, 'date' => $date, 'date2' => $date2
+            'city_id' => $city_id, 'district_id' => $district_id, 'village_id' => $village_id, 'approve_id' => $approve_id, 'name' => $name, 'user_id' => $user_id, 'user' => $user, 'category' => $category, 'date' => $date, 'date2' => $date2
         , 'userdel' => $userdel, 'userdel_id' => $userdel_id, 'id' => $id);
         return $result;
     }
     private function notsearch($id, $index, $skip, $next,$pagi)
     {
-        $label = mst_data::where('job_id', Auth::user()->job_id);
-        if (is_null($id)) {
-            if ($index == 2) {
-                $data = $label->orderBy('id', 'desc')->skip($skip)->take($next)->get();
-                if (count($data)==0){
-                    $data =  mst_data::where('job_id', Auth::user()->job_id)->orderBy('id', 'desc')->skip($skip-10)->take($next)->get();
-                    $pagi=$pagi-1;
+//        if (user::find($role_id=['3']))
+        if (User::findOrFail(Auth::user()->id)->role_id == 4) {
+            $label = mst_data::where('village_id', Auth::user()->village_id);
+            if (is_null($id)) {
+                if ($index == 2) {
+                    $data = $label->orderBy('id', 'desc')->skip($skip)->take($next)->get();
+                    if (count($data) == 0) {
+                        $data = mst_data::where('village_id', Auth::user()->village_id)->orderBy('id', 'desc')->skip($skip - 10)->take($next)->get();
+                        $pagi = $pagi - 1;
+                    }
+                    $data2 = mst_data::where('village_id', Auth::user()->village_id)->get();
+                } else {
+                    $data = $label->onlyTrashed()->orderBy('deleted_at', 'desc')->skip($skip)->take($next)->get();
+                    if (count($data) == 0) {
+                        $data = mst_data::where('village_id', Auth::user()->village_id)->onlyTrashed()->orderBy('id', 'desc')->skip($skip - 10)->take($next)->get();
+                        $pagi = $pagi - 1;
+                    }
+                    $data2 = mst_data::where('village_id', Auth::user()->village_id)->onlyTrashed()->get();
                 }
-                $data2 = mst_data::where('job_id', Auth::user()->job_id)->get();
             } else {
-                $data = $label->onlyTrashed()->orderBy('deleted_at', 'desc')->skip($skip)->take($next)->get();
-                if (count($data)==0){
-                    $data = mst_data::where('job_id', Auth::user()->job_id)->onlyTrashed()->orderBy('id', 'desc')->skip($skip-10)->take($next)->get();
-                    $pagi=$pagi-1;
+                $data = mst_data::where([['category_id', $id], ['village_id', Auth::user()->village_id]])->orderBy('id', 'desc')->skip($skip)->take($next)->get();
+                if (count($data) == 0) {
+                    $data = mst_data::where([['category_id', $id], ['village_id', Auth::user()->village_id]])->orderBy('id', 'desc')->skip($skip - 10)->take($next)->get();
+                    $pagi = $pagi - 1;
                 }
-                $data2 = mst_data::where('job_id', Auth::user()->job_id)->onlyTrashed()->get();
+
+                $data2 = mst_data::/*where('job_id', Auth::user()->job_id)->*/
+                where([['category_id', $id], ['village_id', Auth::user()->village_id]])->get();
             }
-        } else {
-            $data = mst_data::where('category_id', $id)->orderBy('id', 'desc')->skip($skip)->take($next)->get();
-            if (count($data)==0){
-                $data =  mst_data::where('category_id', $id)->orderBy('id', 'desc')->skip($skip-10)->take($next)->get();
-                $pagi=$pagi-1;
-            }
-            $data2 = mst_data::/*where('job_id', Auth::user()->job_id)->*/where('category_id', $id)->get();
         }
+
+        if (User::findOrFail(Auth::user()->id)->role_id == 3) {
+            $label = mst_data::where([['approve_id', 2], ['district_id', Auth::user()->district_id]]);
+            if (is_null($id)) {
+                if ($index == 2) {
+                    $data = $label->orderBy('id', 'desc')->skip($skip)->take($next)->get();
+                    if (count($data) == 0) {
+                        $data = mst_data::where([['approve_id', 2], ['district_id', Auth::user()->district_id]])->orderBy('id', 'desc')->skip($skip - 10)->take($next)->get();
+                        $pagi = $pagi - 1;
+                    }
+                    $data2 = mst_data::where([['approve_id', 2], ['district_id', Auth::user()->district_id]])->get();
+                } else {
+                    $data = $label->onlyTrashed()->orderBy('deleted_at', 'desc')->skip($skip)->take($next)->get();
+                    if (count($data) == 0) {
+                        $data = mst_data::where([['approve_id', 2], ['district_id', Auth::user()->district_id]])->onlyTrashed()->orderBy('id', 'desc')->skip($skip - 10)->take($next)->get();
+                        $pagi = $pagi - 1;
+                    }
+                    $data2 = mst_data::where([['approve_id', 2], ['district_id', Auth::user()->district_id]])->onlyTrashed()->get();
+                }
+            } else {
+                $data = mst_data::where([['approve_id', 2], ['category_id', $id], ['district_id', Auth::user()->district_id]])->orderBy('id', 'desc')->skip($skip)->take($next)->get();
+                if (count($data) == 0) {
+                    $data = mst_data::where([['approve_id', 2], ['category_id', $id], ['district_id', Auth::user()->district_id]])->orderBy('id', 'desc')->skip($skip - 10)->take($next)->get();
+                    $pagi = $pagi - 1;
+                }
+
+                $data2 = mst_data::/*where('job_id', Auth::user()->job_id)->*/
+                where([['category_id', $id], ['district_id', Auth::user()->district_id]])->get();
+            }
+        }
+
         return $this->setarray($data, $next, $id, $data2,$pagi);
     }
     private function setarray($data, $delimiter, $id, $data2,$pagi)
@@ -239,7 +283,7 @@ class UsulanduaController extends Controller
                         $row->deleted_at)->formatLocalized('%A, %d %B %Y');
                 }
                 $result['data'][] = array('name' => $row->name, 'kode' => $row->kode, 'lokasi' => $row->lokasi, 'volume' => $row->volume, 'anggaran' => $row->anggaran,
-                    'city_id' => $row->city_id, 'district_id' => $row->district_id, 'user' => $user, 'user_id' => $row->user_id, 'category' => $row->trDataCategory->name,
+                    'city_id' => $row->city_id, 'district_id' => $row->district_id, 'village_id' => $row->village_id, 'approve_id' => $row->approve_id, 'user' => $user, 'user_id' => $row->user_id, 'category' => $row->trDataCategory->name,
                     'date' => Carbon::createFromFormat('Y-m-d H:i:s', $row->created_at)->formatLocalized('%A, %d %B %Y'),
                     'date2' => $deldate, 'id' => $row->id, 'userdel' => $userdel
                 , 'userdel_id' => $row->userdel, 'relation' => $rela);
@@ -252,6 +296,18 @@ class UsulanduaController extends Controller
         Carbon::setLocale('id');
         setlocale(LC_TIME, 'Indonesian');
     }
+
+//    public function updateStatus(Request $request)
+//    {
+//        $data = Data::find($request->id);
+//        $data->update([
+//           'approve_id' => 2
+//        ]);
+//
+//        return back();
+//
+//    }
+
     public function destroy(Request $r)
     {
         $id = $r->id;
@@ -310,7 +366,7 @@ class UsulanduaController extends Controller
                 foreach ($data as $row) {
                     $trans[] = array('name' => $row->name,
                         'kode' => $row->kode, 'desc' => $row->desc, 'lokasi' => $row->lokasi, 'volume' => $row->volume, 'anggaran' => $row->anggaran,
-                        'city_id' => $row->city_id, 'district_id' => $row->district_id, 'user_id' => Auth::user()->id,
+                        'city_id' => $row->city_id, 'district_id' => $row->district_id, 'village_id' => $row->village_id, 'approve_id' => $row->approve_id, 'user_id' => Auth::user()->id,
                         'category_id' => $row->category_id, 'job_id' => $row->job_id, 'data_id' => $row->id
                     , 'deletes' => 0
                     , 'edit' => 0
@@ -323,7 +379,7 @@ class UsulanduaController extends Controller
                 $data = mst_data::findOrFail($id);
                 trDataHistori::create(['name' => $data->name,
                     'kode' => $data->kode, 'desc' => $data->desc, 'lokasi' => $data->lokasi, 'volume' => $data->volume, 'anggaran' => $data->anggaran,
-                    'city_id' => $data->city_id, 'district_id' => $data->district_id, 'user_id' => Auth::user()->id,
+                    'city_id' => $data->city_id, 'district_id' => $data->district_id, 'village_id' => $data->village_id, 'approve_id' => $data->approve_id, 'user_id' => Auth::user()->id,
                     'category_id' => $data->category_id, 'job_id' => $data->job_id, 'data_id' => $id
                     , 'deletes' => 0
                     , 'edit' => 0
@@ -361,6 +417,8 @@ class UsulanduaController extends Controller
                     'anggaran' => $x->anggaran,
                     'city_id' => $x->city_id,
                     'district_id' => $x->district_id,
+                    'village_id' => $x->village_id,
+                    'approve_id' => $x->approve_id,
                     'id' => $x->id);
             }
         } else {
@@ -383,6 +441,8 @@ class UsulanduaController extends Controller
                 'anggaran' => $i->anggaran,
                 'city_id' => $i->city_id,
                 'district_id' => $i->district_id,
+                'village_id' => $i->village_id,
+                'approve_id' => $i->approve_id,
                 'user_id' => $i->User->name,
                 'userdel' => $userdel,
                 'file' => $dataFile2,
@@ -444,6 +504,8 @@ class UsulanduaController extends Controller
                 $r->anggaran != $data->anggaran ||
                 $r->city_id != $data->city_id ||
                 $r->district_id != $data->district_id ||
+                $r->village_id != $data->village_id ||
+                $r->approve_id != $data->approve_id ||
                 $r->category_id != $data->category_id) {
                 $statusEdit = 1;
             }
@@ -453,7 +515,7 @@ class UsulanduaController extends Controller
                 $row = $r;
                 $idHistori = trDataHistori::create(['name' => $data->name,
                     'kode' => $data->kode, 'desc' => $data->desc, 'lokasi' => $data->lokasi, 'volume' => $data->volume, 'anggaran' => $data->anggaran,
-                    'city_id' => $data->city_id, 'district_id' => $data->district_id, 'user_id' => Auth::user()->id,
+                    'city_id' => $data->city_id, 'district_id' => $data->district_id, 'village_id' => $data->village_id, 'approve_id' => $data->approve_id, 'user_id' => Auth::user()->id,
                     'category_id' => $data->category_id, 'job_id' => Auth::user()->job_id, 'data_id' => $id
                     , 'deletes' => $statusDel
                     , 'edit' => $statusEdit
@@ -465,7 +527,8 @@ class UsulanduaController extends Controller
                     $data = trFileHistori::whereIn('id', $idDel)->update(['histori_id' => $idHistori]);
                 }
                 if ($statusEdit == 1) {
-                    $data->update(['name' => $r->name, 'kode' => $r->kode, 'desc' => $r->desc, 'lokasi' => $r->lokasi, 'volume' => $r->volume, 'anggaran' => $r->anggaran, 'city_id' => $r->city_id, 'district_id' => $r->district_id, 'category_id' => $r->category_id]);
+                    $data->update(['name' => $r->name, 'kode' => $r->kode, 'desc' => $r->desc, 'lokasi' => $r->lokasi, 'volume' => $r->volume, 'anggaran' => $r->anggaran, 'city_id' => $r->city_id,
+                        'district_id' => $r->district_id, 'village_id' => $r->village_id, 'approve_id' => $r->approve_id, 'category_id' => $r->category_id]);
                 }
             }
         }
@@ -486,7 +549,7 @@ class UsulanduaController extends Controller
                 $status = 1;
                 trDataHistori::create(['name' => $data->name,
                     'kode' => $data->kode, 'desc' => $data->desc, 'lokasi' => $data->lokasi, 'volume' => $data->volume, 'anggaran' => $data->anggaran,
-                    'city_id' => $r->city_id, 'district_id' => $r->district_id,
+                    'city_id' => $r->city_id, 'district_id' => $r->district_id, 'village_id' => $r->village_id, 'approve_id' => $r->approve_id,
                     'user_id' => Auth::user()->id, 'category_id' => $data->category_id
                     , 'job_id' => Auth::user()->job_id, 'data_id' => $r->id[$i]
                     , 'deletes' => 0
@@ -500,10 +563,13 @@ class UsulanduaController extends Controller
                     'volume' => $r->volume[$i],
                     'anggaran' => $r->anggaran[$i],
                     'city_id' => $r->city_id[$i],
-                    'district_id' => $r->district_id[$i]
+                    'district_id' => $r->district_id[$i],
+                    'village_id' => $r->village_id[$i],
+                    'approve_id' => $r->approve_id[$i]
                     ]);
             }
         }
+
         return $status;
     }
     public function restore(Request $r)
@@ -514,7 +580,7 @@ class UsulanduaController extends Controller
             foreach ($sample as $data) {
                 trDataHistori::create(['name' => $data->name,
                     'kode' => $data->kode, 'desc' => $data->desc, 'lokasi' => $data->lokasi, 'volume' => $data->volume, 'anggaran' => $data->anggaran,
-                    'city_id' => $data->city_id, 'district_id' => $data->district_id,
+                    'city_id' => $data->city_id, 'district_id' => $data->district_id, 'village_id' => $data->village_id, 'approve_id' => $data->approve_id,
                     'user_id' => Auth::user()->id, 'category_id' => $data->category_id
                     , 'job_id' => Auth::user()->job_id, 'data_id' => $data->id
                     , 'deletes' => 0
@@ -527,7 +593,7 @@ class UsulanduaController extends Controller
             $data = mst_data::onlyTrashed()->findOrFail($r->id);
             trDataHistori::create(['name' => $data->name,
                 'kode' => $data->kode, 'desc' => $data->desc, 'lokasi' => $data->lokasi, 'volume' => $data->volume, 'anggaran' => $data->anggaran,
-                'city_id' => $data->city_id, 'district_id' => $data->district_id,
+                'city_id' => $data->city_id, 'district_id' => $data->district_id, 'village_id' => $data->village_id, 'approve_id' => $data->approve_id,
                 'user_id' => Auth::user()->id, 'category_id' => $data->category_id
                 , 'job_id' => Auth::user()->job_id, 'data_id' => $r->id
                 , 'deletes' => 0
@@ -571,16 +637,19 @@ class UsulanduaController extends Controller
                     $ndescCek = $c->desc;
                     $lokasiCek = $c->lokasi;
                     $volumeCek = $c->volume;
-                    $anggaranCek= $c->anggaran;
+                    $anggaranCek = $c->anggaran;
                     $city_idCek = $c->city_id;
-                    $district_idCek= $c->district_id;
+                    $district_idCek = $c->district_id;
+                    $village_idCek = $c->village_id;
+                    $approve_idCek = $c->approve_id;
                     $categoryCek = $c->trDataCategory->name;
                     $v = trDataHistori::withTrashed()->where('data_id', $id)->where('edit', 1)->get();
                     if (count($v) > 0) {
                         $cek1 = array();
                         foreach ($v as $d) {
                             $cek1[] = array('id' => $d->id, 'name' => $d->name, 'kode' => $d->kode
-                            , 'category_id' => $d->category_id, 'cate' => $d->cate->name, 'desc' => $d->desc, 'lokasi' => $d->lokasi, 'volume' => $d->volume, 'anggaran' => $d->anggaran, 'city_id' => $d->city_id, 'district_id' => $d->district_id);
+                            , 'category_id' => $d->category_id, 'cate' => $d->cate->name, 'desc' => $d->desc, 'lokasi' => $d->lokasi, 'volume' => $d->volume, 'anggaran' => $d->anggaran, 'city_id' => $d->city_id,
+                                'district_id' => $d->district_id, 'village_id' => $d->village_id, 'approve_id' => $d->approve_id);
                         }
                         $cek2 = null;
                         for ($i = 0; $i < count($cek1); $i++) {
@@ -615,6 +684,12 @@ class UsulanduaController extends Controller
                             if ($dataNextEdit['district_id'] != $district_idCek) {
                                 $district_idCek = $dataNextEdit['district_id'] . ' -> ' . $district_idCek;
                             }
+                            if ($dataNextEdit['village_id'] != $village_idCek) {
+                                $village_idCek = $dataNextEdit['village_id'] . ' -> ' . $village_idCek;
+                            }
+                            if ($dataNextEdit['approve_id'] != $approve_idCek) {
+                                $approve_idCek = $dataNextEdit['approve_id'] . ' -> ' . $approve_idCek;
+                            }
                             if ($dataNextEdit['category_id'] != $c->category_id) {
                                 $categoryCek = $dataNextEdit['cate'] . ' -> ' . $categoryCek;
                             }
@@ -644,6 +719,12 @@ class UsulanduaController extends Controller
                             if ($dataNextEdit['district_id'] != $x->district_id) {
                                 $district_idCek = $x->district_id . ' -> ' . $dataNextEdit['district_id'];
                             }
+                            if ($dataNextEdit['village_id'] != $x->village_id) {
+                                $village_idCek = $x->village_id . ' -> ' . $dataNextEdit['village_id'];
+                            }
+                            if ($dataNextEdit['approve_id'] != $x->approve_id) {
+                                $approve_idCek = $x->approve_id . ' -> ' . $dataNextEdit['approve_id'];
+                            }
                             if ($dataNextEdit['category_id'] != $x->category_id) {
                                 $categoryCek = $x->cate->name . ' -> ' . $dataNextEdit['cate'];
                             }
@@ -665,7 +746,8 @@ class UsulanduaController extends Controller
 //                        }
 //                    }
                     $editData = array('name' => $nameCek,
-                        'kode' => $kodeCek, 'desc' => $ndescCek, 'lokasi' => $lokasiCek, 'volume' => $volumeCek, 'anggaran' => $anggaranCek, 'city_id' => $city_idCek, 'district_id' => $district_idCek,
+                        'kode' => $kodeCek, 'desc' => $ndescCek, 'lokasi' => $lokasiCek, 'volume' => $volumeCek, 'anggaran' => $anggaranCek, 'city_id' => $city_idCek,
+                        'district_id' => $district_idCek, 'village_id' => $village_idCek, 'approve_id' => $approve_idCek,
                         'category' => $categoryCek);
                 }
                 if (is_null($x->updated_at)){

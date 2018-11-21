@@ -133,6 +133,32 @@
                                               required autofocus></textarea>
                                 </div>
                             </div>
+                            <div class="row form-group has-feedback">
+                                <div class="col-md-12">
+                                    <input id="city_id" type="hidden"
+                                           class="form-control contentshow "
+                                           name="city_id"
+                                           value="{{app\user::where('city_id',Auth::user()->city_id)->first()->city_id}}"
+                                           required autofocus readonly>
+                                </div>
+                            </div>
+                            <div class="row form-group has-feedback">
+                                <div class="col-md-12">
+                                    <input id="district_id" type="hidden"
+                                           class="form-control contentshow "
+                                           name="district_id"
+                                           value="{{app\user::where('district_id',Auth::user()->district_id)->first()->district_id}}"
+                                           required autofocus readonly>
+                                </div>
+                            </div>
+                            <div class="row form-group has-feedback">
+                                <div class="col-md-12">
+                                    <input id="approve_id" type="hidden"
+                                           class="form-control contentshow "
+                                           name="approve_id" value="1"
+                                           required autofocus readonly>
+                                </div>
+                            </div>
                         </div>
 
                     </div>

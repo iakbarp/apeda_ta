@@ -159,6 +159,7 @@
                                             class="form-control contentshow"
                                             name="job_id"
                                             required autofocus>
+
                                     </select>
                                 </div>
                                 <div class="col-md-6">

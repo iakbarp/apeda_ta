@@ -25,11 +25,11 @@ class AdminController extends Controller
 
         $surat = count(mst_data::all());
         $user = count(User::all());
-        $user2 = User::orderBy('id', 'desc')->get();
+        $user2 = User::where('city_id', Auth::user()->city_id)->get();
         $user4 = User::orderBy('id', 'desc')->take(8)->get();
         $cate = trDataJobDesc::all();
         $surat2 = mst_data::all();
-        $suratfill6 = mst_data::orderBy('id','desc')->take(6)->get();
+        $suratfill6 = mst_data::where('city_id', Auth::user()->city_id)->where('approve_id', 2)->get();
         $jenis=trDataCategory::orderBy('id','desc')->take(6)->get();
         $gantijob=trRequestChangeJob::orderBy('id','desc')->take(6)->get();
 

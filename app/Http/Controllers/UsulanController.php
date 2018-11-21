@@ -37,7 +37,7 @@ class UsulanController extends Controller
         if (is_array($request->name)) {
             for ($i = 0; $i < count($request->name); $i++) {
                 mst_data::create(['name' => $request->name[$i], 'desc' => $request->desc[$i], 'lokasi' => $request->lokasi[$i], 'volume' => $request->volume[$i], 'anggaran' => $request->anggaran[$i],
-                    'city_id' => $request->city_id[$i], 'district_id' => $request->district_id[$i], 'kode' => $request->kode[$i], 'category_id' => $request->category_id[$i],
+                    'city_id' => $request->city_id[$i], 'district_id' => $request->district_id[$i], 'village_id' => $request->village_id[$i], 'approve_id' => $request->approve_id[$i], 'kode' => $request->kode[$i], 'category_id' => $request->category_id[$i],
                     'user_id' => Auth::user()->id, 'job_id' => Auth::user()->job_id, 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()]);
                 $z = 1;
                 foreach ($request->file[$i + 1] as $row) {
@@ -218,7 +218,7 @@ class UsulanController extends Controller
                     $data = mst_data::findOrFail($request->cek[$i]);
                     trDataHistori::create(['name' => $data->name,
                         'kode' => $data->kode, 'desc' => $data->desc, 'lokasi' => $data->lokasi, 'volume' => $data->volume, 'anggaran' => $data->anggaran,
-                        'city_id' => $data->city_id, 'district_id' => $data->district_id, 'user_id' => Auth::user()->id,
+                        'city_id' => $data->city_id, 'district_id' => $data->district_id, 'village_id' => $data->village_id, 'approve_id' => $data->approve_id, 'user_id' => Auth::user()->id,
                         'category_id' => $data->category_id, 'job_id' => $data->job_id, 'data_id' => $request->cek[$i]
                         , 'deletes' => 0
                         , 'edit' => 0
@@ -251,7 +251,7 @@ class UsulanController extends Controller
             if (!is_array($request->file[$i]) && /*&& !is_array($request->berkas[$i)*/
                 $request->name[$i] == $data->name &&
                 $request->kode[$i] == $data->kode && $request->desc[$i] == $data->desc && $request->lokasi[$i] == $data->lokasi && $request->volume[$i] == $data->volume && $request->anggaran[$i] == $data->anggaran &&
-                $request->city_id[$i] == $data->city_id && $request->district_id[$i] == $data->district_id && $request->category_id[$i] == $data->category_id) {
+                $request->city_id[$i] == $data->city_id && $request->district_id[$i] == $data->district_id && $request->village_id[$i] == $data->village_id && $request->approve_id[$i] == $data->approve_id && $request->category_id[$i] == $data->category_id) {
                 return response()->json(['gagal' => 0, 'ganti' => $request->name[$i], 'file' => $request->file[$i]]);
             }
         }
@@ -269,7 +269,8 @@ class UsulanController extends Controller
             $data1 = mst_data::findOrFail($request->id[$i]);
             if ($request->name[$i] != $data1->name ||
                 $request->kode[$i] != $data1->kode || $request->desc[$i] != $data1->desc || $request->lokasi[$i] != $data1->lokasi || $request->volume[$i] != $data1->volume || $request->anggaran[$i] != $data1->anggaran ||
-                $request->city_id[$i] != $data1->city_id || $request->district_id[$i] != $data1->district_id || $request->category_id[$i] != $data1->category_id) {
+                $request->city_id[$i] != $data1->city_id || $request->district_id[$i] != $data1->district_id ||
+                $request->village_id[$i] != $data1->village_id || $request->approve_id[$i] != $data1->approve_id || $request->category_id[$i] != $data1->category_id) {
                 $data21['edit'] = 1;
             }
             if (is_array($request->file)) {
@@ -289,14 +290,15 @@ class UsulanController extends Controller
 ////
             trDataHistori::create(['name' => $data1->name,
                 'kode' => $data1->kode, 'desc' => $data1->desc, 'lokasi' => $data1->lokasi, 'volume' => $data1->volume, 'anggaran' => $data1->anggaran,
-                'city_id' => $data1->city_id, 'district_id' => $data1->district_id, 'user_id' => Auth::user()->id,
+                'city_id' => $data1->city_id, 'district_id' => $data1->district_id, 'village_id' => $data1->village_id, 'approve_id' => $data1->approve_id, 'user_id' => Auth::user()->id,
                 'category_id' => $data1->category_id, 'job_id' => $data1->job_id, 'data_id' => $request->id[$i]
                 , 'deletes' => $data21['delete']
                 , 'edit' => $data21['edit']
                 , 'tambah' => $data21['tambah'], 'deldata' => 0, 'resdata' => 0
             ]);
             $data1->update(['name' => $request->name[$i], 'desc' => $request->desc[$i], 'lokasi' => $request->lokasi[$i], 'volume' => $request->volume[$i], 'anggaran' => $request->anggaran[$i], 'kode' => $request->kode[$i],
-                'city_id' => $request->city_id[$i], 'district_id' => $request->district_id[$i], 'category_id' => $request->category_id[$i]]);
+                'city_id' => $request->city_id[$i], 'district_id' => $request->district_id[$i],
+                'village_id' => $request->village_id[$i], 'approve_id' => $request->approve_id[$i], 'category_id' => $request->category_id[$i]]);
         }
         return response()->json($data21);
     }
@@ -307,7 +309,7 @@ class UsulanController extends Controller
         $data = mst_data::findOrFail($id);
         trDataHistori::create(['name' => $data->name,
             'kode' => $data->kode, 'desc' => $data->desc, 'lokasi' => $data->lokasi, 'volume' => $data->volume, 'anggaran' => $data->anggaran,
-            'city_id' => Auth::user()->city_id, 'district_id' => Auth::user()->district_id,'user_id' => Auth::user()->id,
+            'city_id' => Auth::user()->city_id, 'district_id' => Auth::user()->district_id, 'village_id' => Auth::user()->village_id, 'approve_id' => $data->approve_id, 'user_id' => Auth::user()->id,
             'category_id' => $data->category_id, 'job_id' => $data->job_id, 'data_id' => $id
             , 'deletes' => 0
             , 'edit' => 0
@@ -325,6 +327,7 @@ class UsulanController extends Controller
         $data = mst_data::onlyTrashed()->findOrFail($id);
         trDataHistori::create(['name' => $data->name,
             'kode' => $data->kode, 'desc' => $data->desc, 'lokasi' => $data->lokasi, 'volume' => $data->volume, 'anggaran' => $data->anggaran, 'user_id' => Auth::user()->id, 'city_id' => Auth::user()->city_id, 'district_id' => Auth::user()->district_id,
+            'village_id' => Auth::user()->village_id, 'approve_id' => $data->approve_id,
             'category_id' => $data->category_id, 'job_id' => $data->job_id, 'data_id' => $id
             , 'deletes' => 0
             , 'edit' => 0
@@ -480,7 +483,13 @@ class UsulanController extends Controller
                     $editan[$j++] = array('name' => 'Kota', 'lama' => $data1[$i]['city_id'], 'baru' => $data1[$i + 1]['city_id']);
                 }
                 if ($data1[$i]['district_id'] !== $data1[$i + 1]['district_id']) {
-                    $editan[$j++] = array('name' => 'Anggaran', 'lama' => $data1[$i]['district_id'], 'baru' => $data1[$i + 1]['district_id']);
+                    $editan[$j++] = array('name' => 'Kecamatan', 'lama' => $data1[$i]['district_id'], 'baru' => $data1[$i + 1]['district_id']);
+                }
+                if ($data1[$i]['village_id'] !== $data1[$i + 1]['village_id']) {
+                    $editan[$j++] = array('name' => 'Kecamatan', 'lama' => $data1[$i]['village_id'], 'baru' => $data1[$i + 1]['village_id']);
+                }
+                if ($data1[$i]['approve_id'] !== $data1[$i + 1]['approve_id']) {
+                    $editan[$j++] = array('name' => 'Setuju', 'lama' => $data1[$i]['approve_id'], 'baru' => $data1[$i + 1]['approve_id']);
                 }
                 $data1[$i]['editan'] = $editan;
             }

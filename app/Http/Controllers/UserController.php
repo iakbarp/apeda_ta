@@ -58,6 +58,7 @@ class UserController extends Controller
         $data1->tgl_lahir = $request->tgl_lahir;
         $data1->email = $request->email;
         $data1->phone = $request->phone;
+        $data1->ava = $request->ava;
         if (!is_null($request->password)) {
             $data1['password'] = Hash::make($request->password);
         }
@@ -87,18 +88,18 @@ class UserController extends Controller
         $data['posisition_idreq'] = $request->posisition_id;
         $data['posisition'] = trDataPosisition::where('job_id', $job)->get();
 //
-//        $data['file2'] = '';
-//        if ($request->hasFile('ava')) {
-//            $rand = rand(111, 999);
-//            $name = Carbon::now()->format('dmy') . $rand . str_random(8) . rand(0, 9);
-//            $filename = 'user/'
-//                . str_slug($name, '-') . '.' . $request->ava->getClientOriginalExtension();
-//            $request->ava->storeAs('public', $filename);
-//            if (!is_null($data1->ava)) {
-//                Storage::delete('public/' . substr($data1->ava, 8));
-//            }
-//            $data1->ava = $data['file2'] = 'storage/' . $filename;
-//        }
+        $data['file2'] = '';
+        if ($request->hasFile('ava')) {
+            $rand = rand(111, 999);
+            $name = Carbon::now()->format('dmy') . $rand . str_random(8) . rand(0, 9);
+            $filename = 'user/'
+                . str_slug($name, '-') . '.' . $request->ava->getClientOriginalExtension();
+            $request->ava->storeAs('public', $filename);
+            if (!is_null($data1->ava)) {
+                Storage::delete('public/' . substr($data1->ava, 8));
+            }
+            $data1->ava = $data['file2'] = 'storage/' . $filename;
+        }
         $data1->update();
 //        Session::put('jobupdate',1);
 //

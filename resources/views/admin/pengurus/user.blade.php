@@ -281,11 +281,11 @@
     </style>
     {{--sweetalert modify icon--}}
     <style>
-{{--        {{asset('images/loadingstyle/loadingimg.gif')}}--}}
+        {{--        {{asset('images/loadingstyle/loadingimg.gif')}}--}}
         .swal-wide{
-    width:850px !important;
-    height:400px !important;
-}
+            width: 850px !important;
+            height: 400px !important;
+        }
     </style>
     <script src="{{asset('bower_components/jquery/dist/jquery.min.js')}}"></script>
 @endsection
@@ -993,21 +993,21 @@
                                                     <p><em style="font-size: 14px">Isi Formulir Untuk Menambah
                                                             Pengguna</em></p>
                                                     {{--<div class="box-tools">--}}
-                                                        {{--<div class="input-group input-group-sm"--}}
-                                                             {{--style="width: 150px;">--}}
-                                                            {{--<select placeholder="jumlah" id="jumlah"--}}
-                                                                    {{--class="form-control pull-right"--}}
-                                                                    {{--name="jumlah">--}}
-                                                                {{--@for($i=1;$i<=5;$i++)--}}
-                                                                    {{--@if($i==1)--}}
-                                                                        {{--<option value="{{$i}}" selected> {{$i}} Data--}}
-                                                                        {{--</option>--}}
-                                                                    {{--@else--}}
-                                                                        {{--<option value="{{$i}}"> {{$i}} Data</option>--}}
-                                                                    {{--@endif--}}
-                                                                {{--@endfor--}}
-                                                            {{--</select>--}}
-                                                        {{--</div>--}}
+                                                    {{--<div class="input-group input-group-sm"--}}
+                                                    {{--style="width: 150px;">--}}
+                                                    {{--<select placeholder="jumlah" id="jumlah"--}}
+                                                    {{--class="form-control pull-right"--}}
+                                                    {{--name="jumlah">--}}
+                                                    {{--@for($i=1;$i<=5;$i++)--}}
+                                                    {{--@if($i==1)--}}
+                                                    {{--<option value="{{$i}}" selected> {{$i}} Data--}}
+                                                    {{--</option>--}}
+                                                    {{--@else--}}
+                                                    {{--<option value="{{$i}}"> {{$i}} Data</option>--}}
+                                                    {{--@endif--}}
+                                                    {{--@endfor--}}
+                                                    {{--</select>--}}
+                                                    {{--</div>--}}
                                                     {{--</div>--}}
                                                 </div>
                                                 <br>
@@ -1064,15 +1064,20 @@
                                                                 </div>
                                                                 <div class="col-md-2">
 
-                                                                        @foreach(\App\trDataPosisition::find($id=['3']) as $row)
-                                                                            <input id="posisition_id[]" type="hidden" class="form-control opsi jabatan" name="posisition_id[]" value="{{$row->id}}" readonly>
-                                                                        @endforeach
+                                                                    @foreach(\App\trDataPosisition::find($id=['3']) as $row)
+                                                                        <input id="posisition_id[]" type="hidden"
+                                                                               class="form-control opsi jabatan"
+                                                                               name="posisition_id[]"
+                                                                               value="{{$row->id}}" readonly>
+                                                                    @endforeach
 
                                                                 </div>
                                                                 <div class="col-md-2">
-                                                                        @foreach(\App\status::find($id=['3']) as $row)
-                                                                            <input id="role_id[]" type="hidden" class="form-control" name="role_id[]" value="{{$row->id}}" readonly>
-                                                                        @endforeach
+                                                                    @foreach(\App\status::find($id=['3']) as $row)
+                                                                        <input id="role_id[]" type="hidden"
+                                                                               class="form-control" name="role_id[]"
+                                                                               value="{{$row->id}}" readonly>
+                                                                    @endforeach
                                                                 </div>
                                                                 <div class="col-md-2">
                                                                     @foreach(app\user::where('city_id',Auth::user()->city_id)->get() as $row)

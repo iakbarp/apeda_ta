@@ -13,6 +13,7 @@ use App\trDataPosisition;
 use App\trRequestChangeJob;
 use App\User;
 use App\district;
+use App\village;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
@@ -62,6 +63,12 @@ class AdminTableUserController extends Controller
     public function getPosisition(Request $request)
     {
         $data = trDataPosisition::where('job_id', $request->id)->get();
+        return response()->json($data);
+    }
+
+    public function getVillage(Request $request)
+    {
+        $data = village::where('district_id', $request->id)->get();
         return response()->json($data);
     }
 
@@ -296,7 +303,7 @@ class AdminTableUserController extends Controller
             $kurva = $cek;
         }
         $data = ['email' => $r->email[$x],
-            'subject' => "akun re:eBerkas",
+            'subject' => "akun APEDA",
             'name' => $r->name[$x],
             'kurva' => $kurva,
             'nik' => $r->nik[$x],
@@ -413,7 +420,7 @@ class AdminTableUserController extends Controller
                     $kurva = $cek;
                 }
                 $data2[] = array('password' => $pss,
-                    'subject' => "akun re:eBerkas",
+                    'subject' => "akun APEDA",
                     'name' => $data->name,
                     'email' => $data->email,
                     'kurva' => $kurva,
@@ -436,7 +443,7 @@ class AdminTableUserController extends Controller
                 $kurva = $cek;
             }
             $data2 = array('password' => $pss,
-                'subject' => "akun re:eBerkas",
+                'subject' => "akun APEDA",
                 'name' => $data->name,
                 'email' => $data->email,
                 'kurva' => $kurva,

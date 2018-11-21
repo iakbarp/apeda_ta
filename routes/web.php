@@ -49,6 +49,26 @@ Route::group(['middleware' => ['auth']], function () {
     Route::group(['prefix' => 'profile'], function () {
         Route::get('/', 'profileController@index')->name('profile');
     });
+
+    Route::group(['prefix' => 'TambahDesa'], function () {
+        Route::get('/', 'DesaController@index')->name('user.desa.table.user');
+        Route::get('{users}', 'DesaController@index')->name('user.desa.table.user');
+        Route::group(['prefix' => 'user'], function () {
+            Route::get('/', 'DesaController@index')->name('user.desa.table.user');
+            Route::get('/api', 'DesaController@apiUser')->name('user.desa.table.user.api');
+            Route::get('/getPosisition', 'DesaController@getPosisition')->name('user.desa.table.user.getPosisition');
+            Route::get('/api-penghuni', 'DesaController@apiPenghuni')->name('user.desa.table.penghuni.api');
+            Route::get('/api-histori', 'DesaController@apiPenghunihistori')->name('user.desa.table.penghuni.histori');
+            Route::get('/lihat', 'DesaController@lihat')->name('user.desa.table.pengguna.lihat');
+            Route::get('/cekhapus', 'DesaController@cekhapus')->name('user.desa.table.pengguna.cekhapus');
+            Route::get('/hapus', 'DesaController@hapus')->name('user.desa.table.pengguna.hapus');
+            Route::get('/ceknik', 'DesaController@ceknik')->name('user.desa.table.pengguna.ceknik');
+            Route::post('/edit', 'DesaController@edit')->name('user.desa.table.pengguna.edit');
+            Route::post('/storesuratplus', 'DesaController@storesuratplus')->name('user.desa.table.pengguna.storesuratplus');
+            Route::get('/resend', 'DesaController@resend')->name('user.desa.table.pengguna.resend');
+        });
+    });
+
     Route::group(['prefix' => 'admin', 'middleware' => ['admin']], function () {
         Route::get('/', 'AdminController@index')->name('admin.dashboard');
         Route::get('dataget', 'AdminController@dataget')->name('admin.dataget');
@@ -73,6 +93,7 @@ Route::group(['middleware' => ['auth']], function () {
                 Route::get('/', 'AdminTableUserController@index')->name('admin.table.user');
                 Route::get('/api', 'AdminTableUserController@apiUser')->name('admin.table.user.api');
                 Route::get('/getPosisition', 'AdminTableUserController@getPosisition')->name('admin.table.user.getPosisition');
+                Route::get('/getVillage', 'AdminTableUserController@getVillage')->name('admin.table.user.getVillage');
                 Route::get('/api-penghuni', 'AdminTableLetterController@apiPenghuni')->name('admin.table.penghuni.api');
                 Route::get('/api-histori', 'AdminTableLetterController@apiPenghunihistori')->name('admin.table.penghuni.histori');
                 Route::get('/lihat', 'AdminTableUserController@lihat')->name('admin.table.pengguna.lihat');

@@ -37,7 +37,7 @@
             <div class="row animate-box">
                 <ul class="nav nav-tabs">
                     @foreach(\App\trDataJobDesc::find($id=['3']) as $row)
-                        @if($row->name=='SKPD')
+                        @if($row->name=='PMD')
                             <li class="active"><a data-toggle="tab" href="#{{$row->id}}"
                                                   title="Klik tab untuk melihat {{$row->desc}}">{{$row->name}}</a></li>
                         @else
@@ -49,7 +49,7 @@
                 </ul>
                 <div class="tab-content" style="margin-top: 1em">
                     @foreach(\App\trDataJobDesc::find($id=['3']) as $row)
-                        @if($row->name=='SKPD')
+                        @if($row->name=='PMD')
                             <div id="{{$row->id}}" class="tab-pane fade in active text-center"><br>
                                 @else
                                     <div id="{{$row->id}}" class="tab-pane text-center animate-box"

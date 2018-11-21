@@ -11,18 +11,14 @@
             <a href="#" class="" id="userfill"><span>Menu</span></a>
             <ul class="dropdown">
                 <li><a href="{{url('FormUsulan')}}"><i
-                                class="fa fa-edit"></i> RKP</a></li>
+                                class="fa fa-edit"></i> RKP & RPJMD</a></li>
+                @if ($user->role_id==3)
                 <li>
-                    <a href="{{ route('logout') }}"
-                       onclick="event.preventDefault();document.getElementById('logout-form').submit();">
-                        <i class="fa fa-sign-out"></i> RPJMD
+                    <a href="{{ url('TambahDesa') }}">
+                        <i class="fa fa-user"></i> Tambah Desa
                     </a>
-
-                    <form id="logout-form" action="{{ route('logout') }}" method="POST"
-                          style="display: none;">
-                        {{ csrf_field() }}
-                    </form>
                 </li>
+                @endif
             </ul>
         </li>
     @endif

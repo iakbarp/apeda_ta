@@ -1568,7 +1568,6 @@
                 }
             });
         }
-
         function kirimData(e) {
             $showRole = $(e).data("role");
             $showMetode = $(e).data("method");
@@ -1660,7 +1659,6 @@
                 $('#modal-form-see .hapussurat').attr('data-method', 2);
             }
         }
-
         function loadShow2(e) {
             $('#modal-form-see2 form')[0].reset();
             $('#modal-form-see2 #kode').val(e.kode);

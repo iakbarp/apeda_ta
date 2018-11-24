@@ -1,8 +1,13 @@
 @extends('layouts.user.mst_user_relog')
 @section('title', 'Aplikasi Pembangunan Daerah ')
 @section('nav')
-    <li><a href="{{url('login')}}">Login</a></li>
-    <li><a href="{{url('register')}}">Register</a></li>
+    <li class="has-dropdown">
+        <a href="#" class="" id="userfill"><span>Daftar / Masuk</span></a>
+        <ul class="dropdown">
+            <li><a href="{{url('login')}}">Login</a></li>
+            <li><a href="{{url('register')}}">Register</a></li>
+        </ul>
+    </li>
 @endsection
 @section('content')
     <div class="fh5co-loader"></div>

@@ -68,7 +68,7 @@ class UsulanduaController extends Controller
     private function findData($id, $index, $skip, $next, $search,$pagi)
     {
         $this->getLocation();
-        $label = mst_data::where('job_id', Auth::user()->job_id);
+        $label = mst_data::where('village_id', Auth::user()->village_id);
         if (is_null($id)) {
             if ($index == 2) {
                 $data = $label->orderBy('id', 'desc')->get();

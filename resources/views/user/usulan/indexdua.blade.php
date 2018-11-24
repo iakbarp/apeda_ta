@@ -863,6 +863,27 @@
                             $.each(value.relation, function (key2, value2) {
                                 $filesurat += '<li><a href="{!!URL::to('/')!!}/' + value2.url + '" target="_blank">' + value2.name + '</a></li>\n';
                             });
+                            var approve_id = '', $style, $style2;
+                            if (value.approve_id == 1) {
+                                approve_id = 'Belum dilaporkan';
+                                $style = 'block';
+                                $style2 = 'none';
+
+                            } else if (value.approve_id == 2) {
+                                approve_id = 'Pending Kecamatan';
+                                $style = 'none';
+                                $style2 = 'block';
+
+                            } else if (value.approve_id == 3) {
+                                approve_id = 'Pending Kabupaten';
+                                $style = 'none';
+                                $style2 = 'none';
+
+                            } else if (value.approve_id == 4) {
+                                approve_id = 'Laporan disetujui';
+                                $style = 'none';
+                                $style2 = 'none';
+                            }
                             $opsimenu = '<td>' +
                                 '<div class="btn-group">\n' +
                                 '        <button type="button" class="btn btn-primary" href="javascript:void(0)" data-id="' + value.id + '" data-role="lihat" data-method="1" onclick="showForm(this)">Lihat</button>\n' +
@@ -874,13 +895,17 @@
                                 '        <ul class="dropdown-menu">\n' +
                                 '            <li><a data-id="' + value.id + '" data-method="1" href="javascript:void(0)" data-role="edit" onclick="showForm(this)">Ubah</a></li>\n' +
                                 '            <li><a data-id="' + value.id + '" data-method="1" href="javascript:void(0)" onclick="deleteData(this)">Hapus</a></li>\n' +
-                                // '            <li><a data-id="' + value.id + '" data-method="1" href="javascript:void(0)" data-role="kirim" onclick="kirimData(this)">Kirim</a></li>\n' +
+                                '@if ($user->role_id==4)' +
+                                '            <li style="display: ' + $style + '"><a href="javascript:void(0)" data-id="' + value.id + '" data-role="kirim" data-method="1" onclick="kirimData(this)">Kirim</a></li>\n' +
+                                '@elseif ($user->role_id==3)' +
+                                '            <li style="display: ' + $style2 + '"><a href="javascript:void(0)" data-id="' + value.id + '" data-role="kirim" data-method="1" onclick="kirimData(this)">Kirim</a></li>\n' +
+                                '@endif' +
                                 '            <li role="separator" class="divider"></li>\n' +
                                 '            \n' + $filesurat +
                                 '            \n' +
                                 '        </ul>\n' +
                                 '    </div>' +
-                                '        <button type="button" class="btn btn-primary" href="javascript:void(0)" data-id="' + value.id + '" data-role="kirim" data-method="1" onclick="kirimData(this)">Kirim</button>\n' +
+                                // '        <button type="button" class="btn btn-primary" href="javascript:void(0)" data-id="' + value.id + '" data-role="kirim" data-method="1" onclick="kirimData(this)">Kirim</button>\n' +
                                 '<br>' +
                                 '</td>';
                             $opsimenu2 = '<td>' +
@@ -914,19 +939,6 @@
                                 $replace = '<td> ' + value.category + ' </td>' +
                                     '<td> <a href="javascript:void(0)" onclick="showUser(' + value.user_id + ')">' + value.user + '</a> </td>' +
                                     '<td> ' + value.date + ' </td>' + $opsimenu;
-                            }
-                            var approve_id = '';
-                            if (value.approve_id == 1) {
-                                approve_id = 'Belum dilaporkan';
-
-                            } else if (value.approve_id == 2) {
-                                approve_id = 'Pending Kecamatan';
-
-                            } else if (value.approve_id == 3) {
-                                approve_id = 'Pending Kabupaten';
-
-                            } else if (value.approve_id == 4) {
-                                approve_id = 'Laporan disetujui';
                             }
                             $loopsurat += '<tr>' +
                                 '<td>' +

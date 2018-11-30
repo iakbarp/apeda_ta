@@ -38,13 +38,12 @@ Route::get('405',['as'=>'405','uses'=>'ErrorHandlerController@errorCode405']);
 //    } else
 //        return redirect(url('home'));
 //});
+
 Route::group(['middleware' => ['auth']], function () {
     Route::group(['prefix' => 'api'], function () {
         Route::get('mst/data2', 'UsulanController@apiData2')->name('api.mst.data2');
         Route::get('mst/data3', 'UsulanController@apiData3')->name('api.mst.data3');
         Route::get('mst/data', 'UsulanController@apiData')->name('api.mst.data4');
-
-
     });
     Route::group(['prefix' => 'profile'], function () {
         Route::get('/', 'profileController@index')->name('profile');
@@ -81,12 +80,35 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('carouseladd', 'AdminController@carouseladd')->name('admin.carouseladd');
         Route::post('carouseledit', 'AdminController@carouseledit')->name('admin.carouseledit');
         Route::get('carouseldelete', 'AdminController@carouseldelete')->name('admin.carouseldelete');
+        Route::group(['prefix' => 'cities'], function () {
+            // Route::get('', 'AdminCityController@index')->name('admin.city.index');
+            // Route::get('create', 'AdminCityController@create')->name('admin.city.create');
+            // Route::post('create', 'AdminCityController@store')->name('admin.city.store');
+            Route::get('{id}/change', 'AdminCityController@change')->name('admin.city.change');
+            Route::post('{id}/change', 'AdminCityController@update')->name('admin.city.update');
+            // Route::get('{id}/delete', 'AdminCityController@delete')->name('admin.city.delete');
+        });
         Route::group(['prefix' => 'request'], function () {
             Route::get('/', 'AdminTableManageController@index')->name('admin.request.index');
             Route::get('/apiData', 'AdminTableManageController@apiData')->name('admin.request.apiData');
             Route::get('/accept', 'AdminTableManageController@accept')->name('admin.request.accept');
             Route::get('/deny', 'AdminTableManageController@deny')->name('admin.request.deny');
+//            Route::get('/', 'UsulanduaController@index')->name('usulan.index');
+//        Route::post('save', 'eBerkasController@store')->name('eberkas.store');
+
+            Route::post('/save', 'AdminTableManageController@store')->name('admin.request.store');
+            Route::get('/apiusulan', 'AdminTableManageController@api')->name('admin.request.api');
+            Route::get('/jumlah', 'AdminUsulanduaController@jumlah')->name('admin.request.jumlah');
+            Route::get('/show', 'AdminTableManageController@edit')->name('admin.request.show');
+            Route::get('/delete', 'AdminTableManageController@destroy')->name('admin.request.delete');
+            Route::get('/deleteperm', 'AdminUsulanduaController@deleteperm')->name('admin.request.deleteperm');
+            Route::get('/restore', 'AdminTableManageController@restore')->name('admin.request.restore');
+            Route::get('/history', 'AdminTableManageController@history')->name('admin.request.history');
+            Route::post('/cek', 'AdminUsulanduaController@cek')->name('admin.request.cek');
+            Route::post('/update', 'AdminTableManageController@update')->name('admin.request.update');
+            Route::post('/multiupdate', 'AdminTableManageController@multiupdate')->name('admin.request.multiupdate');
         });
+
         Route::group(['prefix' => 'table'], function () {
             Route::get('{users}', 'AdminTableUserController@index')->name('admin.table.user');
             Route::group(['prefix' => 'user'], function () {

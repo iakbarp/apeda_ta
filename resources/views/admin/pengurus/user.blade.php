@@ -11,6 +11,12 @@
                 </span>
             </a>
         </li>
+        <li class="">
+            <a href="{{route('admin.city.change', Auth::user()->city_id)}}">
+                <i class="fa fa-file-text"></i> <span>Kota/Kabupaten</span>
+                </span>
+            </a>
+        </li>
         <li>
             <a href="{{route('admin.request.index')}}">
                 <i class="fa fa-file-text"></i> <span>Permintaan</span>

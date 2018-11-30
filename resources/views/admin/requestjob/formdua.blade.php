@@ -164,7 +164,7 @@
                                 <div class="col-md-12">
                                     <input id="approve_id" type="hidden"
                                            class="form-control contentshow "
-                                           name="approve_id" value="1"
+                                           name="approve_id" value="3"
                                            required autofocus readonly>
                                 </div>
                             </div>
@@ -191,7 +191,8 @@
         </div>
     </div>
 </div>
-<div class="modal animate-box" id="modal-form-multiple" tabindex="1" role="dialog" aria-hidden="true" data-backdrop="static">
+<div class="modal animate-box" id="modal-form-multiple" tabindex="1" role="dialog" aria-hidden="true"
+     data-backdrop="static">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <form method="post" class="form-horizontal">
@@ -278,7 +279,8 @@
         </div>
     </div>
 </div>
-<div class="modal animate-box" id="modal-form-spoiler" tabindex="1" role="dialog" aria-hidden="true" data-backdrop="static">
+<div class="modal animate-box" id="modal-form-spoiler" tabindex="1" role="dialog" aria-hidden="true"
+     data-backdrop="static">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <form method="post" class="form-horizontal">
@@ -371,31 +373,31 @@
                                         </div>
                                     </div>
                                     {{--<div class="set">--}}
-                                        {{--<a href="#">--}}
-                                            {{--Phasellus--}}
-                                            {{--<i class="fa fa-plus"></i>--}}
-                                        {{--</a>--}}
-                                        {{--<div class="content">--}}
-                                            {{--<p> Aliquam cursus vitae nulla non rhoncus. Nunc condimentum erat nec dictum tempus. Suspendisse aliquam erat hendrerit vehicula vestibulum.</p>--}}
-                                        {{--</div>--}}
+                                    {{--<a href="#">--}}
+                                    {{--Phasellus--}}
+                                    {{--<i class="fa fa-plus"></i>--}}
+                                    {{--</a>--}}
+                                    {{--<div class="content">--}}
+                                    {{--<p> Aliquam cursus vitae nulla non rhoncus. Nunc condimentum erat nec dictum tempus. Suspendisse aliquam erat hendrerit vehicula vestibulum.</p>--}}
+                                    {{--</div>--}}
                                     {{--</div>--}}
                                     {{--<div class="set">--}}
-                                        {{--<a href="#">--}}
-                                            {{--Praesent--}}
-                                            {{--<i class="fa fa-plus"></i>--}}
-                                        {{--</a>--}}
-                                        {{--<div class="content">--}}
-                                            {{--<p>Pellentesque aliquam ligula libero, vitae imperdiet diam porta vitae. sed do eiusmod tempor incididunt ut labore et dolore magna.</p>--}}
-                                        {{--</div>--}}
+                                    {{--<a href="#">--}}
+                                    {{--Praesent--}}
+                                    {{--<i class="fa fa-plus"></i>--}}
+                                    {{--</a>--}}
+                                    {{--<div class="content">--}}
+                                    {{--<p>Pellentesque aliquam ligula libero, vitae imperdiet diam porta vitae. sed do eiusmod tempor incididunt ut labore et dolore magna.</p>--}}
+                                    {{--</div>--}}
                                     {{--</div>--}}
                                     {{--<div class="set">--}}
-                                        {{--<a href="#">--}}
-                                            {{--Curabitur--}}
-                                            {{--<i class="fa fa-plus"></i>--}}
-                                        {{--</a>--}}
-                                        {{--<div class="content">--}}
-                                            {{--<p> Donec tincidunt consectetur orci at dignissim. Proin auctor aliquam justo, vitae luctus odio pretium scelerisque. </p>--}}
-                                        {{--</div>--}}
+                                    {{--<a href="#">--}}
+                                    {{--Curabitur--}}
+                                    {{--<i class="fa fa-plus"></i>--}}
+                                    {{--</a>--}}
+                                    {{--<div class="content">--}}
+                                    {{--<p> Donec tincidunt consectetur orci at dignissim. Proin auctor aliquam justo, vitae luctus odio pretium scelerisque. </p>--}}
+                                    {{--</div>--}}
                                     {{--</div>--}}
                                 </div>
                             </div>

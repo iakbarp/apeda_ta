@@ -29,7 +29,7 @@ class AdminController extends Controller
         $user4 = User::orderBy('id', 'desc')->take(8)->get();
         $cate = trDataJobDesc::all();
         $surat2 = mst_data::all();
-        $suratfill6 = mst_data::where('city_id', Auth::user()->city_id)->where('approve_id', 2)->get();
+        $suratfill6 = mst_data::where('city_id', Auth::user()->city_id)->whereIn('approve_id', [3, 4])->get();
         $jenis=trDataCategory::orderBy('id','desc')->take(6)->get();
         $gantijob=trRequestChangeJob::orderBy('id','desc')->take(6)->get();
 

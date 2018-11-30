@@ -73,11 +73,15 @@
 
     <ul class="sidebar-menu" data-widget="tree">
         <li class="header">Navigasi Admin</li>
-
-
         <li class="active">
             <a href="{{route('admin.dashboard')}}">
                 <i class="fa fa-dashboard"></i> <span>Dashboard</span>
+                </span>
+            </a>
+        </li>
+        <li class="">
+            <a href="{{route('admin.city.change', Auth::user()->city_id)}}">
+                <i class="fa fa-file-text"></i> <span>Kota/Kabupaten</span>
                 </span>
             </a>
         </li>

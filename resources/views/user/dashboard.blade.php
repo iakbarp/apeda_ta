@@ -93,7 +93,9 @@
             <div class="row animate-box">
                 <div class="col-md-8 col-md-offset-2 text-center fh5co-heading">
                     <h2>APEDA</h2>
-                    <p> APEDA merupakan Aplikasi Usulan Perencanaan Pembangunan Daerah yang menjembatani Satuan Kerja Pembangunan Daerah (SKPD) yang berdomisili di Kecamatan dengan Badan Perencanaan Pembangunan Daerah (BAPPEDA) yang berdomisili di Kota/Kabupaten dalam hal usulan perencanaan pembangunan daerah. </p>
+                    <p> APEDA merupakan Aplikasi Usulan Perencanaan Pembangunan Desa yang menjembatani Desa, Kecamatan
+                        dan Badan Perencanaan Pembangunan Daerah (BAPPEDA) yang berdomisili di Kota/Kabupaten dalam hal
+                        usulan perencanaan pembangunan desa. </p>
                 </div>
             </div>
             <div class="row">
@@ -105,7 +107,7 @@
                             </span>
                             <div class="desc">
                                 <h3><a href="{{url('usulan#fh5co-eberkas')}}">Form Usulan</a></h3>
-                                <p>Aplikasi E:Berkas bertujuan memudahkan anda selaku karyawan di KPP Madya Surabaya dalam penyimpanan Berkas secara tersistem.</p>
+                                <p>Lorem Ipsum.</p>
                             </div>
                         </div>
                     </a>
@@ -118,7 +120,7 @@
                             </span>
                             <div class="desc">
                                 <h3><a href="{{url('employes#fh5co-about')}}">Daftar Pegawai</a></h3>
-                                <p>Aplikasi ini juga dilengkapi dengan halaman yang berisikan daftar pegawai dari masing-masing seksi. </p>
+                                <p>Lorem Ipsum. </p>
                             </div>
                         </div>
                     </a>
@@ -131,7 +133,7 @@
                             </span>
                             <div class="desc">
                                 <h3><a href="{{--{{route('hama.dashboard')}}--}}">Profile</a></h3>
-                                <p>Terdapat juga halaman yang menjelaskan profl kantor pelayanan pajak madya Surabaya lengkap dari visi-misi hingga video profil.</p>
+                                <p>Lorem Ipsum.</p>
                             </div>
                         </div>
                     </a>

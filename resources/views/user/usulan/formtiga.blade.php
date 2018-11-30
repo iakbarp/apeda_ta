@@ -150,12 +150,32 @@
                             </div>
                             <div class="row form-group has-feedback">
                                 <div class="col-md-12">
-                                    <input id="approve_id" type="hidden"
+                                    <input id="village_id" type="hidden"
+                                           class="form-control contentshow "
+                                           name="village_id"
+                                           value="{{app\user::where('village_id',Auth::user()->village_id)->first()->village_id}}"
+                                           required autofocus readonly>
+                                </div>
+                            </div>
+                            @if ($user->role_id==4)
+                                <div class="row form-group has-feedback">
+                                    <div class="col-md-12">
+                                        <input id="approve_id" type="text"
                                            class="form-control contentshow "
                                            name="approve_id" value="2"
                                            required autofocus readonly>
                                 </div>
                             </div>
+                            @elseif ($user->role_id==3)
+                                <div class="row form-group has-feedback">
+                                    <div class="col-md-12">
+                                        <input id="approve_id" type="text"
+                                               class="form-control contentshow "
+                                               name="approve_id" value="3"
+                                               required autofocus readonly>
+                                    </div>
+                                </div>
+                            @endif
                         </div>
 
                     </div>

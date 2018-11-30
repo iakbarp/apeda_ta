@@ -38,10 +38,15 @@
     <link rel="stylesheet" href="{{asset('plugins/datatables/dataTables.bootstrap.css')}}">
 
 
-    <script src="{{ asset('sweetalert2/sweetalert2.min.js') }}"></script>
-    <link rel="stylesheet" href="{{ asset('/sweetalert2/sweetalert2.min.css') }}">
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <script src="{{asset('js/respond.min.js')}}"></script>
+    <script src="{{asset('js/modernizr-2.6.2.min.js')}}"></script>
+    <![endif]-->
+
+    <script src="{{ asset('sweetalert2/baru/sweetalert2.all.js') }}"></script>
+    <script src="{{ asset('sweetalert2/baru/core.js') }}"></script>
+    {{--<link rel="stylesheet" href="{{ asset('/sweetalert2/sweetalert2.min.css') }}">--}}
+    <script src="{{ asset('js/bootstrap.js') }}"></script>
+
     <!--[if lt IE 9]>
     <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>

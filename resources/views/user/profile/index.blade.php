@@ -5,7 +5,7 @@
     <li class="active"><a href="{{url('profile')}}">Profil Aplikasi</a></li>
     <li><a href="{{url('employes')}}">Daftar Kecamatan</a></li>
     @if ($user->role_id==2)
-        <li><a href="{{url('bappeda')}}">Halaman Admin</a></li>
+        <li><a href="{{url('admin')}}">Halaman Admin</a></li>
     @else
         <li><a href="{{url('FormUsulan')}}">RKP</a></li>
     @endif
@@ -14,14 +14,14 @@
     <aside id="fh5co-hero" class="js-fullheight">
         <div class="flexslider js-fullheight">
             <ul class="slides">
-                <li style="background-image: url({{asset('images/about.jpeg')}});">
+                <li style="background-image: url({{asset((!empty($city->photo) && $city->photo != NULL) ? 'storage/' . $city->photo : 'images/about.jpeg')}});">
                     <div class="overlay-gradient"></div>
                     <div class="container">
                         <div class="row">
                             <div class="col-md-8 col-md-offset-2 text-center js-fullheight slider-text">
                                 <div class="slider-text-inner">
                                     <h1>Aplikasi Usulan Pembangunan Daerah</h1>
-                                    <p class="fh5co-lead">Deskripsi Aplikasi</p>
+                                    <p class="fh5co-lead">{{ isset($city->description)?$city->description:'Data Belum Diisi' }}</p>
                                 </div>
                             </div>
                         </div>
@@ -33,38 +33,18 @@
     <br>
     <div id="fh5co-content">
 
-        <div class="video fh5co-video" style="background-image: url({{asset('images/video.jpg')}}) ; size: 100px">
-            <a href="https://www.youtube.com/watch?v=kee98xLA_OQ" class="popup-youtube"><i class="icon-video2"></i></a>
+        <div class="video fh5co-video"
+             style="background-image: url({{asset((!empty($city->youtube) && $city->youtube != NULL) ? 'http://img.youtube.com/vi/' . $city->youtube . '/0.jpg' : 'images/video.jpg')}}) ; size: 100px">
+            <a href="{{ (!empty($city->youtube) && $city->youtube != NULL) ? 'https://www.youtube.com/watch?v=' . $city->youtube : 'https://www.youtube.com/watch?v=kee98xLA_OQ' }}"
+               class="popup-youtube"><i class="icon-video2"></i></a>
             <div class="overlay"></div>
         </div>
         <div class="choose animate-box">
             <div class="fh5co-heading">
                 <h2>Visi Pembangunan Daerah (BAPPEDA)</h2>
-                <p style="text-align: justify">Untuk melaksanakan wewenang dan tanggung jawab tersebut serta berkaitan dengan tugas pokok Badan Perencanaan Pembangunan (BAPPEDA), maka ditetapkan visi :</p>
-                <ol>
-                    <li>
-                        Perencanaan Pembangunan Daerah yang Partisipatif;
-                    </li>
-                    <li>
-                        Perencanaan Pembangunan Daerah yang Profesionalis;
-                    </li>
-                    <li>
-                        Perencanaan Pembangunan Daerah yang Inovatif;
-                    </li>
-                    <li>
-                        Perencanaan Pembangunan Daerah yang Bertanggungjawab.
-                    </li>
-                </ol>
-
+                <p style="text-align: justify">{{ isset($city->vision)?$city->vision:'Data Belum Diisi' }}</p>
                 <h2>Misi Pembangunan Daerah (BAPPEDA)</h2>
-                <p>Berikut merupkan Misi pembangunan daerah yang telah umum ditetapkan oleh Badan Pembangunan Daerah :</p>
-                <ol>
-                    <li>Meningkatkan Kapasitas Kelembagaan dan Profesionalisme Sumber Daya Manusia;
-                    </li>
-                    <li>Memantapkan Penyelenggaraan Sistem Perencanaan Pembangunan Daerah yang partisipatif dan inovatif;</li>
-                    <li>Melakukan Pendataan, Pengendalian, Monitoring dan Evaluasi serta Pelaporan Pelaksanaan Pembangunan Daerah.</li>
-                </ol>
-
+                <p style="text-align: justify">{{ isset($city->mision)?$city->mision:'Data Belum Diisi' }}</p>
             </div>
         </div>
     </div>

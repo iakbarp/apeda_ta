@@ -218,27 +218,27 @@ class UsulanduaController extends Controller
         }
 
         if (User::findOrFail(Auth::user()->id)->role_id == 3) {
-            $label = mst_data::where([['approve_id', 2], ['district_id', Auth::user()->district_id]]);
+            $label = mst_data::whereIn('approve_id', [2, 3])->where('district_id', Auth::user()->district_id);
             if (is_null($id)) {
                 if ($index == 2) {
                     $data = $label->orderBy('id', 'desc')->skip($skip)->take($next)->get();
                     if (count($data) == 0) {
-                        $data = mst_data::where([['approve_id', 2], ['district_id', Auth::user()->district_id]])->orderBy('id', 'desc')->skip($skip - 10)->take($next)->get();
+                        $data = mst_data::whereIn('approve_id', [2, 3])->where('district_id', Auth::user()->district_id)->orderBy('id', 'desc')->skip($skip - 10)->take($next)->get();
                         $pagi = $pagi - 1;
                     }
-                    $data2 = mst_data::where([['approve_id', 2], ['district_id', Auth::user()->district_id]])->get();
+                    $data2 = mst_data::whereIn('approve_id', [2, 3])->where('district_id', Auth::user()->district_id)->get();
                 } else {
                     $data = $label->onlyTrashed()->orderBy('deleted_at', 'desc')->skip($skip)->take($next)->get();
                     if (count($data) == 0) {
-                        $data = mst_data::where([['approve_id', 2], ['district_id', Auth::user()->district_id]])->onlyTrashed()->orderBy('id', 'desc')->skip($skip - 10)->take($next)->get();
+                        $data = mst_data::whereIn('approve_id', [2, 3])->where('district_id', Auth::user()->district_id)->onlyTrashed()->orderBy('id', 'desc')->skip($skip - 10)->take($next)->get();
                         $pagi = $pagi - 1;
                     }
-                    $data2 = mst_data::where([['approve_id', 2], ['district_id', Auth::user()->district_id]])->onlyTrashed()->get();
+                    $data2 = mst_data::whereIn('approve_id', [2, 3])->where('district_id', Auth::user()->district_id)->onlyTrashed()->get();
                 }
             } else {
-                $data = mst_data::where([['approve_id', 2], ['category_id', $id], ['district_id', Auth::user()->district_id]])->orderBy('id', 'desc')->skip($skip)->take($next)->get();
+                $data = mst_data::whereIn('approve_id', [2, 3])->where('category_id', $id)->where('district_id', Auth::user()->district_id)->orderBy('id', 'desc')->skip($skip)->take($next)->get();
                 if (count($data) == 0) {
-                    $data = mst_data::where([['approve_id', 2], ['category_id', $id], ['district_id', Auth::user()->district_id]])->orderBy('id', 'desc')->skip($skip - 10)->take($next)->get();
+                    $data = mst_data::whereIn('approve_id', [2, 3])->where('category_id', $id)->where('district_id', Auth::user()->district_id)->orderBy('id', 'desc')->skip($skip - 10)->take($next)->get();
                     $pagi = $pagi - 1;
                 }
 

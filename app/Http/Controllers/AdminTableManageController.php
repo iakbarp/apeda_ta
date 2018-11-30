@@ -9,11 +9,16 @@ use App\trDataCategory;
 use App\trDataJobDesc;
 use App\trDataPosisition;
 use App\trRequestChangeJob;
+use App\trFile;
+use App\trDataHistori;
+use App\trFileHistori;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Hash;
 use Redirect;
 use Yajra\Datatables\Datatables;
 
@@ -26,6 +31,8 @@ class AdminTableManageController extends Controller
         Session::put('requ', count(trRequestChangeJob::where('admin_id', null)->orderBy('id', 'desc')->get()));
         Carbon::setLocale('id');
         setlocale(LC_TIME, 'Indonesian');
+        $category = $this->getCatagories();
+        $user = User::findOrFail(Auth::user()->id);
         $req = trRequestChangeJob::where('admin_id', null)->orderBy('id', 'desc')->get();
         $jobType1 = trDataJobDesc::all();
         $countjob = count($jobType1);
@@ -35,201 +42,922 @@ class AdminTableManageController extends Controller
         $statusPage = 5 < $entityPage;
         $contentPage = $requestJob->take(10);
 
-        return view('admin.requestjob.index', compact('req', 'jobType', 'entityPage', 'contentPage', 'statusPage'));
+        return view('admin.requestjob.index', compact('req', 'jobType', 'entityPage', 'contentPage', 'statusPage', 'category', 'user'));
     }
 
-    public function apiData(Request $request)
+    private function getCatagories()
+    {
+        $job = trDataCategory::where('job_id', 3)->orderBy('name', 'asc')->get(['id', 'name', 'singkatan']);
+        $job2 = $job;
+        return $job2;
+    }
+
+//    public function apiData(Request $request)
+//    {
+//        Carbon::setLocale('id');
+//        setlocale(LC_TIME, 'Indonesian');
+//        $skip = ($request->pagination - 1) * 10;
+//        $next = 10;
+//
+//        if ($request->id == 0) {
+//            $requestJob = trRequestChangeJob::orderBy('id', 'desc')->get();
+//            $entity = count($requestJob);
+//            $loop = trRequestChangeJob::orderBy('id', 'desc')->skip($skip)->take($next)->get();
+//        } else {
+//            $requestJob = trRequestChangeJob::where('job_id', $request->id)->orderBy('id', 'desc')->get();
+//            $entity = count($requestJob);
+//            if ($entity > 0) {
+//                $loop = trRequestChangeJob::where('job_id', $request->id)->orderBy('id', 'desc')->skip($skip)->take($next)->get();
+//            }
+//        }
+//        $data['list'] = array();
+//        $entityPage = array();
+//        if ($entity > 0) {
+//
+//            if (is_null($request->search)) {
+//                foreach ($loop as $row) {
+//
+//                    if ($row->status == 0) {
+//                        $class = 'wait';
+//                    } elseif ($row->status == 1) {
+//                        $class = 'accept';
+//                    } else {
+//                        $class = 'deny';
+//                    }
+//                    $entityPage = array();
+//                    for ($i = 1; $i <= ceil($entity / 10); $i++) {
+//                        $entityPage[] = $i;
+//                    }
+//
+//                    $data['list'][] = array('user' => $row->user->name, 'old' => $row->oldposisition->name . ' di ' . $row->oldjob->name,
+//                        'new' => $row->posisition->name . ' di ' . $row->job->name,
+//                        'date' => Carbon::createFromFormat('Y-m-d H:i:s', $row->created_at)->formatLocalized('%A, %d %B %Y'),
+//                        'status' => $row->status, 'id' => $row->id, 'class' => $class);
+//                }
+//                $data['amount']=$entity;
+//            }
+//            else {
+//                foreach ($requestJob as $row) {
+//                    $user=$row->user->name;
+//                    $old=$row->oldposisition->name . ' di ' . $row->oldjob->name;
+//                    $new=$row->posisition->name . ' di ' . $row->job->name;
+//                    if ($row->status==0) {
+//                        $status ='Menunggu';
+//                    }elseif ($row->status==1) {
+//                        $status ='Diterima';
+//                    }else {
+//                        $status ='Ditolak';
+//                    }
+//                    $date=Carbon::createFromFormat('Y-m-d H:i:s', $row->created_at)->formatLocalized('%A, %d %B %Y');
+//                    $name = strpos(strtolower($user), strtolower($request->search));
+//                    $seksi = strpos(strtolower($old), strtolower($request->search));
+//                    $new1 = strpos(strtolower($new), strtolower($request->search));
+//                    $date1 = strpos(strtolower($date), strtolower($request->search));
+//                    $status1 = strpos(strtolower($status), strtolower($request->search));
+//                    if ($name !== false || $seksi !== false || $new1 !== false || $date1 !== false || $status1 !== false) {
+//                        if ($row->status == 0) {
+//                            $class = 'wait';
+//                        } elseif ($row->status == 1) {
+//                            $class = 'accept';
+//                        } else {
+//                            $class = 'deny';
+//                        }
+//                        $entityPage = array();
+//                        $data['list'][] = array('user' => $user, 'old' => $old,
+//                            'new' => $new, 'date' => $date,
+//                            'status' => $row->status, 'id' => $row->id, 'class' => $class);
+//                    }
+//                }
+//                for ($i = 1; $i <= ceil(count($data['list']) / 10); $i++) {
+//                    $entityPage[] = $i;
+//                }
+//                $data['amount']=count($data['list']);
+//                $data['list']=array_slice($data['list'],$skip,$next);
+//            }
+//        }
+//        $data['pagination'] = $request->pagination;
+//        $data['entity'] = $entityPage;
+//
+//        return response()->json($data);
+//    }
+//
+////    public function accept(Request $request)
+////    {
+////        $id = $request->id;
+////        if (is_array($id)) {
+////            for ($i = 0; $i < count($id); $i++) {
+////                $data = trRequestChangeJob::findOrFail($id[$i]);
+////                $terima = $data->user;
+////                $terima->job_id = $data->changejob_id;
+////                $terima->posisition_id = $data->changeposisition_id;
+////                $terima->ganti = null;
+////                $terima->update();
+////                $data->status = 1;
+////                $data->admin_id = Auth::user()->id;
+////                $data->update();
+////            }
+////        } else {
+////            $data = trRequestChangeJob::findOrFail($id);
+////            $terima = $data->user;
+////            $terima->job_id = $data->changejob_id;
+////            $terima->posisition_id = $data->changeposisition_id;
+////            $terima->ganti = null;
+////            $terima->update();
+////            $data->status = 1;
+////            $data->admin_id = Auth::user()->id;
+////            $data->update();
+////        }
+////        return response()->json($id);
+////    }
+////
+////    public function deny(Request $request)
+////    {
+////        $id = $request->id;
+////        if (is_array($id)) {
+////            for ($i = 0; $i < count($id); $i++) {
+////                $data = trRequestChangeJob::findOrFail($id[$i]);
+////                $terima = $data->user;
+////                $terima->job_id = $data->changejob_id;
+////                $terima->posisition_id = $data->changeposisition_id;
+////                $terima->ganti = null;
+////                $terima->update();
+////                $data->status = 2;
+////                $data->admin_id = Auth::user()->id;
+////                $data->update();
+////            }
+////        } else {
+////            $data = trRequestChangeJob::findOrFail($id);
+////            $terima = $data->user;
+////            $terima->job_id = $data->job_id;
+////            $terima->posisition_id = $data->posisition_id;
+////            $terima->ganti = null;
+////            $terima->update();
+////            $data->status = 2;
+////            $data->admin_id = Auth::user()->id;
+////            $data->update();
+////        }
+////        return response()->json($id);
+////    }
+//
+//    public function apiData2(Request $request)
+//    {
+//        $products = trRequestChangeJob::where('job_id', $request->id);
+//        Carbon::setLocale('id');
+//        setlocale(LC_TIME, 'Indonesian');
+//        return DataTables::of($products)
+//            ->addColumn('user', function ($products) {
+//                $user = User::findOrFail($products->user_id)->name;
+//                $length = strlen($user);
+//                if ($length > 12) {
+//                    return substr(User::findOrFail($products->user_id)->name, 0, 12) . '...';
+//                } else {
+//                    return $user;
+//                }
+//            })
+////            ->addColumn('category', function ($products) {
+////                return trDataCategory::findOrFail($products->category_id)->singkatan;
+////            })->addColumn('dibuat', function ($products) {
+////                if (Carbon::now()->subDay(3)->gte($products->created_at) == false) {
+////                    return Carbon::createFromFormat('Y-m-d H:i:s', $products->created_at)->diffForHumans();
+////                } else
+////                    return Carbon::createFromFormat('Y-m-d H:i:s', $products->created_at)->formatLocalized('%A %d %B %Y');
+////            })
+//            ->addColumn('action', function ($products) {
+//
+//                return view('layouts.partials.status', [
+//                    'id' => $products->id,
+//                    'user' => $products->user_id,
+//                    'status' => $products->status,
+//                ]);
+//            })
+//            ->addColumn('change', function ($products) {
+//
+//                return $products->oldjob->name . ' di ' . $products->oldposisition->name . '<br>&rrarr;' . $products->posisition->name . ' di ' . $products->job->name;
+//            })
+//            ->addColumn('cek', function ($products) {
+//                $datas = '<input placeholder="pilih data" class="cek0" data-id="' . $products->id . '"
+//                                                                   type="checkbox" value="' . $products->id . '"
+//                                                                   id="cek0[]" name="cek0[]" multiple>';
+//
+//                return html_entity_decode($datas);
+//            })
+//            ->rawColumns(['cek', 'action', 'change'])
+////            ->removeColumn('job_id', 'category_id', 'user_id')
+//            ->make(true);
+//    }
+
+//    batas
+
+    public function store(Request $request)
+    {
+        for ($i = 0; $i < count($request->name); $i++) {
+            mst_data::create(['name' => $request->name[$i], 'desc' => $request->desc[$i], 'lokasi' => $request->lokasi[$i], 'volume' => $request->volume[$i], 'anggaran' => $request->anggaran[$i], 'kode' => $request->kode[$i],
+                'city_id' => $request->city_id[$i], 'district_id' => $request->district_id[$i], 'village_id' => $request->village_id[$i], 'approve_id' => $request->approve_id[$i], 'category_id' => $request->category_id[$i],
+                'user_id' => Auth::user()->id, 'job_id' => 3, 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()]);
+            $z = 1;
+            foreach ($request->file[$i] as $row) {
+                $rand = rand(111, 999);
+                $name = $request->name[$i] . '_' . Carbon::now()->format('dmy') . $rand . $z++;
+                $filename = 'berkas/surat/'
+                    . str_slug($name, '-') . '.' . $row->getClientOriginalExtension();
+//                    $filesize = $row->getClientSize();
+                $row->storeAs('public', $filename);
+                trFile::create(['name' => 'storage/' . $filename, 'data_id' => mst_data::where('user_id', Auth::user()->id)->orderBy('id', 'desc')->first()->id]);
+            }
+        }
+        return response()->json($request);
+    }
+
+    public function api(Request $r)
+    {
+        $index = $r->index;
+        $next = $r->page;
+        $skip = ($r->pagination - 1) * $next;
+        if ($r->index == 1 || $r->index == 2) {
+            $id = null;
+        } else {
+            $id = $r->id;
+        }
+        if (is_null($r->search)) {
+            $result = $this->notsearch($id, $index, $skip, $next, $r->pagination);
+        } else {
+            $result = $this->findData($id, $index, $skip, $next, $r->search, $r->pagination);
+        }
+        return response()->json($result);
+    }
+
+    private function findData($id, $index, $skip, $next, $search, $pagi)
+    {
+        $this->getLocation();
+        $label = mst_data::where('city_id', Auth::user()->city_id);
+        if (is_null($id)) {
+            if ($index == 2) {
+                $data = $label->orderBy('id', 'desc')->get();
+            } else {
+                $data = $label->onlyTrashed()->orderBy('deleted_at', 'desc')->get();
+            }
+        } else {
+            $data = mst_data::where('category_id', $id)->orderBy('id', 'desc')->get();
+        }
+        $result['entity'] = $result['status'] = 0;
+        if (count($data) > 0) {
+            foreach ($data as $r) {
+                $kode = $r->kode;
+                $lokasi = $r->lokasi;
+                $volume = $r->volume;
+                $anggaran = $r->anggaran;
+                $city_id = $r->city_id;
+                $district_id = $r->district_id;
+                $village_id = $r->village_id;
+                $approve_id = $r->approve_id;
+                $name = $r->name;
+                $user_id = $r->user_id;
+                $id = $r->id;
+                $user = $r->User->name;
+                $userdel_id = $r->userdel;
+                $userdel = null;
+                if (!is_null($userdel_id)) {
+                    $userdel = $r->Userdel->name;
+                }
+                $category = $r->trDataCategory->name;
+                $date = Carbon::createFromFormat('Y-m-d H:i:s', $r->created_at)->formatLocalized('%A, %d %B %Y');
+                $date2 = null;
+                if (!is_null($r->deleted_at)) {
+                    $date2 = Carbon::createFromFormat('Y-m-d H:i:s', $r->deleted_at)->formatLocalized('%A, %d %B %Y');
+                }
+                $comparkode = strpos(strtolower($kode), strtolower($search));
+                $comparname = strpos(strtolower($name), strtolower($search));
+                $comparuser = strpos(strtolower($user), strtolower($search));
+                $comparuserdel = strpos(strtolower($userdel), strtolower($search));
+                $comparcategory = strpos(strtolower($category), strtolower($search));
+                $compardate = strpos(strtolower($date), strtolower($search));
+                $compardate2 = strpos(strtolower($date2), strtolower($search));
+                if (strlen($user) > 11) {
+                    $user = substr($user, 0, 11) . '...';
+                }
+                if (strlen($userdel) > 11) {
+                    $userdel = substr($userdel, 0, 11) . '...';
+                }
+                if ($index == 0) {
+                    if ($comparkode !== false || $comparname !== false || $comparuser !== false || $compardate !== false) {
+                        $result['status'] = 1;
+                        $result['entity'] = $result['entity'] + 1;
+                        $rela = array();
+                        foreach (trFile::where('data_id', $r->id)->get() as $tr) {
+                            $url = $tr->name;
+                            $rela[] = array('url' => $url, 'name' => substr($tr->name, 21));
+                        }
+                        $result['data'][] = array('kode' => $kode, 'lokasi' => $lokasi, 'volume' => $volume, 'anggaran' => $anggaran,
+                            'city_id' => $city_id, 'district_id' => $district_id, 'village_id' => $village_id, 'approve_id' => $approve_id, 'name' => $name, 'user_id' => $user_id, 'user' => $user, 'date' => $date
+                        , 'id' => $id, 'relation' => $rela);
+                    }
+                } elseif ($index == 1) {
+                    if ($comparkode !== false || $comparname !== false || $compardate2 !== false || $comparcategory !== false || $comparuserdel !== false) {
+                        $result['status'] = 1;
+                        $result['entity'] = $result['entity'] + 1;
+                        $rela = array();
+                        foreach (trFile::where('data_id', $r->id)->get() as $tr) {
+                            $url = $tr->name;
+                            $rela[] = array('url' => $url, 'name' => substr($tr->name, 21));
+                        }
+                        $result['data'][] = array('kode' => $kode, 'name' => $name, 'category' => $category, 'date2' => $date2
+                        , 'userdel' => $userdel
+                        , 'userdel_id' => $userdel_id, 'id' => $id, 'relation' => $rela);
+                    }
+                } elseif ($index == 2) {
+                    if ($comparkode !== false || $comparname !== false || $comparuser !== false || $compardate !== false || $comparcategory !== false) {
+                        $result['status'] = 1;
+                        $result['entity'] = $result['entity'] + 1;
+                        $rela = array();
+                        foreach (trFile::where('data_id', $r->id)->get() as $tr) {
+                            $url = $tr->name;
+                            $rela[] = array('url' => $url, 'name' => substr($tr->name, 21));
+                        }
+                        $result['data'][] = array('kode' => $kode, 'lokasi' => $lokasi, 'volume' => $volume, 'anggaran' => $anggaran,
+                            'city_id' => $city_id, 'district_id' => $district_id, 'village_id' => $village_id, 'approve_id' => $approve_id,
+                            'name' => $name, 'user_id' => $user_id, 'user' => $user, 'category' => $category, 'date' => $date
+                        , 'id' => $id, 'relation' => $rela);
+                    }
+                }
+            }
+            if (isset($result['data'])) {
+                $anu = array_slice($result['data'], $skip, $next);
+                if (count($anu) == 0) {
+                    $result['data'] = array_slice($result['data'], ($skip - 10), $next);
+                    $pagi = $pagi - 1;
+                } else {
+                    $result['data'] = $anu;
+                }
+                $result['maxpage'] = ceil($result['entity'] / $next);
+                $result['pagi'] = $pagi;
+            }
+        }
+        return $result;
+    }
+
+    private function inputArray($kode, $lokasi, $volume, $anggaran, $city_id, $district_id, $village_id, $approve_id, $name, $user_id, $id, $user, $userdel_id, $userdel, $category, $date, $date2)
+    {
+        $result['status'] = 1;
+        $result['entity'] = $result['entity'] + 1;
+        $result['data'][] = array('kode' => $kode, 'lokasi' => $lokasi, 'volume' => $volume, 'anggaran' => $anggaran,
+            'city_id' => $city_id, 'district_id' => $district_id, 'village_id' => $village_id, 'approve_id' => $approve_id, 'name' => $name, 'user_id' => $user_id, 'user' => $user, 'category' => $category, 'date' => $date, 'date2' => $date2
+        , 'userdel' => $userdel, 'userdel_id' => $userdel_id, 'id' => $id);
+        return $result;
+    }
+
+    private function notsearch($id, $index, $skip, $next, $pagi)
+    {
+//        if (user::find($role_id=['3']))
+        $label = mst_data::whereIn('approve_id', [3, 4])->where('city_id', Auth::user()->city_id);
+        if (is_null($id)) {
+            if ($index == 2) {
+                $data = $label->orderBy('id', 'desc')->skip($skip)->take($next)->get();
+                if (count($data) == 0) {
+                    $data = mst_data::whereIn('approve_id', [3, 4])->where('city_id', Auth::user()->city_id)->orderBy('id', 'desc')->skip($skip - 10)->take($next)->get();
+                    $pagi = $pagi - 1;
+                }
+                $data2 = mst_data::whereIn('approve_id', [3, 4])->where('city_id', Auth::user()->city_id)->get();
+            } else {
+                $data = $label->onlyTrashed()->orderBy('deleted_at', 'desc')->skip($skip)->take($next)->get();
+                if (count($data) == 0) {
+                    $data = mst_data::whereIn('approve_id', [3, 4])->where('city_id', Auth::user()->city_id)->onlyTrashed()->orderBy('id', 'desc')->skip($skip - 10)->take($next)->get();
+                    $pagi = $pagi - 1;
+                }
+                $data2 = mst_data::whereIn('approve_id', [3, 4])->where('city_id', Auth::user()->city_id)->onlyTrashed()->get();
+            }
+        } else {
+            $data = mst_data::whereIn('approve_id', [3, 4])->where('category_id', $id)->where('city_id', Auth::user()->city_id)->orderBy('id', 'desc')->skip($skip)->take($next)->get();
+            if (count($data) == 0) {
+                $data = mst_data::whereIn('approve_id', [3, 4])->where('category_id', $id)->where('city_id', Auth::user()->city_id)->orderBy('id', 'desc')->skip($skip - 10)->take($next)->get();
+                $pagi = $pagi - 1;
+            }
+
+            $data2 = mst_data::/*where('job_id', Auth::user()->job_id)->*/
+            where([['category_id', $id], ['city_id', Auth::user()->city_id]])->get();
+        }
+
+        return $this->setarray($data, $next, $id, $data2, $pagi);
+    }
+
+    private function setarray($data, $delimiter, $id, $data2, $pagi)
+    {
+        $this->getLocation();
+        $this->getLocation();
+        $result = array();
+        $entity = $result['entity'] = count($data2);
+        $result['status'] = 0;
+        if ($entity > 0) {
+            $result['status'] = 1;
+            $result['pagi'] = $pagi;
+            $result['maxpage'] = ceil($entity / $delimiter);
+            foreach ($data as $row) {
+                $user = $row->User->name;
+                $userdel = 'not difined';
+                if (!is_null($row->userdel)) {
+                    $userdel = $row->Userdel->name;
+                }
+                if (strlen($user) > 11) {
+                    $user = substr($user, 0, 11) . '...';
+                }
+                if (strlen($userdel) > 11) {
+                    $userdel = substr($userdel, 0, 11) . '...';
+                }
+                $rela = array();
+                foreach (trFile::where('data_id', $row->id)->get() as $tr) {
+                    $url = $tr->name;
+                    $rela[] = array('url' => $url, 'name' => substr($tr->name, 21));
+                }
+                $deldate = "data tidak tersedia";
+                if (!is_null($row->deleted_at)) {
+                    $deldate = Carbon::createFromFormat('Y-m-d H:i:s',
+                        $row->deleted_at)->formatLocalized('%A, %d %B %Y');
+                }
+                $result['data'][] = array('name' => $row->name, 'kode' => $row->kode, 'lokasi' => $row->lokasi, 'volume' => $row->volume, 'anggaran' => $row->anggaran,
+                    'city_id' => $row->city_id, 'district_id' => $row->district_id, 'village_id' => $row->village_id, 'approve_id' => $row->approve_id, 'user' => $user, 'user_id' => $row->user_id, 'category' => $row->trDataCategory->name,
+                    'date' => Carbon::createFromFormat('Y-m-d H:i:s', $row->created_at)->formatLocalized('%A, %d %B %Y'),
+                    'date2' => $deldate, 'id' => $row->id, 'userdel' => $userdel
+                , 'userdel_id' => $row->userdel, 'relation' => $rela);
+            }
+        }
+        return $result;
+    }
+
+    public function getLocation()
     {
         Carbon::setLocale('id');
         setlocale(LC_TIME, 'Indonesian');
-        $skip = ($request->pagination - 1) * 10;
-        $next = 10;
+    }
 
-        if ($request->id == 0) {
-            $requestJob = trRequestChangeJob::orderBy('id', 'desc')->get();
-            $entity = count($requestJob);
-            $loop = trRequestChangeJob::orderBy('id', 'desc')->skip($skip)->take($next)->get();
+//    public function updateStatus(Request $request)
+//    {
+//        $data = Data::find($request->id);
+//        $data->update([
+//           'approve_id' => 2
+//        ]);
+//
+//        return back();
+//
+//    }
+
+    public function destroy(Request $r)
+    {
+        $id = $r->id;
+        $method = $r->metode;
+        if ($method == 2) {
+            if (is_array($id)) {
+                $datafs = trFileHistori::whereIn('data_id', $id)->get();
+                $datads = trDataHistori::whereIn('data_id', $id)->get();
+                $dataf = trFile::whereIn('data_id', $id)->get();
+                if (!is_null($datafs)) {
+                    trFileHistori::whereIn('data_id', $id)->delete();
+                }
+                if (!is_null($datads)) {
+                    trDataHistori::onlyTrashed()->whereIn('data_id', $id)->restore();
+                    trDataHistori::whereIn('data_id', $id)->forceDelete();
+                }
+                if (!is_null($dataf)) {
+                    $hapus = trFile::withTrashed()->whereIn('id', $id)->pluck('name')->all();
+                    foreach ($hapus as $row) {
+//                    $a[]=substr($row,21);
+                        Storage::delete('public/' . substr($row, 8));
+                    }
+                    trFile::onlyTrashed()->whereIn('data_id', $id)->restore();
+                    trFile::whereIn('data_id', $id)->forceDelete();
+                }
+                mst_data::onlyTrashed()->whereIn('id', $id)->restore();
+                mst_data::whereIn('id', $id)->forceDelete();
+            } else {
+                $datafs = trFileHistori::where('data_id', $id)->get();
+                $datads = trDataHistori::where('data_id', $id)->get();
+                $dataf = trFile::where('data_id', $id)->get();
+                if (!is_null($datafs)) {
+                    trFileHistori::where('data_id', $id)->delete();
+                }
+                if (!is_null($datads)) {
+                    trDataHistori::onlyTrashed()->where('data_id', $id)->restore();
+                    trDataHistori::where('data_id', $id)->forceDelete();
+                }
+                if (!is_null($dataf)) {
+                    $hapus = trFile::withTrashed()->where('id', $id)->pluck('name')->all();
+                    foreach ($hapus as $row) {
+//                    $a[]=substr($row,21);
+                        Storage::delete('public/' . substr($row, 8));
+                    }
+                    trFile::onlyTrashed()->where('data_id', $id)->restore();
+                    trFile::where('data_id', $id)->forceDelete();
+                }
+                mst_data::onlyTrashed()->findOrFail($id)->restore();
+                mst_data::where('id', $id)->forceDelete();
+            }
         } else {
-            $requestJob = trRequestChangeJob::where('job_id', $request->id)->orderBy('id', 'desc')->get();
-            $entity = count($requestJob);
-            if ($entity > 0) {
-                $loop = trRequestChangeJob::where('job_id', $request->id)->orderBy('id', 'desc')->skip($skip)->take($next)->get();
+            if (is_array($id)) {
+                $data = mst_data::whereIn('id', $id)->get();
+                $trans = array();
+                foreach ($data as $row) {
+                    $trans[] = array('name' => $row->name,
+                        'kode' => $row->kode, 'desc' => $row->desc, 'lokasi' => $row->lokasi, 'volume' => $row->volume, 'anggaran' => $row->anggaran,
+                        'city_id' => $row->city_id, 'district_id' => $row->district_id, 'village_id' => $row->village_id, 'approve_id' => $row->approve_id, 'user_id' => Auth::user()->id,
+                        'category_id' => $row->category_id, 'job_id' => $row->job_id, 'data_id' => $row->id
+                    , 'deletes' => 0
+                    , 'edit' => 0
+                    , 'tambah' => 0, 'deldata' => 1, 'resdata' => 0, 'created_at' => Carbon::now(), 'updated_at' => Carbon::now());
+                }
+                trDataHistori::insert($trans);
+                mst_data::whereIn('id', $id)->update(['userdel' => Auth::user()->id]);
+                mst_data::whereIn('id', $id)->delete();
+            } else {
+                $data = mst_data::findOrFail($id);
+                trDataHistori::create(['name' => $data->name,
+                    'kode' => $data->kode, 'desc' => $data->desc, 'lokasi' => $data->lokasi, 'volume' => $data->volume, 'anggaran' => $data->anggaran,
+                    'city_id' => $data->city_id, 'district_id' => $data->district_id, 'village_id' => $data->village_id, 'approve_id' => $data->approve_id, 'user_id' => Auth::user()->id,
+                    'category_id' => $data->category_id, 'job_id' => $data->job_id, 'data_id' => $id
+                    , 'deletes' => 0
+                    , 'edit' => 0
+                    , 'tambah' => 0, 'deldata' => 1, 'resdata' => 0
+                ]);
+                $data->update(['userdel' => Auth::user()->id]);
+                mst_data::destroy($id);
+//        $data2 = mst_data::withTrashed()->where('id', $id)->first();
+//        $data = trDataCategory::findOrFail($data2->category_id);
             }
         }
-        $data['list'] = array();
-        $entityPage = array();
-        if ($entity > 0) {
+        return response()->json(['status' => 'sukses'/*, 'category' => $data->singkatan*/]);
+    }
 
-            if (is_null($request->search)) {
-                foreach ($loop as $row) {
-
-                    if ($row->status == 0) {
-                        $class = 'wait';
-                    } elseif ($row->status == 1) {
-                        $class = 'accept';
-                    } else {
-                        $class = 'deny';
-                    }
-                    $entityPage = array();
-                    for ($i = 1; $i <= ceil($entity / 10); $i++) {
-                        $entityPage[] = $i;
-                    }
-
-                    $data['list'][] = array('user' => $row->user->name, 'old' => $row->oldposisition->name . ' di ' . $row->oldjob->name,
-                        'new' => $row->posisition->name . ' di ' . $row->job->name,
-                        'date' => Carbon::createFromFormat('Y-m-d H:i:s', $row->created_at)->formatLocalized('%A, %d %B %Y'),
-                        'status' => $row->status, 'id' => $row->id, 'class' => $class);
-                }
-                $data['amount']=$entity;
-            }
-            else {
-                foreach ($requestJob as $row) {
-                    $user=$row->user->name;
-                    $old=$row->oldposisition->name . ' di ' . $row->oldjob->name;
-                    $new=$row->posisition->name . ' di ' . $row->job->name;
-                    if ($row->status==0) {
-                        $status ='Menunggu';
-                    }elseif ($row->status==1) {
-                        $status ='Diterima';
-                    }else {
-                        $status ='Ditolak';
-                    }
-                    $date=Carbon::createFromFormat('Y-m-d H:i:s', $row->created_at)->formatLocalized('%A, %d %B %Y');
-                    $name = strpos(strtolower($user), strtolower($request->search));
-                    $seksi = strpos(strtolower($old), strtolower($request->search));
-                    $new1 = strpos(strtolower($new), strtolower($request->search));
-                    $date1 = strpos(strtolower($date), strtolower($request->search));
-                    $status1 = strpos(strtolower($status), strtolower($request->search));
-                    if ($name !== false || $seksi !== false || $new1 !== false || $date1 !== false || $status1 !== false) {
-                        if ($row->status == 0) {
-                            $class = 'wait';
-                        } elseif ($row->status == 1) {
-                            $class = 'accept';
-                        } else {
-                            $class = 'deny';
-                        }
-                        $entityPage = array();
-                        $data['list'][] = array('user' => $user, 'old' => $old,
-                            'new' => $new, 'date' => $date,
-                            'status' => $row->status, 'id' => $row->id, 'class' => $class);
-                    }
-                }
-                for ($i = 1; $i <= ceil(count($data['list']) / 10); $i++) {
-                    $entityPage[] = $i;
-                }
-                $data['amount']=count($data['list']);
-                $data['list']=array_slice($data['list'],$skip,$next);
-            }
+    public function edit(Request $r)
+    {
+        $this->getLocation();
+        $id = $r->id;
+//        $metode=$r->metode;
+        $data = array();
+        $dataCategory = trDataCategory::where('job_id', 3)->orderBy('name', 'asc')->get();
+        $dataCategory2 = array();
+        foreach ($dataCategory as $row) {
+            $dataCategory2[] = array('name' => $row->singkatan . ' (' . $row->name . ')', 'id' => $row->id);
         }
-        $data['pagination'] = $request->pagination;
-        $data['entity'] = $entityPage;
-
+        if (is_array($id)) {
+            $i = mst_data::whereIn('id', $id)->orderBy('id', 'desc')->get();
+            $data['category_list'] = $dataCategory2;
+            foreach ($i as $x) {
+                $data['listss'][] = array('name' => $x->name,
+                    'kode' => $x->kode,
+                    'category_id' => $x->category_id,
+                    'desc' => $x->desc,
+                    'lokasi' => $x->lokasi,
+                    'volume' => $x->volume,
+                    'anggaran' => $x->anggaran,
+                    'city_id' => $x->city_id,
+                    'district_id' => $x->district_id,
+                    'village_id' => $x->village_id,
+                    'approve_id' => $x->approve_id,
+                    'id' => $x->id);
+            }
+        } else {
+            $i = mst_data::withTrashed()->findOrFail($id);
+            $dataFile = trFile::where('data_id', $id)->get();
+            $dataFile2 = array();
+            $cek = $i->Userdel;
+            $userdel = '';
+            if (!is_null($cek)) {
+                $userdel = $cek->name;
+            }
+            foreach ($dataFile as $row) {
+                $dataFile2[] = array('name' => substr($row->name, 21), 'url' => $row->name, 'id' => $row->id);
+            }
+            $data = array('kode' => $i->kode,
+                'name' => $i->name,
+                'desc' => $i->desc,
+                'lokasi' => $i->lokasi,
+                'volume' => $i->volume,
+                'anggaran' => $i->anggaran,
+                'city_id' => $i->city_id,
+                'district_id' => $i->district_id,
+                'village_id' => $i->village_id,
+                'approve_id' => $i->approve_id,
+                'user_id' => $i->User->name,
+                'userdel' => $userdel,
+                'file' => $dataFile2,
+                'id' => $i->id,
+                'job_id' => $i->category_id,
+                'job_list' => $dataCategory2);
+        }
         return response()->json($data);
     }
 
-    public function accept(Request $request)
+    public function update(Request $r)
     {
-        $id = $request->id;
+        $id = $r->id;
+        $idAdd = array();
+        $idDel = array();
+        $idEdit = array();
         if (is_array($id)) {
-            for ($i = 0; $i < count($id); $i++) {
-                $data = trRequestChangeJob::findOrFail($id[$i]);
-                $terima = $data->user;
-                $terima->job_id = $data->changejob_id;
-                $terima->posisition_id = $data->changeposisition_id;
-                $terima->ganti = null;
-                $terima->update();
-                $data->status = 1;
-                $data->admin_id = Auth::user()->id;
-                $data->update();
-            }
         } else {
-            $data = trRequestChangeJob::findOrFail($id);
-            $terima = $data->user;
-            $terima->job_id = $data->changejob_id;
-            $terima->posisition_id = $data->changeposisition_id;
-            $terima->ganti = null;
-            $terima->update();
-            $data->status = 1;
-            $data->admin_id = Auth::user()->id;
-            $data->update();
-        }
-        return response()->json($id);
-    }
-
-    public function deny(Request $request)
-    {
-        $id = $request->id;
-        if (is_array($id)) {
-            for ($i = 0; $i < count($id); $i++) {
-                $data = trRequestChangeJob::findOrFail($id[$i]);
-                $terima = $data->user;
-                $terima->job_id = $data->changejob_id;
-                $terima->posisition_id = $data->changeposisition_id;
-                $terima->ganti = null;
-                $terima->update();
-                $data->status = 2;
-                $data->admin_id = Auth::user()->id;
-                $data->update();
-            }
-        } else {
-            $data = trRequestChangeJob::findOrFail($id);
-            $terima = $data->user;
-            $terima->job_id = $data->job_id;
-            $terima->posisition_id = $data->posisition_id;
-            $terima->ganti = null;
-            $terima->update();
-            $data->status = 2;
-            $data->admin_id = Auth::user()->id;
-            $data->update();
-        }
-        return response()->json($id);
-    }
-
-    public function apiData2(Request $request)
-    {
-        $products = trRequestChangeJob::where('job_id', $request->id);
-        Carbon::setLocale('id');
-        setlocale(LC_TIME, 'Indonesian');
-        return DataTables::of($products)
-            ->addColumn('user', function ($products) {
-                $user = User::findOrFail($products->user_id)->name;
-                $length = strlen($user);
-                if ($length > 12) {
-                    return substr(User::findOrFail($products->user_id)->name, 0, 12) . '...';
-                } else {
-                    return $user;
+            $data = mst_data::findOrFail($id);
+            $statusFile = 0;
+            $statusDel = 0;
+            $statusEdit = 0;
+            if ($r->hasFile('file')) {
+                foreach ($r->file as $row) {
+                    $rand = rand(111, 999);
+                    $name = $r->name . '_' . Carbon::now()->format('dmy') . $rand . rand(1, 2);
+                    $filename = 'berkas/surat/'
+                        . str_slug($name, '-') . '.' . $row->getClientOriginalExtension();
+//                    $filesize = $row->getClientSize();
+                    $row->storeAs('public', $filename);
+                    $file_id = trFile::create(['name' => 'storage/' . $filename, 'data_id' => $id])->id;
+                    $statusFile = 1;
+                    $idAdd[] = trFileHistori::create(['metode' => 2, 'file_id' => $file_id,
+                        'data_id' => $id])->id;
                 }
-            })
-//            ->addColumn('category', function ($products) {
-//                return trDataCategory::findOrFail($products->category_id)->singkatan;
-//            })->addColumn('dibuat', function ($products) {
-//                if (Carbon::now()->subDay(3)->gte($products->created_at) == false) {
-//                    return Carbon::createFromFormat('Y-m-d H:i:s', $products->created_at)->diffForHumans();
-//                } else
-//                    return Carbon::createFromFormat('Y-m-d H:i:s', $products->created_at)->formatLocalized('%A %d %B %Y');
-//            })
-            ->addColumn('action', function ($products) {
+            }
+            if ($r->has('hapus')) {
+                $statusDel = 1;
+//                $hapus=trFile::whereIn('id',$r->hapus)->pluck('name')->all();
+//                foreach ($hapus as $row){
+//                    $a[]=substr($row,21);
+//                    Storage::delete('public/'.substr($row,8));
+//                }
+                if (is_array($r->hapus)) {
+                    trFile::whereIn('id', $r->hapus)->delete();
+                    foreach ($r->hapus as $row) {
+                        $idDel[] = trFileHistori::create(['metode' => 1, 'file_id' => $row,
+                            'data_id' => $id])->id;
+                    }
+                } else {
+                    trFile::findOrFail('id', $r->hapus)->destroy();
+                    $idDel[] = trFileHistori::create(['metode' => 1, 'file_id' => $r->hapus])->id;
+                }
+            }
+            if ($r->name != $data->name ||
+                $r->kode != $data->kode ||
+                $r->desc != $data->desc ||
+                $r->lokasi != $data->lokasi ||
+                $r->volume != $data->volume ||
+                $r->anggaran != $data->anggaran ||
+                $r->city_id != $data->city_id ||
+                $r->district_id != $data->district_id ||
+                $r->village_id != $data->village_id ||
+                $r->approve_id != $data->approve_id ||
+                $r->category_id != $data->category_id) {
+                $statusEdit = 1;
+            }
+            $status = 0;
+            if ($statusEdit == 1 || $statusDel == 1 || $statusFile == 1) {
+                $status = 1;
+                $row = $r;
+                $idHistori = trDataHistori::create(['name' => $data->name,
+                    'kode' => $data->kode, 'desc' => $data->desc, 'lokasi' => $data->lokasi, 'volume' => $data->volume, 'anggaran' => $data->anggaran,
+                    'city_id' => $data->city_id, 'district_id' => $data->district_id, 'village_id' => $data->village_id, 'approve_id' => $data->approve_id, 'user_id' => Auth::user()->id,
+                    'category_id' => $data->category_id, 'job_id' => 3, 'data_id' => $id
+                    , 'deletes' => $statusDel
+                    , 'edit' => $statusEdit
+                    , 'tambah' => $statusFile, 'deldata' => 0, 'resdata' => 0])->id;
+                if ($statusFile == 1) {
+                    $data = trFileHistori::whereIn('id', $idAdd)->update(['histori_id' => $idHistori]);
+                }
+                if ($statusDel == 1) {
+                    $data = trFileHistori::whereIn('id', $idDel)->update(['histori_id' => $idHistori]);
+                }
+                if ($statusEdit == 1) {
+                    $data->update(['name' => $r->name, 'kode' => $r->kode, 'desc' => $r->desc, 'lokasi' => $r->lokasi, 'volume' => $r->volume, 'anggaran' => $r->anggaran, 'city_id' => $r->city_id,
+                        'district_id' => $r->district_id, 'village_id' => $r->village_id, 'approve_id' => $r->approve_id, 'category_id' => $r->category_id]);
+                }
+            }
+        }
+        return $status;
+    }
 
-                return view('layouts.partials.status', [
-                    'id' => $products->id,
-                    'user' => $products->user_id,
-                    'status' => $products->status,
+    public function multiupdate(Request $r)
+    {
+        $status = 0;
+        for ($i = 0; $i < count($r->id); $i++) {
+            $data = mst_data::findOrFail($r->id[$i]);
+            if ($r->name[$i] != $data->name ||
+                $r->kode[$i] != $data->kode ||
+                $r->desc[$i] != $data->desc ||
+                $r->lokasi[$i] != $data->lokasi ||
+                $r->volume[$i] != $data->volume ||
+                $r->volume[$i] != $data->volume ||
+                $r->category_id[$i] != $data->category_id) {
+                $status = 1;
+                trDataHistori::create(['name' => $data->name,
+                    'kode' => $data->kode, 'desc' => $data->desc, 'lokasi' => $data->lokasi, 'volume' => $data->volume, 'anggaran' => $data->anggaran,
+                    'city_id' => $r->city_id, 'district_id' => $r->district_id, 'village_id' => $r->village_id, 'approve_id' => $r->approve_id,
+                    'user_id' => Auth::user()->id, 'category_id' => $data->category_id
+                    , 'job_id' => 3, 'data_id' => $r->id[$i]
+                    , 'deletes' => 0
+                    , 'edit' => 1
+                    , 'tambah' => 0, 'deldata' => 0, 'resdata' => 0]);
+                $data->update(['name' => $r->name[$i],
+                    'kode' => $r->kode[$i],
+                    'category_id' => $r->category_id[$i],
+                    'desc' => $r->desc[$i],
+                    'lokasi' => $r->lokasi[$i],
+                    'volume' => $r->volume[$i],
+                    'anggaran' => $r->anggaran[$i],
+                    'city_id' => $r->city_id[$i],
+                    'district_id' => $r->district_id[$i],
+                    'village_id' => $r->village_id[$i],
+                    'approve_id' => $r->approve_id[$i]
                 ]);
-            })
-            ->addColumn('change', function ($products) {
+            }
+        }
 
-                return $products->oldjob->name . ' di ' . $products->oldposisition->name . '<br>&rrarr;' . $products->posisition->name . ' di ' . $products->job->name;
-            })
-            ->addColumn('cek', function ($products) {
-                $datas = '<input placeholder="pilih data" class="cek0" data-id="' . $products->id . '"
-                                                                   type="checkbox" value="' . $products->id . '"
-                                                                   id="cek0[]" name="cek0[]" multiple>';
+        return $status;
+    }
 
-                return html_entity_decode($datas);
-            })
-            ->rawColumns(['cek', 'action', 'change'])
-//            ->removeColumn('job_id', 'category_id', 'user_id')
-            ->make(true);
+    public function restore(Request $r)
+    {
+        if (is_array($r->id)) {
+            mst_data::onlyTrashed()->whereIn('id', $r->id)->update(['userdel' => null]);
+            $sample = mst_data::onlyTrashed()->whereIn('id', $r->id)->get();
+            foreach ($sample as $data) {
+                trDataHistori::create(['name' => $data->name,
+                    'kode' => $data->kode, 'desc' => $data->desc, 'lokasi' => $data->lokasi, 'volume' => $data->volume, 'anggaran' => $data->anggaran,
+                    'city_id' => $data->city_id, 'district_id' => $data->district_id, 'village_id' => $data->village_id, 'approve_id' => $data->approve_id,
+                    'user_id' => Auth::user()->id, 'category_id' => $data->category_id
+                    , 'job_id' => 3, 'data_id' => $data->id
+                    , 'deletes' => 0
+                    , 'edit' => 0
+                    , 'tambah' => 0, 'deldata' => 0, 'resdata' => 1]);
+            }
+            mst_data::onlyTrashed()->whereIn('id', $r->id)->restore();
+        } else {
+            mst_data::onlyTrashed()->findOrFail($r->id)->update(['userdel' => null]);
+            $data = mst_data::onlyTrashed()->findOrFail($r->id);
+            trDataHistori::create(['name' => $data->name,
+                'kode' => $data->kode, 'desc' => $data->desc, 'lokasi' => $data->lokasi, 'volume' => $data->volume, 'anggaran' => $data->anggaran,
+                'city_id' => $data->city_id, 'district_id' => $data->district_id, 'village_id' => $data->village_id, 'approve_id' => $data->approve_id,
+                'user_id' => Auth::user()->id, 'category_id' => $data->category_id
+                , 'job_id' => 3, 'data_id' => $r->id
+                , 'deletes' => 0
+                , 'edit' => 0
+                , 'tambah' => 0, 'deldata' => 0, 'resdata' => 1]);
+            $data->restore();
+        }
+        return response()->json('a');
+    }
+
+    public function history(Request $r)
+    {
+        $id = $r->id;
+        $metode = $r->id;
+        $this->getLocation();
+        $i = trDataHistori::withTrashed()->where('data_id', $id)->get();
+        $data = null;
+        if (!is_null($i)) {
+            $data['status'] = 0;
+            foreach ($i as $x) {
+                $data['status'] = 1;
+                $delData = array();
+                $addData = array();
+                $editData = array();
+                $datadel = trFileHistori::where('histori_id', $x->id)->get();
+                if ($x->deletes == 1) {
+                    foreach ($datadel as $z) {
+                        $url = $z->files->name;
+                        $delData[] = array('url' => url($url), 'name' => substr($url, 21));
+                    }
+                }
+                if ($x->tambah == 1) {
+                    foreach ($datadel as $z) {
+                        $url = $z->files->name;
+                        $addData[] = array('url' => url($url), 'name' => substr($url, 21));
+                    }
+                }
+                if ($x->edit == 1) {
+                    $c = mst_data::withTrashed()->findOrFail($id);
+                    $nameCek = $c->name;
+                    $kodeCek = $c->kode;
+                    $ndescCek = $c->desc;
+                    $lokasiCek = $c->lokasi;
+                    $volumeCek = $c->volume;
+                    $anggaranCek = $c->anggaran;
+                    $city_idCek = $c->city_id;
+                    $district_idCek = $c->district_id;
+                    $village_idCek = $c->village_id;
+                    $approve_idCek = $c->approve_id;
+                    $categoryCek = $c->trDataCategory->name;
+                    $v = trDataHistori::withTrashed()->where('data_id', $id)->where('edit', 1)->get();
+                    if (count($v) > 0) {
+                        $cek1 = array();
+                        foreach ($v as $d) {
+                            $cek1[] = array('id' => $d->id, 'name' => $d->name, 'kode' => $d->kode
+                            , 'category_id' => $d->category_id, 'cate' => $d->cate->name, 'desc' => $d->desc, 'lokasi' => $d->lokasi, 'volume' => $d->volume, 'anggaran' => $d->anggaran, 'city_id' => $d->city_id,
+                                'district_id' => $d->district_id, 'village_id' => $d->village_id, 'approve_id' => $d->approve_id);
+                        }
+                        $cek2 = null;
+                        for ($i = 0; $i < count($cek1); $i++) {
+                            if ($cek1[$i]['id'] == $x->id) {
+                                $cek2 = $i;
+                                break;
+                            }
+                        }
+                        if ((count($cek1) - 1) == $cek2) {
+                            $dataNextEdit = $cek1[(count($cek1) - 1)];
+                            if ($dataNextEdit['name'] != $nameCek) {
+                                $nameCek = $dataNextEdit['name'] . ' -> ' . $nameCek;
+                            }
+                            if ($dataNextEdit['kode'] != $kodeCek) {
+                                $kodeCek = $dataNextEdit['kode'] . ' -> ' . $kodeCek;
+                            }
+                            if ($dataNextEdit['desc'] != $ndescCek) {
+                                $ndescCek = $dataNextEdit['desc'] . ' -> ' . $ndescCek;
+                            }
+                            if ($dataNextEdit['lokasi'] != $lokasiCek) {
+                                $lokasiCek = $dataNextEdit['lokasi'] . ' -> ' . $lokasiCek;
+                            }
+                            if ($dataNextEdit['volume'] != $volumeCek) {
+                                $volumeCek = $dataNextEdit['volume'] . ' -> ' . $volumeCek;
+                            }
+                            if ($dataNextEdit['anggaran'] != $anggaranCek) {
+                                $anggaranCek = $dataNextEdit['anggaran'] . ' -> ' . $anggaranCek;
+                            }
+                            if ($dataNextEdit['city_id'] != $city_idCek) {
+                                $city_idCek = $dataNextEdit['city_id'] . ' -> ' . $city_idCek;
+                            }
+                            if ($dataNextEdit['district_id'] != $district_idCek) {
+                                $district_idCek = $dataNextEdit['district_id'] . ' -> ' . $district_idCek;
+                            }
+                            if ($dataNextEdit['village_id'] != $village_idCek) {
+                                $village_idCek = $dataNextEdit['village_id'] . ' -> ' . $village_idCek;
+                            }
+                            if ($dataNextEdit['approve_id'] != $approve_idCek) {
+                                $approve_idCek = $dataNextEdit['approve_id'] . ' -> ' . $approve_idCek;
+                            }
+                            if ($dataNextEdit['category_id'] != $c->category_id) {
+                                $categoryCek = $dataNextEdit['cate'] . ' -> ' . $categoryCek;
+                            }
+                        } else {
+                            $dataNextEdit = $cek1[$cek2 + 1];
+                            if ($dataNextEdit['name'] != $x->name) {
+                                $nameCek = $x->name . ' -> ' . $dataNextEdit['name'];
+                            }
+                            if ($dataNextEdit['kode'] != $x->kode) {
+                                $kodeCek = $x->kode . ' -> ' . $dataNextEdit['kode'];
+                            }
+                            if ($dataNextEdit['desc'] != $x->desc) {
+                                $ndescCek = $x->desc . ' -> ' . $dataNextEdit['desc'];
+                            }
+                            if ($dataNextEdit['lokasi'] != $x->lokasi) {
+                                $lokasiCek = $x->lokasi . ' -> ' . $dataNextEdit['lokasi'];
+                            }
+                            if ($dataNextEdit['volume'] != $x->volume) {
+                                $volumeCek = $x->volume . ' -> ' . $dataNextEdit['volume'];
+                            }
+                            if ($dataNextEdit['anggaran'] != $x->anggaran) {
+                                $anggaranCek = $x->anggaran . ' -> ' . $dataNextEdit['anggaran'];
+                            }
+                            if ($dataNextEdit['city_id'] != $x->city_id) {
+                                $city_idCek = $x->city_id . ' -> ' . $dataNextEdit['city_id'];
+                            }
+                            if ($dataNextEdit['district_id'] != $x->district_id) {
+                                $district_idCek = $x->district_id . ' -> ' . $dataNextEdit['district_id'];
+                            }
+                            if ($dataNextEdit['village_id'] != $x->village_id) {
+                                $village_idCek = $x->village_id . ' -> ' . $dataNextEdit['village_id'];
+                            }
+                            if ($dataNextEdit['approve_id'] != $x->approve_id) {
+                                $approve_idCek = $x->approve_id . ' -> ' . $dataNextEdit['approve_id'];
+                            }
+                            if ($dataNextEdit['category_id'] != $x->category_id) {
+                                $categoryCek = $x->cate->name . ' -> ' . $dataNextEdit['cate'];
+                            }
+                        }
+                    }
+//                    else {
+//                        $dataNextEdit = $c;
+//                        if ($dataNextEdit['name'] != $x->name) {
+//                            $nameCek = $x->name . ' -> ' . $dataNextEdit['name'];
+//                        }
+//                        if ($dataNextEdit['kode'] != $x->kode) {
+//                            $kodeCek = $x->kode . ' -> ' . $dataNextEdit['kode'];
+//                        }
+//                        if ($dataNextEdit['desc'] != $x->desc) {
+//                            $ndescCek = $x->desc . ' -> ' . $dataNextEdit['desc'];
+//                        }
+//                        if ($dataNextEdit['category_id'] != $x->category_id) {
+//                            $categoryCek = $x->cate->name . ' -> ' . $dataNextEdit['cate'];
+//                        }
+//                    }
+                    $editData = array('name' => $nameCek,
+                        'kode' => $kodeCek, 'desc' => $ndescCek, 'lokasi' => $lokasiCek, 'volume' => $volumeCek, 'anggaran' => $anggaranCek, 'city_id' => $city_idCek,
+                        'district_id' => $district_idCek, 'village_id' => $village_idCek, 'approve_id' => $approve_idCek,
+                        'category' => $categoryCek);
+                }
+                if (is_null($x->updated_at)) {
+                    $date = 'Undefined';
+                } else {
+                    $date = Carbon::createFromFormat('Y-m-d H:i:s', $x->updated_at)->format('d/m/Y H:i:s') . ' WIB.';
+                }
+                $data['lists'][] = array('user_id' => $x->User->name, 'date' => $date, 'fileDel' => $x->deletes, 'edit' => $x->edit,
+                    'addfiles' => $x->tambah, 'del' => $x->deldata, 'res' => $x->resdata,
+                    'listDel' => $delData, 'listAdd' => $addData, 'listEdit' => $editData);
+            }
+        } else {
+            $data['status'] = 0;
+        }
+        return response()->json($data);
     }
 
 

@@ -34,7 +34,8 @@
         </div>
     </div>
 </div>
-<div class="modal animate-box" id="modal-form-see" tabindex="1" role="dialog" aria-hidden="true" data-backdrop="static">
+<div class="modal animate-box" id="modal-form-see2" tabindex="1" role="dialog" aria-hidden="true"
+     data-backdrop="static">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <form method="post" class="form-horizontal">
@@ -44,7 +45,7 @@
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true"> &times; </span>
                     </button>
-                    <h3 class="modal-title">Data Berkas</h3>
+                    <h3 class="modal-title">Kirim Perencanaan Usulan</h3>
                 </div>
 
                 <div class="modal-body" id="content">
@@ -56,7 +57,7 @@
                                     <div id="contentBerkas"></div>
                                 </div>
                                 <div class="col-md-5 uploadfile">
-                                    <span>Tambah Berkas:</span>
+                                    <span>Lampirkan Berkas Musrenbang :</span>
                                     <input type="file" name="file[]"
                                            class="form-control"
                                            multiple id="file">
@@ -99,38 +100,34 @@
                             </div>
                             <div class="row form-group has-feedback">
                                 <div class="col-md-12">
-                                    <span>Detail :</span>
-                                    <textarea placeholder="Detail" id="desc"
-                                              class="form-control contentshow "
-                                              name="desc"
-                                              required autofocus></textarea>
+                                    <input type="hidden" placeholder="Detail" id="desc"
+                                           class="form-control contentshow "
+                                           name="desc"
+                                           required autofocus>
                                 </div>
                             </div>
                             <div class="row form-group has-feedback">
                                 <div class="col-md-12">
-                                    <span>Lokasi :</span>
-                                    <textarea placeholder="Lokasi" id="lokasi"
-                                              class="form-control contentshow "
-                                              name="lokasi"
-                                              required autofocus></textarea>
+                                    <input type="hidden" placeholder="Lokasi" id="lokasi"
+                                           class="form-control contentshow "
+                                           name="lokasi"
+                                           required autofocus>
                                 </div>
                             </div>
                             <div class="row form-group has-feedback">
                                 <div class="col-md-12">
-                                    <span>Volume m2 :</span>
-                                    <textarea placeholder="Volume m2" id="volume"
-                                              class="form-control contentshow "
-                                              name="volume"
-                                              required autofocus></textarea>
+                                    <input type="hidden" placeholder="Volume m2" id="volume"
+                                           class="form-control contentshow "
+                                           name="volume"
+                                           required autofocus>
                                 </div>
                             </div>
                             <div class="row form-group has-feedback">
                                 <div class="col-md-12">
-                                    <span>Estimasi Anggaran :</span>
-                                    <textarea placeholder="Anggaran" id="anggaran"
-                                              class="form-control contentshow "
-                                              name="anggaran"
-                                              required autofocus></textarea>
+                                    <input type="hidden" placeholder="Anggaran" id="anggaran"
+                                           class="form-control contentshow "
+                                           name="anggaran"
+                                           required autofocus>
                                 </div>
                             </div>
                             <div class="row form-group has-feedback">
@@ -162,9 +159,9 @@
                             </div>
                             <div class="row form-group has-feedback">
                                 <div class="col-md-12">
-                                    <input id="approve_id" type="hidden"
+                                    <input id="approve_id" type="text"
                                            class="form-control contentshow "
-                                           name="approve_id" value="1"
+                                           name="approve_id" value="4"
                                            required autofocus readonly>
                                 </div>
                             </div>
@@ -174,7 +171,7 @@
                 </div>
 
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary btn-save editform"><em id="berubah">Submit</em>
+                    <button type="submit" class="btn btn-primary btn-save editform"><em id="berubah">Kirim</em>
                         <i class="fa fa-circle-o-notch fa-spin fa-1x fa-fw" id="loading1"></i>
                     </button>
                     <button type="button" class="btn btn-primary lihatsurat lihatform" data-action="edit"
@@ -191,7 +188,8 @@
         </div>
     </div>
 </div>
-<div class="modal animate-box" id="modal-form-multiple" tabindex="1" role="dialog" aria-hidden="true" data-backdrop="static">
+<div class="modal animate-box" id="modal-form-multiple" tabindex="1" role="dialog" aria-hidden="true"
+     data-backdrop="static">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <form method="post" class="form-horizontal">
@@ -247,7 +245,7 @@
                                 </div>
                                 <div class="col-md-3">
                                     <span>Volume m2 :</span>
-                                    <textarea placeholder="Detail" id="volume"
+                                    <textarea placeholder="Detail" id="volumw"
                                               class="form-control"
                                               name="volume[]" style="height: 54px;"
                                               required autofocus></textarea>
@@ -278,7 +276,8 @@
         </div>
     </div>
 </div>
-<div class="modal animate-box" id="modal-form-spoiler" tabindex="1" role="dialog" aria-hidden="true" data-backdrop="static">
+<div class="modal animate-box" id="modal-form-spoiler" tabindex="1" role="dialog" aria-hidden="true"
+     data-backdrop="static">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <form method="post" class="form-horizontal">
@@ -371,31 +370,31 @@
                                         </div>
                                     </div>
                                     {{--<div class="set">--}}
-                                        {{--<a href="#">--}}
-                                            {{--Phasellus--}}
-                                            {{--<i class="fa fa-plus"></i>--}}
-                                        {{--</a>--}}
-                                        {{--<div class="content">--}}
-                                            {{--<p> Aliquam cursus vitae nulla non rhoncus. Nunc condimentum erat nec dictum tempus. Suspendisse aliquam erat hendrerit vehicula vestibulum.</p>--}}
-                                        {{--</div>--}}
+                                    {{--<a href="#">--}}
+                                    {{--Phasellus--}}
+                                    {{--<i class="fa fa-plus"></i>--}}
+                                    {{--</a>--}}
+                                    {{--<div class="content">--}}
+                                    {{--<p> Aliquam cursus vitae nulla non rhoncus. Nunc condimentum erat nec dictum tempus. Suspendisse aliquam erat hendrerit vehicula vestibulum.</p>--}}
+                                    {{--</div>--}}
                                     {{--</div>--}}
                                     {{--<div class="set">--}}
-                                        {{--<a href="#">--}}
-                                            {{--Praesent--}}
-                                            {{--<i class="fa fa-plus"></i>--}}
-                                        {{--</a>--}}
-                                        {{--<div class="content">--}}
-                                            {{--<p>Pellentesque aliquam ligula libero, vitae imperdiet diam porta vitae. sed do eiusmod tempor incididunt ut labore et dolore magna.</p>--}}
-                                        {{--</div>--}}
+                                    {{--<a href="#">--}}
+                                    {{--Praesent--}}
+                                    {{--<i class="fa fa-plus"></i>--}}
+                                    {{--</a>--}}
+                                    {{--<div class="content">--}}
+                                    {{--<p>Pellentesque aliquam ligula libero, vitae imperdiet diam porta vitae. sed do eiusmod tempor incididunt ut labore et dolore magna.</p>--}}
+                                    {{--</div>--}}
                                     {{--</div>--}}
                                     {{--<div class="set">--}}
-                                        {{--<a href="#">--}}
-                                            {{--Curabitur--}}
-                                            {{--<i class="fa fa-plus"></i>--}}
-                                        {{--</a>--}}
-                                        {{--<div class="content">--}}
-                                            {{--<p> Donec tincidunt consectetur orci at dignissim. Proin auctor aliquam justo, vitae luctus odio pretium scelerisque. </p>--}}
-                                        {{--</div>--}}
+                                    {{--<a href="#">--}}
+                                    {{--Curabitur--}}
+                                    {{--<i class="fa fa-plus"></i>--}}
+                                    {{--</a>--}}
+                                    {{--<div class="content">--}}
+                                    {{--<p> Donec tincidunt consectetur orci at dignissim. Proin auctor aliquam justo, vitae luctus odio pretium scelerisque. </p>--}}
+                                    {{--</div>--}}
                                     {{--</div>--}}
                                 </div>
                             </div>

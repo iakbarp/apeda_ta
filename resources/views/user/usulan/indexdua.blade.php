@@ -163,8 +163,6 @@
         </div>
     </aside>
     <br><br>
-
-
     <div id="fh5co-eberkas">
         <div class="container">
             <div class="row">
@@ -370,7 +368,7 @@
                                             </button>
                                         </div>
                                         <div class="col-md-4">
-                                            <h3 style="margin-top: 10px">- Data Semua Surat -</h3>
+                                            <h3 style="margin-top: 10px">- Data Semua Usulan -</h3>
                                         </div>
                                         <div class="col-md-4">
                                             <div class="row container-fluid">
@@ -1180,7 +1178,7 @@
                         $('#modal-form-user #ava').attr('src', '{!!URL::to('/')!!}' + '/' + data.ava);
                     }
                     trHTML = '';
-                    trHTML += '<tr><td width="100px">NIP</td><td>:</td><td>' + data.nip + '</td></tr>';
+                    trHTML += '<tr><td width="100px">NIK</td><td>:</td><td>' + data.nip + '</td></tr>';
                     trHTML += '<tr><td width="60px">Nama</td><td>:&nbsp;</td><td>' + data.name + '</td></tr>';
                     trHTML += '<tr><td width="60px">TTL</td><td>:&nbsp;</td><td>' + data.ttl + '</td></tr>';
                     trHTML += '<tr><td width="60px">Email</td><td>:&nbsp;</td><td><a href="mailto:' + data.email + '">' + data.email + '</a></td></tr>';
@@ -1580,37 +1578,6 @@
                 }
             });
         }
-        function kirimData(e) {
-            $showRole = $(e).data("role");
-            $showMetode = $(e).data("method");
-            $.ajax({
-                url: "{{route('usulan.show')}}",
-                type: "get",
-                data: {'id': $(e).data("id"), 'metode': $showMetode},
-                success: function (data) {
-                    console.log(data);
-                    if ($showMetode > 0) {
-                        loadShow2(data);
-                        $('#modal-form-see2').modal('show');
-                    }
-                    if ($showRole == 'kirim') {
-                        $('#modal-form-see2 .contentshow').attr('disabled', false);
-                        $('#modal-form-see2 .btn-save').show();
-                        $('#modal-form-see2 .editFile').show();
-                        $('#modal-form-see2 .uploadfile').show();
-                        $('#modal-form-see2 .lihatsurat').hide();
-                        $('#modal-form-see2 .hapussurat').hide();
-                        $('#modal-form-see2 #deleteBerkas').empty().append('Hapus Berkas:');
-                    }
-                    else {
-                        swalError('Peringatan!', 'Perintah Tidak Terdaftar');
-                    }
-                },
-                error: function () {
-                    swalError('Oops...', 'Something went wrong or data is empty!');
-                }
-            });
-        }
         function loadShow(e) {
             $('#modal-form-see form')[0].reset();
             $('#modal-form-see #kode').val(e.kode);
@@ -1671,6 +1638,38 @@
                 $('#modal-form-see .hapussurat').attr('data-method', 2);
             }
         }
+
+        function kirimData(e) {
+            $showRole = $(e).data("role");
+            $showMetode = $(e).data("method");
+            $.ajax({
+                url: "{{route('usulan.show')}}",
+                type: "get",
+                data: {'id': $(e).data("id"), 'metode': $showMetode},
+                success: function (data) {
+                    console.log(data);
+                    if ($showMetode > 0) {
+                        loadShow2(data);
+                        $('#modal-form-see2').modal('show');
+                    }
+                    if ($showRole == 'kirim') {
+                        $('#modal-form-see2 .contentshow').attr('disabled', false);
+                        $('#modal-form-see2 .btn-save').show();
+                        $('#modal-form-see2 .editFile').show();
+                        $('#modal-form-see2 .uploadfile').show();
+                        $('#modal-form-see2 .lihatsurat').hide();
+                        $('#modal-form-see2 .hapussurat').hide();
+                        $('#modal-form-see2 #deleteBerkas').empty().append('Hapus Berkas:');
+                    }
+                    else {
+                        swalError('Peringatan!', 'Perintah Tidak Terdaftar');
+                    }
+                },
+                error: function () {
+                    swalError('Oops...', 'Something went wrong or data is empty!');
+                }
+            });
+        }
         function loadShow2(e) {
             $('#modal-form-see2 form')[0].reset();
             $('#modal-form-see2 #kode').val(e.kode);
@@ -1683,7 +1682,7 @@
             $('#modal-form-see2 #city_id').val(e.city_id);
             $('#modal-form-see2 #district_id').val(e.district_id);
             $('#modal-form-see2 #village_id').val(e.village_id);
-            $('#modal-form-see2 #approve_id').val(e.approve_id);
+            // $('#modal-form-see2 #approve_id').val(e.approve_id);
             $('#modal-form-see2 #name').val(e.name);
             $('#modal-form-see2 #name').val(e.name);
             $('#modal-form-see2 #user_id').css('background-color', '#ffffff');
@@ -1938,6 +1937,209 @@
         });
     </script>
     {{--save edit--}}
+
+    <script>
+        $(function () {
+            $('#modal-form-see2 form').on('submit', function (e) {
+                if (!e.isDefaultPrevented()) {
+                    $('#modal-form-see2').modal('hide');
+                    swal({
+                        title: 'Konfirmasi Keamanan',
+                        html:
+                            '<input id="swal-input1" placeholder="Masukkan Password" type="password" class="form-control mb-1">',
+                        showCancelButton: true,
+                        confirmButtonText: 'Submit',
+                        showLoaderOnConfirm: true,
+                        showCancelButton: true,
+                        cancelButtonColor: '#d33',
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'Ya!',
+                        preConfirm: function () {
+                            return new Promise(function (resolve) {
+                                resolve([
+                                    $('#swal-input1').val()
+                                ])
+                            })
+                        },
+                        allowOutsideClick: false
+                    }).then(function (isConfirm) {
+                        var password = $('#swal-input1').val();
+                        if (isConfirm.value) {
+                            $.ajax({
+                                type: 'get',
+                                url: '<?php echo e(route('user.cek')); ?>',
+                                data: {'id': password},
+                                success: function (data) {
+                                    if (data.status == 0) {
+                                        swal({
+                                            title: 'Cek Password!',
+                                            text: 'Password belum diisi!',
+                                            type: 'info',
+                                            timer: '1500'
+                                        })
+                                    }
+                                    else if (data.status == 1) {
+                                        $.ajax({
+                                            url: "{{route('usulan.update')}}",
+                                            type: "post",
+                                            data: new FormData($('#modal-form-see2 form')[0]),
+                                            contentType: false,
+                                            processData: false,
+                                            success: function (data) {
+                                                console.log(data);
+                                                getData($id);
+                                                if (data == 0) {
+                                                    swal({
+                                                        title: 'Notice!',
+                                                        text: 'Data tidak ada perubahan...',
+                                                        type: 'info',
+                                                        timer: '1500'
+                                                    });
+                                                }
+                                                else {
+                                                    swal({
+                                                        title: 'Berhasil!',
+                                                        text: 'Data telah dirubah...',
+                                                        type: 'success',
+                                                        timer: '1500'
+                                                    });
+                                                }
+                                                $('#jadi-data form')[0].reset();
+                                            },
+                                            error: function () {
+                                                swal({
+                                                    title: 'Oops...',
+                                                    text: 'Something went wrong!',
+                                                    type: 'error',
+                                                    timer: '1500'
+                                                });
+                                            }
+                                        });
+                                    } else {
+                                        swal({
+                                            title: 'Password Salah!',
+                                            text: 'Harap masukkan password dengan benar!',
+                                            type: 'error',
+                                            timer: '1500'
+                                        })
+                                    }
+                                },
+                                error: function () {
+                                    swal({
+                                        title: 'Oops...',
+                                        text: 'something wrong!',
+                                        type: 'error',
+                                        timer: '1500'
+                                    })
+                                }
+                            });
+                        }
+                        return false;
+                    });
+                    return false;
+                }
+            });
+            $('#modal-form-multiple form').on('submit', function (e) {
+                if (!e.isDefaultPrevented()) {
+                    $('#modal-form-multiple').modal('hide');
+                    swal({
+                        title: 'Konfirmasi Keamanan',
+                        html:
+                            '<input id="swal-input1" placeholder="Masukkan Password" type="password" class="form-control mb-1">',
+                        showCancelButton: true,
+                        confirmButtonText: 'Submit',
+                        showLoaderOnConfirm: true,
+                        showCancelButton: true,
+                        cancelButtonColor: '#d33',
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'Ya!',
+                        preConfirm: function () {
+                            return new Promise(function (resolve) {
+                                resolve([
+                                    $('#swal-input1').val()
+                                ])
+                            })
+                        },
+                        allowOutsideClick: false
+                    }).then(function (isConfirm) {
+                        var password = $('#swal-input1').val();
+                        if (isConfirm.value) {
+                            $.ajax({
+                                type: 'get',
+                                url: '<?php echo e(route('user.cek')); ?>',
+                                data: {'id': password},
+                                success: function (data) {
+                                    if (data.status == 0) {
+                                        swal({
+                                            title: 'Cek Password!',
+                                            text: 'Password belum diisi!',
+                                            type: 'info',
+                                            timer: '1500'
+                                        })
+                                    }
+                                    else if (data.status == 1) {
+                                        $.ajax({
+                                            url: "{{route('usulan.multiupdate')}}",
+                                            type: "post",
+                                            data: new FormData($('#modal-form-multiple form')[0]),
+                                            contentType: false,
+                                            processData: false,
+                                            success: function (data) {
+                                                console.log(data);
+                                                getData($id);
+                                                if (data == 0) {
+                                                    swal({
+                                                        title: 'Notice!',
+                                                        text: 'Data tidak ada perubahan...',
+                                                        type: 'info',
+                                                        timer: '1500'
+                                                    });
+                                                }
+                                                else {
+                                                    swal({
+                                                        title: 'Berhasil!',
+                                                        text: 'Data telah dirubah...',
+                                                        type: 'success',
+                                                        timer: '1500'
+                                                    });
+                                                }
+                                                $('#jadi-data form')[0].reset();
+                                            },
+                                            error: function () {
+                                                swal({
+                                                    title: 'Oops...',
+                                                    text: 'Something went wrong!',
+                                                    type: 'error',
+                                                    timer: '1500'
+                                                });
+                                            }
+                                        });
+                                    } else {
+                                        swal({
+                                            title: 'Password Salah!',
+                                            text: 'Harap masukkan password dengan benar!',
+                                            type: 'error',
+                                            timer: '1500'
+                                        })
+                                    }
+                                },
+                                error: function () {
+                                    swal({
+                                        title: 'Oops...',
+                                        text: 'something wrong!',
+                                        type: 'error',
+                                        timer: '1500'
+                                    })
+                                }
+                            });
+                        }
+                        return false;
+                    });
+                    return false;
+                }
+            });
+        });
+    </script>
 
     {{--restore--}}
     <script>

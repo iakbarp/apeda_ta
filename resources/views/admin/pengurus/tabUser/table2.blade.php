@@ -617,7 +617,6 @@
         $('#modal-form #alamat').prop('disabled', true);
         $('#modal-form #alamat').css('background-color', '#fcfdff');
     }
-
     function lihatuser(asd) {
         $id = $(asd).data('id');
         $action = $(asd).data('action');

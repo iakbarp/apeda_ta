@@ -31,11 +31,17 @@ class UsulanduaController extends Controller
     }
     public function store(Request $request)
     {
+        $z = 1;
         for ($i = 0; $i < count($request->name); $i++) {
-            mst_data::create(['name' => $request->name[$i], 'desc' => $request->desc[$i], 'lokasi' => $request->lokasi[$i], 'volume' => $request->volume[$i], 'anggaran' => $request->anggaran[$i], 'kode' => $request->kode[$i],
+            $rand = rand(111, 999);
+            $file = $request->name[$i] . '_' . Carbon::now()->format('dmy') . $rand . $z++;
+            $filename = 'berkas/surat/'
+                . str_slug($file, '-') . '.' . $request->file[$i]->getClientOriginalExtension();
+            $request->file[$i]->storeAs('public', $filename);
+            mst_data::create(['name' => $request->name[$i], 'file' => 'storage/' . $filename, 'desc' => $request->desc[$i], 'lokasi' => $request->lokasi[$i], 'volume' => $request->volume[$i], 'anggaran' => $request->anggaran[$i], 'kode' => $request->kode[$i],
                 'city_id' => $request->city_id[$i], 'district_id' => $request->district_id[$i], 'village_id' => $request->village_id[$i], 'approve_id' => $request->approve_id[$i], 'category_id' => $request->category_id[$i],
                 'user_id' => Auth::user()->id, 'job_id' => Auth::user()->job_id, 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()]);
-            $z = 1;
+            trFile::create(['name' => 'storage/' . $filename, 'data_id' => mst_data::where('user_id', Auth::user()->id)->orderBy('id', 'desc')->first()->id]);
             foreach ($request->file[$i] as $row) {
                 $rand = rand(111, 999);
                 $name = $request->name[$i] . '_' . Carbon::now()->format('dmy') . $rand . $z++;

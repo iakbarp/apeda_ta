@@ -51,7 +51,7 @@
                                             required autofocus>
                                         <option value="" disabled selected>- Pilih Kota -
                                         </option>
-                                        @foreach(\App\city::all() as $row)
+                                        @foreach(\App\city::whereNotIn('id', [1])->get() as $row)
                                             <option value="{{$row->name}}">{{$row->name}}</option>
                                                 @endforeach
                                                 <input id="tgl_lahir" type="date" class="form-control" name="tgl_lahir" required>
@@ -77,7 +77,7 @@
                                             required autofocus>
                                         <option value="" disabled selected>- Pilih Kota -
                                         </option>
-                                        @foreach(\App\city::all() as $row)
+                                        @foreach(\App\city::whereNotIn('id', [1])->get() as $row)
                                             <option value="{{$row->id}}">{{$row->name}}</option>
                                         @endforeach
                                         @if ($errors->has('city_id'))

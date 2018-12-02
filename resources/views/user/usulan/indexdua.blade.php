@@ -247,7 +247,7 @@
                                                     <div class="col-md-3 ">
                                                         <input placeholder="input data" class="form-control addfile"
                                                                type="file"
-                                                               id="file[0][]" name="file[]" multiple required
+                                                               id="file[]" name="file[]" multiple required
                                                                autofocus>
                                                     </div>
                                                     <div class="col-md-3">
@@ -419,10 +419,13 @@
                                                                                               class="checkall"
                                                                                               style="width: 30px">
                                             <th>
-                                                <center>Kode Berkas</center>
+                                                <center>Desa/Kelurahan</center>
                                             </th>
                                             <th>
-                                                <center>Kode Surat</center>
+                                                <center>Kecamatan</center>
+                                            </th>
+                                            <th>
+                                                <center>Judul Usulan</center>
                                             </th>
                                             {{--<th>--}}
                                             {{--<center>Lokasi</center>--}}
@@ -434,7 +437,7 @@
                                             {{--<center>Anggaran</center>--}}
                                             {{--</th>--}}
                                             <th>
-                                                <center>Jenis Surat</center>
+                                                <center>RKP Tahun</center>
                                             </th>
                                             <th>
                                                 <center>Pengirim</center>
@@ -443,7 +446,7 @@
                                                 <center>Dibuat Tanggal</center>
                                             </th>
                                             <th>
-                                                <center>Action</center>
+                                                <center>Sunting/Hapus/Laporkan</center>
                                             </th>
                                             <th>
                                                 <center>Status Usulan</center>
@@ -534,14 +537,17 @@
                                                                                               class="checkall"
                                                                                               style="width: 30px">
                                             <th>
-                                                <center>Kode Berkas</center>
+                                                <center>Desa/Kelurahan</center>
                                             </th>
                                             <th>
-                                                <center>Kode Surat</center>
+                                                <center>Kecamatan</center>
                                             </th>
-                                            {{--<th>--}}
-                                            {{--<center>Lokasi</center>--}}
-                                            {{--</th>--}}
+                                            <th>
+                                                <center>Judul Usulan</center>
+                                            </th>
+                                            <th>
+                                                <center>RKP Tahun</center>
+                                            </th>
                                             {{--<th>--}}
                                             {{--<center>Volume</center>--}}
                                             {{--</th>--}}
@@ -549,13 +555,16 @@
                                             {{--<center>Anggaran</center>--}}
                                             {{--</th>--}}
                                             <th>
-                                                <center>Penghapus</center>
+                                                <center>Dihapus oleh</center>
                                             </th>
                                             <th>
                                                 <center>Dihapus Tanggal</center>
                                             </th>
                                             <th>
-                                                <center>Action</center>
+                                                <center>Sunting/Hapus/Laporkan</center>
+                                            </th>
+                                            <th>
+                                                <center>Status Usulan</center>
                                             </th>
                                         </tr>
                                         </thead>
@@ -649,10 +658,13 @@
                                                                                                   style="width: 30px">
                                                 </th>
                                                 <th>
-                                                    <center>Kode Berkas</center>
+                                                    <center>Desa/Kelurahan</center>
                                                 </th>
                                                 <th>
-                                                    <center>Kode Surat</center>
+                                                    <center>Kecamatan</center>
+                                                </th>
+                                                <th>
+                                                    <center>Judul Usulan</center>
                                                 </th>
                                                 {{--<th>--}}
                                                 {{--<center>Lokasi</center>--}}
@@ -670,7 +682,7 @@
                                                     <center>Dibuat</center>
                                                 </th>
                                                 <th>
-                                                    <center>Action</center>
+                                                    <center>Sunting/Hapus/Laporkan</center>
                                                 </th>
                                                 <th>
                                                     <center>Status Usulan</center>
@@ -861,6 +873,14 @@
                             $.each(value.relation, function (key2, value2) {
                                 $filesurat += '<li><a href="{!!URL::to('/')!!}/' + value2.url + '" target="_blank">' + value2.name + '</a></li>\n';
                             });
+                            var village_id = '';
+                            if (value.village_id += 'mst_data::findOrFail()->village_id') {
+                                village_id = '{{App\village::findOrFail($user->village_id)->name}}';
+                            }
+                            var district_id = '';
+                            if (value.district_id += 'mst_data::findOrFail()->district_id') {
+                                district_id = '{{App\district::findOrFail($user->district_id)->name}}';
+                            }
                             var approve_id = '', $style, $style2;
                             if (value.approve_id == 1) {
                                 approve_id = 'Belum dilaporkan';
@@ -946,7 +966,8 @@
                                 '                                                                               data-id="' + value.id + '"\n' +
                                 '                                                                               style="width: 30px">\n' +
                                 '</td>' +
-                                '<td> ' + value.kode + ' </td>' +
+                                '<td> ' + village_id + ' </td>' +
+                                '<td> ' + district_id + ' </td>' +
                                 '<td> ' + value.name + ' </td>' + $replace +
                                 '<td> ' + approve_id + ' </td>' +
                                 '</tr>';
